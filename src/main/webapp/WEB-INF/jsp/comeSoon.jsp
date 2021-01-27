@@ -50,12 +50,14 @@
 <body>
 <div class="bgimg">
     <div class="topleft">
-        <h5>Proj Rlog</h5>
+        <h5>R.LOG</h5>
     </div>
     <div class="middle">
         <h1>COMING SOON</h1>
         <hr>
         <p>개발 중인 프로젝트입니다</p>
+        <br/>
+        <p><a href = 'https://redcoder.tistory.com/'>티스토리 블로그</a></p>
     </div>
     <div class="bottomleft">
         <h5>ROJAE</h5>
