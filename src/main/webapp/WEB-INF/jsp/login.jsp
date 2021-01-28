@@ -11,10 +11,11 @@
     <title>Title</title>
 </head>
 <body>
+    <h3>로그인 페이지</h3>
     <form name = "login"  method="post" action="/login">
-        <input name = "userName" value =""/>
-        <input name = "password" value =""/>
-        <input type="submit" value="가입"/>
+        <input type="text" name = "userName" value =""/>
+        <input type="password" name = "password" value =""/>
+        <input type="submit" value="로그인"/>
     </form>
 </body>
 </html>

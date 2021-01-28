@@ -11,11 +11,13 @@
     <title>테스트 페이지</title>
 </head>
 <body>
+    <h3>회원가입 페이지</h3>
+
     <form name = "signUp" action="/signup" method="post">
-        <input name = "userName" value =""/>
-        <input name = "password" value =""/>
-        <input name = "email" value =""/>
-        <input name = "role" value =""/>
+        <input type="text" name = "userName" value =""/>
+        <input type="password" name = "password" value =""/>
+        <input type="text" name = "email" value =""/>
+        <input type="text" name = "role" value =""/>
         <input type="submit" value="가입"/>
     </form>
 </body>

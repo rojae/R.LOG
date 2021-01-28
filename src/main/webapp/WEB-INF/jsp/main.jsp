@@ -11,6 +11,6 @@
     <title>Title</title>
 </head>
 <body>
-MAIN Page
+    로그인을 성공한 이후에, 보여지는 메인 페이지입니다.
 </body>
 </html>
