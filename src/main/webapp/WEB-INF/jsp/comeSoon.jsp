@@ -4,6 +4,13 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=EUC-KR">
+    <meta property="og:url" content="http://rlog.or.kr/">
+    <meta property="og:title" content="R.Log">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="http://www.mydomain.com/myimage.jpg">
+    <meta property="og:description" content="개밸 관련 이야기들을 소소하게 담은 블로그 R.Log입니다.">
+    <meta name="description" content="로재가 개발하는 개발환경 블로그입니다.">
+    <meta name="keywords" content="로재의 블로그 - R.LOG">
 <style>
     body, html {
         height: 100%;
