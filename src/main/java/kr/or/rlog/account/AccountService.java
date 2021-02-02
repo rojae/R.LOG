@@ -7,8 +7,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-
 @Service
 public class AccountService implements UserDetailsService {
 
@@ -19,11 +17,16 @@ public class AccountService implements UserDetailsService {
     PasswordEncoder passwordEncoder;
 
     @Override
-    public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
-        Account account = accountRepository.findByUserName(userName);
-        if (account == null) {
-            throw new UsernameNotFoundException(userName);
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        Account account = accountRepository.findByEmailAndIsAuthIsTrue(email);
+        if (account == null && accountRepository.findByEmail(email) == null) {
+            // not sign-up
+            throw new UsernameNotFoundException("not sign-up");
+        }else if (account == null){
+            // should be mail authentication
+            throw new UsernameNotFoundException("mail Authentication");
         }
+
         System.out.println(account.getUserName() + "님이 로그인 성공하셨습니다.");
         return new UserAccount(account);
     }

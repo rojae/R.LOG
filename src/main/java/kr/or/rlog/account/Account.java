@@ -6,7 +6,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
 
-@Entity
+@Entity(name = "TBL_ACCOUNT")
 @Getter
 @Setter
 public class Account {
@@ -14,17 +14,20 @@ public class Account {
     @GeneratedValue
     private Long id;
 
-    @Column(name = "userName", nullable = false)
-    private String userName;
+    @Column(name = "email", nullable = false, unique = true)
+    private String email;
 
     @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name = "email", nullable = false)
-    private String email;
+    @Column(name = "userName", nullable = false)
+    private String userName;
 
     @Column(name = "role", columnDefinition = "VARCHAR(255) DEFAULT 'USER' ")
     private String role;
+
+    @Column(name = "isAuth", columnDefinition = "TINYINT DEFAULT 0", length = 1)
+    private boolean isAuth;
 
     // 패스워드 암호화 기법
     public void encodePassword(PasswordEncoder passwordEncoder){

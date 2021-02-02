@@ -51,7 +51,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) {
         web.ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations());
-        web.ignoring().requestMatchers(PathRequest.toH2Console());
+        //web.ignoring().requestMatchers(PathRequest.toH2Console());
         web.ignoring().mvcMatchers("/", "/signup");
     }
 
@@ -68,7 +68,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.formLogin()
                 .loginPage("/login")
-                .usernameParameter("userName")
+                .usernameParameter("email")
                 .passwordParameter("password")
                 .loginProcessingUrl("/login")
                 .successHandler(new LoginSuccessHandler())

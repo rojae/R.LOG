@@ -6,11 +6,27 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
 <html>
 <head>
     <title>Title</title>
 </head>
 <body>
-    로그인을 성공한 이후에, 보여지는 메인 페이지입니다.
+    <c:if test = "${!empty message}">
+        <c:out value = "${message}"/>
+        <br/>
+    </c:if>
+
+    <c:if test = "${!empty email}">
+        <c:out value = "${email}"/>
+        <br/>
+    </c:if>
+
+    <c:if test = "${!empty role}">
+        <c:out value = "${role}"/>
+        <br/>
+    </c:if>
+
 </body>
 </html>
