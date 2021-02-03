@@ -1,6 +1,7 @@
 package kr.or.rlog.handler;
 
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;

@@ -52,7 +52,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public void configure(WebSecurity web) {
         web.ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations());
         //web.ignoring().requestMatchers(PathRequest.toH2Console());
-        web.ignoring().mvcMatchers("/", "/signup");
+        web.ignoring().mvcMatchers("/", "/signup", "/api/v1/signup/mail");
     }
 
     @Override

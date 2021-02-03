@@ -44,7 +44,7 @@ public class MailSenderTest {
 
         Mail mail = Mail.builder().userName(user.getUserName())
                 .email(user.getEmail()).expireDate(LocalDateTime.now().plusMinutes(5))
-                .authKey(RandomUtils.getNumber(6,1)).build();
+                .secretKey(RandomUtils.getAlpha(64)).build();
 
         System.out.println("Generated Mail : " + mail);
 

@@ -25,8 +25,9 @@ public class AccountController {
 
     @PostMapping("/signup")
     public String createAccount(Model model, @ModelAttribute Account account) throws MessagingException {
-        accountService.createNew(account);
-        Mail newMail = mailService.createMail(account);
+        // 아래 두개는 합치는게 .. 좋으려나??
+        Account savedUser = accountService.createNew(account);
+        Mail newMail = mailService.createMail(savedUser);
         mailService.mailSend(newMail);
         model.addAttribute("message", "회원가입이 완료되었습니다. 이메일 인증을 진행하세요.");
         return "login";

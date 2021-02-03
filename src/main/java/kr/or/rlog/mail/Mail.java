@@ -1,5 +1,6 @@
 package kr.or.rlog.mail;
 
+import kr.or.rlog.account.Account;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -18,7 +19,10 @@ public class Mail {
 
     @Id
     @GeneratedValue
-    private Integer id;
+    private Long id;
+
+    @ManyToOne
+    private Account account;
 
     // 돔명이인은 존재할 수 있다
     @Column(name = "userName", nullable = false)
@@ -29,8 +33,8 @@ public class Mail {
     private String email;
 
     // 랜던 인증키
-    @Column(name = "authKey", nullable = false)
-    private String authKey;
+    @Column(name = "secretKey", nullable = false)
+    private String secretKey;
 
     // 보낸 날짜
     @Column(name = "sentDate", nullable = false)
@@ -51,7 +55,7 @@ public class Mail {
                 "id=" + id +
                 ", userName='" + userName + '\'' +
                 ", email='" + email + '\'' +
-                ", authKey='" + authKey + '\'' +
+                ", secretKey='" + secretKey + '\'' +
                 ", sentDate=" + sentDate +
                 ", expireDate=" + expireDate +
                 ", isAuth=" + auth +
