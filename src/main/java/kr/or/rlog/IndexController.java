@@ -11,12 +11,11 @@ public class IndexController {
 
     @RequestMapping(value = "/")
     public String index(Model model, @CurrentUser Account account){
-        model.addAttribute("message", "반갑습니다" + account.getUserName() + "님");
+        if(account == null)
+            return "comeSoon";
+        else
+            model.addAttribute("message", "반갑습니다" + account.getUserName() + "님");
         return "main";
     }
 
-    @RequestMapping(value = "/comesoon")
-    public String comeSoon(){
-        return "comeSoon";
-    }
 }

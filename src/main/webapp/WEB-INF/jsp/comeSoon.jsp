@@ -63,6 +63,7 @@
         <h1>COMING SOON</h1>
         <hr>
         <p>개발 중인 프로젝트입니다</p>
+        <p><a href = '/login'>로그인</a></p>
         <br/>
         <p><a href = 'https://redcoder.tistory.com/'>티스토리 블로그</a></p>
     </div>
