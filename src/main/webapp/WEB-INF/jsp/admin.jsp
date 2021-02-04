@@ -17,19 +17,9 @@
     <c:out value = "${message}"/>
 </c:if>
 
-<h3>로그인 페이지</h3>
-<form name = "login"  method="post" action="/login">
-    <label>
-        <p>이메일</p>
-        <input type="text" name = "email" value =""/>
-    </label>
-    <label>
-        <p>비밀번호</p>
-        <input type="password" name = "password" value =""/>
-    </label>
-    <input type="submit" value="로그인"/>
-</form>
-<button onclick="location.href='/signup'">회원가입</button>
-
+<h3>관리자 페이지</h3>
+<p>어서오세요 관리자님</p>
+<p><a href = '/main'>사용자 페이지</a></p>
+<p><a href = '/logout'>로그아웃</a></p>
 </body>
 </html>

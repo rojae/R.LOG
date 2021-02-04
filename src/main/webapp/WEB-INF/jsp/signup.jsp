@@ -9,6 +9,9 @@
 <html>
 <head>
     <title>테스트 페이지</title>
+    <script>
+
+    </script>
 </head>
 <body>
     <h3>회원가입 페이지</h3>

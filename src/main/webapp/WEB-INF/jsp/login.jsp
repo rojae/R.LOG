@@ -10,7 +10,7 @@
 
 <html>
 <head>
-    <title>Title</title>
+    <title>R.LOG</title>
 </head>
 <body>
     <c:if test = "${!empty message}">
