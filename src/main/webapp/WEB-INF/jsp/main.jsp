@@ -10,7 +10,7 @@
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
 
-<html>
+<!DOCTYPE html>
 <head>
     <title>R.LOG</title>
 </head>
