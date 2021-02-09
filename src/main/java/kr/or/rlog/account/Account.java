@@ -1,5 +1,6 @@
 package kr.or.rlog.account;
 
+import kr.or.rlog.common.BaseTimeEntity;
 import kr.or.rlog.mail.Mail;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,7 +13,7 @@ import java.util.Set;
 @Entity(name = "TBL_ACCOUNT")
 @Getter
 @Setter
-public class Account {
+public class Account extends BaseTimeEntity {
     @Id
     @GeneratedValue
     private Long id;

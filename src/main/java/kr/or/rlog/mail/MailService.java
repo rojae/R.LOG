@@ -99,7 +99,7 @@ public class MailService {
                 .auth(false)
                 .secretKey(RandomUtils.getAlpha(64))
                 .expireDate(LocalDateTime.now().plusMinutes(5))
-                .sentDate(LocalDateTime.now())
+                //.sentDate(LocalDateTime.now())
                 .userName(account.getUserName())
                 .build();
         Mail savedMail = this.mailRepository.save(mail);
