@@ -38,7 +38,7 @@ public class Account extends BaseTimeEntity {
     @OneToMany(mappedBy = "account")
     private Set<Mail> mails = new HashSet<Mail>();
 
-    @OneToMany(mappedBy = "writer")
+    @OneToMany(mappedBy = "writer", fetch = FetchType.EAGER)
     private Set<Post> posts = new HashSet<Post>();
 
     @OneToMany(mappedBy = "writer")
