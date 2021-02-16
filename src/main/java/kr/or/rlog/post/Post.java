@@ -31,6 +31,9 @@ public class Post extends BaseTimeEntity {
     @OneToMany(mappedBy = "post")
     private Set<Comment> comments = new HashSet<Comment>();
 
-
+    public void addComment(Comment comment){
+        this.comments.add(comment);
+        comment.setPost(this);
+    }
 
 }

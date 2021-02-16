@@ -1,6 +1,7 @@
 package kr.or.rlog.post;
 
 import kr.or.rlog.account.Account;
+import kr.or.rlog.comment.CommentService;
 import kr.or.rlog.common.CurrentUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,6 +15,9 @@ public class PostController {
 
     @Autowired
     PostService postService;
+
+    @Autowired
+    CommentService commentService;
 
     @GetMapping("/write")
     public String write(){
@@ -32,10 +36,13 @@ public class PostController {
     @GetMapping("post/{id}")
     public String getPost(Model model, @PathVariable Long id){
         Optional<Post> post = postService.getPost(id);
-        if(post.isPresent())
+        if(post.isPresent()) {
             model.addAttribute("post", post.get());
+            model.addAttribute("comments", commentService.getComment(post.get()));
+        }
         else
             model.addAttribute("message", "존재하지 않는 글입니다");
+
         return "/post";
     }
 
