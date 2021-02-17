@@ -34,6 +34,7 @@
         <p><a href = '/admin'>관리자 페이지로 이동</a></p>
     </sec:authorize>
     <p><a href = '/posts'>글 리스트 조회</a></p>
+    <p><a href = '/categories'>카테고리 테스트 조회</a></p>
     <p><a href = '/logout'>로그아웃</a></p>
 
 </body>

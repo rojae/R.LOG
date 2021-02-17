@@ -20,7 +20,7 @@ public class CategoryService {
                 .stream()
                 .map(ce -> new CategoryDto(ce.getId(), ce.getCategoryName(), ce.getParentId()))
                 .collect(groupingBy(CategoryDto::getParentId));
-        CategoryDto rootCategoryDto = new CategoryDto(0l, "ROOT", null);
+        CategoryDto rootCategoryDto = new CategoryDto(0L, "ROOT", null);
         addSubCategories(rootCategoryDto, groupingByParent);
 
         return rootCategoryDto;
