@@ -1,9 +1,9 @@
 package kr.or.rlog.post;
 
 import kr.or.rlog.account.Account;
+import kr.or.rlog.category.Category;
 import kr.or.rlog.comment.Comment;
 import kr.or.rlog.common.BaseTimeEntity;
-import kr.or.rlog.mail.Mail;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,6 +18,9 @@ public class Post extends BaseTimeEntity {
 
     @Id @GeneratedValue
     private Long Id;
+
+    @ManyToOne
+    private Category category;
 
     @Column(name = "title", nullable = false)
     private String title;

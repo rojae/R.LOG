@@ -20,6 +20,14 @@
 
 <h3>글 상세조회</h3>
 <c:if test="${!empty post}">
+    <c:forEach var="category" items="${categories}" varStatus="status">
+        <c:if test="${status.first}">카테고리 :</c:if>
+        <c:out value="${category.categoryName}"/>
+        <c:if test="${!status.last}"> > </c:if>
+        <c:if test="${status.last}">.</c:if>
+    </c:forEach>
+
+    <br/>
     제목 : <c:out value="${post.title}"/>
     <br/>
     작성자 : <c:out value="${post.writer.userName}"/>

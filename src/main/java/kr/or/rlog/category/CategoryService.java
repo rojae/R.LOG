@@ -1,11 +1,11 @@
 package kr.or.rlog.category;
 
+import com.sun.istack.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static java.util.stream.Collectors.groupingBy;
 
@@ -38,6 +38,26 @@ public class CategoryService {
                 .forEach(s -> {
                     addSubCategories(s, groupingByParentId);
                 });
+    }
+
+    public Category getParent(Category category){
+        Optional<Category> parent = categoryRepository.findById(category.getParentId());
+        return parent.orElse(null);
+    }
+
+    public List<Category> getParentsAndMe(Category category){
+        ArrayList<Category> list = new ArrayList<>();
+        list.add(category);
+
+        while(true) {
+            Category parent = this.getParent(category);
+            if(parent == null)
+                break;
+            list.add(parent);
+            category = parent;
+        }
+        Collections.reverse(list);
+        return list;
     }
 
 }

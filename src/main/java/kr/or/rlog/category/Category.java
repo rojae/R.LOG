@@ -1,13 +1,13 @@
 package kr.or.rlog.category;
 
+import kr.or.rlog.post.Post;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity(name = "TBL_CATEGORY")
 @Getter
@@ -17,6 +17,14 @@ public class Category {
     private Long id;
     private String categoryName;
     private Long parentId;
+
+    @OneToMany(mappedBy = "category")
+    private Set<Post> posts = new HashSet<Post>();
+
+    public void addPost(Post post){
+        this.posts.add(post);
+        post.setCategory(this);
+    }
 
     public Category(String categoryName, Long parentId){
         this.categoryName = categoryName;

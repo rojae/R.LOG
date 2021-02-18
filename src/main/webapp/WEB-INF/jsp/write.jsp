@@ -5,16 +5,41 @@
     <meta charset="UTF-8">
     <title>글쓰기</title>
     <link rel="shortcut icon" href="#">
-    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
-            integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
     </script>
     <link href="/css/summernote/summernote-lite.css" rel="stylesheet"/>
     <script src="/js/summernote/summernote-lite.js"></script>
     <script src="/js/summernote/summernote-ko-KR.js"></script>
     <script>
+        function goCategory() {
+            $.ajax({
+                url: '/categories',
+                dataType: 'json',
+                success: function (data) {
+                    showCategories(data, 1);
+                }
+            });
+        }
+
+        function showCategories(root, depth){
+            for(let i in root.subCategories){
+                let name = root.subCategories[i].categoryName;
+                let id = root.subCategories[i].categoryId;
+                drawCategory(id, name, depth);
+                showCategories(root.subCategories[i], depth + 1);
+            }
+        }
+
+        function drawCategory(id, name, depth){
+            let stair = '';
+            for(let i = 0; i < depth; i++)
+                stair += '>';
+            $("#category-select").append(`<option value="\${id}">\${stair} \${name}</option>`);
+        }
+
         function goWrite(frm) {
-            var title = frm.title.value;
-            var content = frm.content.value;
+            let title = frm.title.value;
+            let content = frm.content.value;
 
             if (title.trim() == ''){
                 alert("제목을 입력해주세요");
@@ -30,6 +55,8 @@
 
     <script>
         $(document).ready(function () {
+            goCategory();
+
             $('#summernote').summernote({
                 placeholder: 'content',
                 minHeight: 370,
@@ -48,10 +75,15 @@
 <body>
 <h2 style="text-align: center;">글 작성</h2><br><br><br>
 
+
+
 <div style="width: 60%; margin: auto;">
     <form method="post" action="/write">
+        <label for="category-select">카테고리</label>
+        <select name="category" id="category-select">
+        </select>
+
         <input type="text" name="title" style="width: 40%;" placeholder="제목"/>
-        <br><br>
         <textarea id="summernote" name="content"></textarea>
         <input id="subBtn" type="button" value="글 작성" style="float: right;" onclick="goWrite(this.form)"/>
     </form>
