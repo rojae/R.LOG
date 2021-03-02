@@ -1,5 +1,6 @@
 package kr.or.rlog.category;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import kr.or.rlog.post.Post;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -18,7 +19,8 @@ public class Category {
     private String categoryName;
     private Long parentId;
 
-    @OneToMany(mappedBy = "category")
+    @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
+    @JsonIgnore
     private Set<Post> posts = new HashSet<Post>();
 
     public void addPost(Post post){

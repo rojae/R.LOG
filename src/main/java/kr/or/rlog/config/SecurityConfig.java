@@ -50,20 +50,28 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) {
-        web.ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations());
-        web.ignoring().mvcMatchers( "/", "/signup", "/api/v1/signup/mail");
+        String[] staticResources  =  {
+                "/assets/**",
+                "/css/**",
+                "/ico/**",
+                "/images/**",
+                "/js/**"
+        };
+
+        web.ignoring()
+                .requestMatchers(PathRequest.toStaticResources().atCommonLocations())
+                .mvcMatchers( "/", "/signup", "/api/v1/signup/mail")
+                .mvcMatchers(staticResources);
         //web.ignoring().requestMatchers(PathRequest.toH2Console());
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-
         http.addFilterBefore(new LoggerFilter(), WebAsyncManagerIntegrationFilter.class);
 
         http.authorizeRequests()
                 .mvcMatchers("/admin/**").hasRole("ADMIN")
-                .mvcMatchers("/main").hasRole("USER")
-                .anyRequest().authenticated()
+                .anyRequest().permitAll()
                 .accessDecisionManager(accessDecisionManager());
 
         http.formLogin()
