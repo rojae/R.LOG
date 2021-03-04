@@ -29,6 +29,12 @@ public class PostService {
         return postRepository.findById(pId);
     }
 
+
+    @Transactional
+    public void deletePost(Long pId){
+        postRepository.deleteById(pId);
+    }
+
     @Transactional
     public Post createNew(Post post, Account user) {
         Optional<Category> category = categoryRepository.findById(post.getCategory().getId());
@@ -68,4 +74,19 @@ public class PostService {
         }
         return new PageImpl<PostDto>(list);
     }
+
+    /*
+        ~ 게시글 수정 저장 부분
+        AccountService에서의 메일인증 이후, 권한 변경에 이어서
+        게시글 수정 이후에, update 쿼리를 위해서 JPA 종속성을 사용
+     */
+    @Transactional
+    public void editSave(Post newPost) {
+        Optional<Post> savedPost = postRepository.findById(newPost.getId());
+        savedPost.get().setCategory(newPost.getCategory());
+        savedPost.get().setTitle(newPost.getTitle());
+        savedPost.get().setHeader(newPost.getHeader());
+        savedPost.get().setContent(newPost.getContent());
+    }
+
 }

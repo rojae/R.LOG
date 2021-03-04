@@ -1,20 +1,22 @@
 package kr.or.rlog.post;
 
 import kr.or.rlog.account.Account;
-import kr.or.rlog.category.Category;
 import kr.or.rlog.category.CategoryService;
 import kr.or.rlog.comment.CommentService;
 import kr.or.rlog.common.CurrentUser;
+import netscape.javascript.JSObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 @Controller
@@ -30,35 +32,76 @@ public class PostController {
     CategoryService categoryService;
 
     @GetMapping("/admin/write")
-    public String write(){
+    public String write() {
         return "/admin/page-blog-write";
     }
 
     @PostMapping("/admin/write")
-    public String savePost(@CurrentUser Account user, @ModelAttribute Post post){
+    @Secured("ROLE_ADMIN")
+    public String savePost(@CurrentUser Account user, @ModelAttribute Post post) {
         Post savedPost = postService.createNew(post, user);
-        if(savedPost != null)
+        if (savedPost != null)
             return "redirect:/post/" + savedPost.getId();
         else
             return "/error";
     }
 
-    @GetMapping("post/{id}")
-    public String getPost(Model model, @PathVariable Long id, @CurrentUser Account account){
+    @GetMapping("/admin/write/{id}")
+    @Secured("ROLE_ADMIN")
+    public String edit(Model model, @PathVariable Long id, @CurrentUser Account account) {
         Optional<Post> post = postService.getPost(id);
-        if(post.isPresent()) {
+        if (post.isPresent()) {
+            if (post.get().getWriter().getId().equals(account.getId())) {
+                model.addAttribute("post", post.get());
+                model.addAttribute("category", post.get().getCategory());
+                model.addAttribute("comments", commentService.getComment(post.get()));
+            } else
+                model.addAttribute("message", "권한이 없는 글입니다");
+        } else
+            model.addAttribute("message", "존재하지 않는 글입니다");
+        return "/admin/page-blog-write";
+    }
+
+    @PostMapping("/admin/write/{id}")
+    @Secured("ROLE_ADMIN")
+    public String editSave(Model model, @ModelAttribute Post newPost, @PathVariable Long id, @CurrentUser Account account) {
+        Optional<Post> oldPost = postService.getPost(id);
+        if (oldPost.isPresent()) {
+            if (oldPost.get().getWriter().getId().equals(account.getId())) {
+                postService.editSave(newPost);
+            } else
+                model.addAttribute("message", "권한이 없는 글입니다");
+        } else
+            model.addAttribute("message", "존재하지 않는 글입니다");
+        return "redirect:/post/" + newPost.getId();
+    }
+
+    @GetMapping("post/{id}")
+    public String getPost(Model model, @PathVariable Long id, @CurrentUser Account account) {
+        Optional<Post> post = postService.getPost(id);
+        if (post.isPresent()) {
+            if (account != null)
+                model.addAttribute("isWriter", post.get().getWriter().getId().equals(account.getId()));
             model.addAttribute("post", post.get());
             model.addAttribute("categories", categoryService.getParentsAndMe(post.get().getCategory()));
             model.addAttribute("comments", commentService.getComment(post.get()));
-        }
-        else
+        } else
             model.addAttribute("message", "존재하지 않는 글입니다");
         return "page-blog-post";
     }
 
+    @DeleteMapping("post/{id}")
+    @ResponseBody
+    public Object deletePost(Model model, @PathVariable Long id, @CurrentUser Account account) {
+        postService.deletePost(id);
+        Map<String, Object> map = new HashMap<>();
+        map.put("response", "삭제되었습니다. 자동으로 메인으로 이동합니다.");
+        return map;
+    }
+
     @GetMapping("posts")
     @ResponseBody
-    public ResponseEntity getPosts(Pageable pageable){
+    public ResponseEntity getPosts(Pageable pageable) {
         Page<PostDto> posts = postService.getPage(pageable);
         return new ResponseEntity<>(posts, HttpStatus.OK);
     }
