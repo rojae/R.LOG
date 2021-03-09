@@ -20,7 +20,6 @@ public class Category {
     private Long parentId;
 
     @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
-    @JsonIgnore
     private Set<Post> posts = new HashSet<Post>();
 
     public void addPost(Post post){

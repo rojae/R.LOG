@@ -14,12 +14,12 @@ import javax.persistence.*;
 public class Comment extends BaseTimeEntity {
 
     @Id @GeneratedValue
-    private Long Id;
+    private Long id;
 
     @Column(name = "content")
     private String content;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Account writer;
 
     @ManyToOne

@@ -44,23 +44,31 @@ public class Account extends BaseTimeEntity {
     @OneToMany(mappedBy = "writer")
     private Set<Comment> comments = new HashSet<Comment>();
 
-    public void addMail(Mail mail){
+    public void addMail(Mail mail) {
         this.mails.add(mail);
         mail.setAccount(this);
     }
 
-    public void addPost(Post post){
+    public void addPost(Post post) {
         this.posts.add(post);
         post.setWriter(this);
     }
 
-    public void addComment(Comment comment){
+    public void deletePost(Post post) {
+        posts.removeIf(one -> one.getId().equals(post.getId()));
+    }
+
+    public void addComment(Comment comment) {
         this.comments.add(comment);
         comment.setWriter(this);
     }
 
+    public void deleteComment(Comment comment) {
+        comments.removeIf(one -> one.getId().equals(comment.getId()));
+    }
+
     // 패스워드 암호화 기법
-    public void encodePassword(PasswordEncoder passwordEncoder){
+    public void encodePassword(PasswordEncoder passwordEncoder) {
         this.password = passwordEncoder.encode(this.password);
     }
 

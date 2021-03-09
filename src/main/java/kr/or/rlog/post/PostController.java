@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 
 @Controller
@@ -85,15 +86,17 @@ public class PostController {
             model.addAttribute("post", post.get());
             model.addAttribute("categories", categoryService.getParentsAndMe(post.get().getCategory()));
             model.addAttribute("comments", commentService.getComment(post.get()));
+            System.out.println(Objects.requireNonNull(account).getPosts().size());
         } else
             model.addAttribute("message", "존재하지 않는 글입니다");
         return "page-blog-post";
     }
 
+    // delete to update로 수정하여, 삭제되도 보관되도록 개발 필요
     @DeleteMapping("post/{id}")
     @ResponseBody
     public Object deletePost(Model model, @PathVariable Long id, @CurrentUser Account account) {
-        postService.deletePost(id);
+        postService.deletePost(id, account);
         Map<String, Object> map = new HashMap<>();
         map.put("response", "삭제되었습니다. 자동으로 메인으로 이동합니다.");
         return map;

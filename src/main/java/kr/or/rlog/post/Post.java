@@ -6,6 +6,8 @@ import kr.or.rlog.comment.Comment;
 import kr.or.rlog.common.BaseTimeEntity;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -17,9 +19,10 @@ import java.util.Set;
 public class Post extends BaseTimeEntity {
 
     @Id @GeneratedValue
-    private Long Id;
+    private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @Fetch(FetchMode.JOIN)
     private Category category;
 
     @Column(name = "header", nullable = false)
@@ -31,10 +34,12 @@ public class Post extends BaseTimeEntity {
     @Column(columnDefinition = "TEXT", name = "content", nullable = false)
     private String content;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
+    @Fetch(FetchMode.JOIN)
     private Account writer;
 
-    @OneToMany(mappedBy = "post")
+    @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    @Fetch(FetchMode.JOIN)
     private Set<Comment> comments = new HashSet<Comment>();
 
     public void addComment(Comment comment){

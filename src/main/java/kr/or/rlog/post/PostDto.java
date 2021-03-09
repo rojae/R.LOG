@@ -13,7 +13,6 @@ public class PostDto {
     private CategoryDto category;
     private String header;
     private String title;
-    private String content;
     private AccountDto writer;
     private LocalDateTime createdDate;
     private LocalDateTime modifiedDate;

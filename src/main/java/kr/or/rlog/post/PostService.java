@@ -29,10 +29,13 @@ public class PostService {
         return postRepository.findById(pId);
     }
 
-
     @Transactional
-    public void deletePost(Long pId){
-        postRepository.deleteById(pId);
+    public void deletePost(Long pId, Account user){
+        Optional<Post> post = postRepository.findById(pId);
+        if(post.isPresent()) {
+            postRepository.deleteById(pId);
+            user.deletePost(post.get());
+        }
     }
 
     @Transactional
@@ -40,8 +43,9 @@ public class PostService {
         Optional<Category> category = categoryRepository.findById(post.getCategory().getId());
         if (category.isPresent()) {
             category.get().addPost(post);
-            post.setWriter(user);
             user.addPost(post);
+            post.setCategory(category.get());
+            post.setWriter(user);
             return postRepository.save(post);
         }
         return null;
