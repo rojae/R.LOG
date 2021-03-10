@@ -76,7 +76,7 @@ public class PostService {
             target.setUrl("/post/"+origin.getId());
             list.add(target);
         }
-        return new PageImpl<PostDto>(list);
+        return new PageImpl<PostDto>(list, pages.getPageable(), pages.getTotalElements());
     }
 
     /*

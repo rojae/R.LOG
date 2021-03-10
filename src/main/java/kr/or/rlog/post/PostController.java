@@ -105,6 +105,7 @@ public class PostController {
     @GetMapping("posts")
     @ResponseBody
     public ResponseEntity getPosts(Pageable pageable) {
+        System.out.println(pageable.getPageNumber());
         Page<PostDto> posts = postService.getPage(pageable);
         return new ResponseEntity<>(posts, HttpStatus.OK);
     }
