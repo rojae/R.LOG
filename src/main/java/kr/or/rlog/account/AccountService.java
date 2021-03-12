@@ -67,4 +67,13 @@ public class AccountService implements UserDetailsService {
         account.encodePassword(passwordEncoder);
         return this.accountRepository.save(account);
     }
+
+    public boolean isDuplicate(Account account){
+        return this.accountRepository.existsAccountByEmail(account.getEmail());
+    }
+
+    public boolean isAuth(Account account){
+        return this.accountRepository.existsAccountByEmailAndIsAuthIsTrue(account.getEmail());
+    }
+
 }

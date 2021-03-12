@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class IndexController {
 
-    private final static int pageSize = 2;
+    private final static int pageSize = 7;
     private final static int blockSize = 5;
     @Autowired
     PostService postService;
@@ -38,6 +38,7 @@ public class IndexController {
         int endBlockPage = startBlockPage + pageBlock - 1; //6+5-1=10. 6,7,8,9,10해서 10.
         endBlockPage = Math.min(totalPages, endBlockPage);
 
+        System.out.println(pageNumber + " " + totalPages + " " + pageBlock + " " +startBlockPage + " " + endBlockPage);
         model.addAttribute("startBlockPage", startBlockPage);
         model.addAttribute("endBlockPage", endBlockPage);
         model.addAttribute("postPage", postPage);

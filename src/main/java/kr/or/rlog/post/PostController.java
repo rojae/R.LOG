@@ -86,7 +86,6 @@ public class PostController {
             model.addAttribute("post", post.get());
             model.addAttribute("categories", categoryService.getParentsAndMe(post.get().getCategory()));
             model.addAttribute("comments", commentService.getComment(post.get()));
-            System.out.println(Objects.requireNonNull(account).getPosts().size());
         } else
             model.addAttribute("message", "존재하지 않는 글입니다");
         return "page-blog-post";

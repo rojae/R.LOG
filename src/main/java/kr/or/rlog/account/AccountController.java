@@ -25,6 +25,12 @@ public class AccountController {
 
     @PostMapping("/signup")
     public String createAccount(Model model, @ModelAttribute Account account) throws MessagingException {
+        if(accountService.isDuplicate(account)) {
+            model.addAttribute("message", "이미 가입된 이메일입니다. 이메일 인증을 진행하세요.");
+            if(accountService.isAuth(account))
+                model.addAttribute("message", "이미 가입된 이메일입니다. 로그인을 진행해주세요.");
+            return "login";
+        }
         // 아래 두개는 합치는게 .. 좋으려나??
         Account savedUser = accountService.createNew(account);
         Mail newMail = mailService.createMail(savedUser);
