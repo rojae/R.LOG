@@ -20,7 +20,7 @@ public class AccountController {
 
     @GetMapping("/signup")
     public String signUp(){
-        return "signup";
+        return "page-blog-signup";
     }
 
     @PostMapping("/signup")

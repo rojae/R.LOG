@@ -5,6 +5,7 @@ import kr.or.rlog.category.Category;
 import kr.or.rlog.comment.Comment;
 import kr.or.rlog.common.BaseTimeEntity;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -15,6 +16,7 @@ import java.util.Set;
 
 @Getter
 @Setter
+@NoArgsConstructor
 @Entity(name = "TBL_POST")
 public class Post extends BaseTimeEntity {
 

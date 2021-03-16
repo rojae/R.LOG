@@ -7,8 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class CommentService {
@@ -19,20 +18,37 @@ public class CommentService {
     PostRepository postRepository;
 
     @Transactional
-    public boolean createNew(Comment comment, Account user, Long postId){
+    public boolean createNew(Comment comment, Account user, Long postId) {
         Optional<Post> savedPost = postRepository.findById(postId);
-        if(!savedPost.isPresent())
+        if (!savedPost.isPresent())
             return false;
-        else{
-            savedPost.get().addComment(comment);
+        else {
             comment.setWriter(user);
             comment.setPost(savedPost.get());
+            savedPost.get().addComment(comment);
         }
         commentRepository.save(comment);
         return true;
     }
 
-    public List<Comment> getComment(Post post){
+    @Transactional
+    public boolean createNew(Comment comment, Account user, Long postId, Long parentId) {
+        Optional<Post> savedPost = postRepository.findById(postId);
+        Optional<Comment> savedComment = commentRepository.findById(parentId);
+
+        if (!savedPost.isPresent() || !savedComment.isPresent())
+            return false;
+        else {
+            comment.setWriter(user);
+            comment.setPost(savedPost.get());
+            comment.setParentId(parentId);
+            savedPost.get().addComment(comment);
+        }
+        commentRepository.save(comment);
+        return true;
+    }
+
+    public List<Comment> getComment(Post post) {
         return commentRepository.findByPostOrderByCreatedDateDesc(post);
     }
 
