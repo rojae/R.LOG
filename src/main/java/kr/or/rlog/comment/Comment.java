@@ -3,10 +3,8 @@ package kr.or.rlog.comment;
 import kr.or.rlog.account.Account;
 import kr.or.rlog.common.BaseTimeEntity;
 import kr.or.rlog.post.Post;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 
@@ -27,7 +25,7 @@ public class Comment extends BaseTimeEntity {
     @ManyToOne
     private Post post;
 
-    @Column
+    @Column(columnDefinition = "bigint(20) default '0'", nullable = false)
     private Long parentId;
 
 }

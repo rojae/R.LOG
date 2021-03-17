@@ -4,7 +4,6 @@ import kr.or.rlog.account.Account;
 import kr.or.rlog.category.CategoryService;
 import kr.or.rlog.comment.CommentService;
 import kr.or.rlog.common.CurrentUser;
-import netscape.javascript.JSObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 
 @Controller
@@ -55,7 +53,6 @@ public class PostController {
             if (post.get().getWriter().getId().equals(account.getId())) {
                 model.addAttribute("post", post.get());
                 model.addAttribute("category", post.get().getCategory());
-                model.addAttribute("comments", commentService.getComment(post.get()));
             } else
                 model.addAttribute("message", "권한이 없는 글입니다");
         } else
@@ -85,7 +82,6 @@ public class PostController {
                 model.addAttribute("isWriter", post.get().getWriter().getId().equals(account.getId()));
             model.addAttribute("post", post.get());
             model.addAttribute("categories", categoryService.getParentsAndMe(post.get().getCategory()));
-            model.addAttribute("comments", commentService.getComment(post.get()));
         } else
             model.addAttribute("message", "존재하지 않는 글입니다");
         return "page-blog-post";
