@@ -99,9 +99,9 @@ public class PostController {
 
     @GetMapping("posts")
     @ResponseBody
-    public ResponseEntity getPosts(Pageable pageable) {
+    public ResponseEntity getPosts(Pageable pageable, @RequestParam(value = "keyword", defaultValue = "") String keyword) {
         System.out.println(pageable.getPageNumber());
-        Page<PostDto> posts = postService.getPage(pageable);
+        Page<PostDto> posts = postService.getPage(pageable, keyword);
         return new ResponseEntity<>(posts, HttpStatus.OK);
     }
 }

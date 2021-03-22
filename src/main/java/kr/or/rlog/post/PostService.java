@@ -56,8 +56,14 @@ public class PostService {
     }
 
     @Transactional
-    public Page<PostDto> getPage(Pageable pageable) {
-        Page<Post> pages = postRepository.findAllByOrderByCreatedDateDesc(pageable);
+    public Page<PostDto> getPage(Pageable pageable, String keyword) {
+        Page<Post> pages;
+
+        if(keyword.equals(""))
+            pages = postRepository.findAllByOrderByCreatedDateDesc(pageable);
+        else
+            pages = postRepository.findAllByTitleContainsIgnoreCaseOrderByCreatedDateDesc(pageable, keyword);
+
         List<PostDto> list = new ArrayList<>();
         for (Post origin : pages) {
             PostDto target = new PostDto();
