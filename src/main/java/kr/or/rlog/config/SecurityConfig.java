@@ -2,10 +2,14 @@ package kr.or.rlog.config;
 
 
 import kr.or.rlog.account.AccountService;
+import kr.or.rlog.account.OAuth2Provider;
+import kr.or.rlog.account.OAuth2UserService;
 import kr.or.rlog.common.LoggerFilter;
 import kr.or.rlog.handler.LoginFailHandler;
 import kr.or.rlog.handler.LoginSuccessHandler;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientProperties;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,12 +23,20 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.oauth2.client.CommonOAuth2Provider;
+import org.springframework.security.oauth2.client.registration.ClientRegistration;
+import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
+import org.springframework.security.oauth2.client.registration.InMemoryClientRegistrationRepository;
 import org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler;
 import org.springframework.security.web.access.expression.WebExpressionVoter;
+import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
+
 
 @Configuration
 @EnableWebSecurity
@@ -32,6 +44,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     AccountService accountService;
+
+    OAuth2ClientProperties oAuth2ClientProperties = new OAuth2ClientProperties();
 
     // Voter's expression handler custom
     public AccessDecisionManager accessDecisionManager() {
@@ -50,7 +64,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) {
-        String[] staticResources  =  {
+        String[] staticResources = {
                 "/assets/**",
                 "/css/**",
                 "/ico/**",
@@ -60,7 +74,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         web.ignoring()
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations())
-                .mvcMatchers( "/", "/signup", "/api/v1/signup/mail")
+                .mvcMatchers("/", "/signup", "/api/v1/signup/mail")
                 .mvcMatchers(staticResources);
         //web.ignoring().requestMatchers(PathRequest.toH2Console());
     }
@@ -72,7 +86,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .mvcMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest().permitAll()
-                .accessDecisionManager(accessDecisionManager());
+                .accessDecisionManager(accessDecisionManager())
+                .and()
+                .exceptionHandling()
+                .authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/login"))
+                .and()
+                .oauth2Login()
+                .userInfoEndpoint()
+                .userService(new OAuth2UserService());
+
 
         http.formLogin()
                 .loginPage("/login")
@@ -89,6 +111,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .logoutUrl("/logout")
                 .deleteCookies("JSESSIONID")
                 .logoutSuccessUrl("/index");
+
     }
 
     @Override
@@ -101,5 +124,57 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public AuthenticationManager authenticationManager() throws Exception {
         return super.authenticationManager();
+    }
+
+    @Bean
+    public ClientRegistrationRepository clientRegistrationRepository(
+            @Value("${spring.security.oauth2.kakao.client-id}") String kakaoClientId,
+            @Value("${spring.security.oauth2.kakao.client-secret}") String kakaoClientSecret,
+            @Value("${spring.security.oauth2.naver.client-id}") String naverClientId,
+            @Value("${spring.security.oauth2.naver.client-secret}") String naverClientSecret) {
+
+        List<ClientRegistration> registrations =
+                oAuth2ClientProperties.getRegistration().keySet().stream()
+                        .map(client -> getRegistration(oAuth2ClientProperties, client))
+                        .filter(Objects::nonNull)
+                        .collect(Collectors.toList());
+
+        registrations.add(OAuth2Provider.KAKAO.getBuilder("kakao")
+                .clientId(kakaoClientId)
+                .clientSecret(kakaoClientSecret)
+                .jwkSetUri("temp")
+                .build());
+
+        registrations.add(OAuth2Provider.NAVER.getBuilder("naver")
+                .clientId(naverClientId)
+                .clientSecret(naverClientSecret)
+                .jwkSetUri("temp")
+                .build());
+
+        return new InMemoryClientRegistrationRepository(registrations);
+
+    }
+
+    private ClientRegistration getRegistration(OAuth2ClientProperties clientProperties, String client) {
+        if ("google".equals(client)) {
+            OAuth2ClientProperties.Registration registration = clientProperties.getRegistration().get("google");
+            return CommonOAuth2Provider.GOOGLE.getBuilder(client)
+                    .clientId(registration.getClientId())
+                    .clientSecret(registration.getClientSecret())
+                    .scope("email", "profile")
+                    .build();
+        }
+
+        if ("facebook".equals(client)) {
+            OAuth2ClientProperties.Registration registration = clientProperties.getRegistration().get("facebook");
+            return CommonOAuth2Provider.FACEBOOK.getBuilder(client)
+                    .clientId(registration.getClientId())
+                    .clientSecret(registration.getClientSecret())
+                    .userInfoUri("https://graph.facebook.com/me?fields=id,name,email,link")
+                    .scope("email")
+                    .build();
+        }
+
+        return null;
     }
 }
