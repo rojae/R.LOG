@@ -3,7 +3,6 @@ package kr.or.rlog.guestbook;
 import kr.or.rlog.account.Account;
 import kr.or.rlog.common.CurrentUser;
 import kr.or.rlog.common.Message;
-import kr.or.rlog.post.PostDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,7 +14,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 /*
     R.LOG -> 방명록 기능
