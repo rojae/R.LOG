@@ -19,6 +19,7 @@ public class IndexController {
 
     private final static int pageSize = 7;
     private final static int blockSize = 5;
+
     @Autowired
     PostService postService;
 
