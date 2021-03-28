@@ -31,6 +31,7 @@ public class PostController {
     CategoryService categoryService;
 
     @GetMapping("/admin/write")
+    @Secured("ROLE_ADMIN")
     public String write() {
         return "/admin/page-blog-write";
     }

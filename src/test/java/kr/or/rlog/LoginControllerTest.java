@@ -2,6 +2,7 @@ package kr.or.rlog;
 
 import kr.or.rlog.account.Account;
 import kr.or.rlog.account.AccountService;
+import kr.or.rlog.account.platform.PlatformType;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -60,7 +61,7 @@ public class LoginControllerTest {
         account.setPassword(password);
         account.setEmail("rojae@kakao.com");
         account.setRole("ADMIN");
-        return accountService.createNew(account);
+        return accountService.createNew(account, PlatformType.RLOG);
     }
 
     public Account createUser(String userName, String password){
@@ -69,7 +70,7 @@ public class LoginControllerTest {
         account.setPassword(password);
         account.setEmail("rojae@kakao.com");
         account.setRole("USER");
-        return accountService.createNew(account);
+        return accountService.createNew(account, PlatformType.RLOG);
     }
 
 }

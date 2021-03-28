@@ -1,9 +1,7 @@
 package kr.or.rlog.mail;
 
-import kr.or.rlog.account.Account;
 import kr.or.rlog.account.AccountRepository;
 import kr.or.rlog.account.AccountService;
-import kr.or.rlog.common.CurrentUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,10 +9,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.persistence.EntityManager;
-import javax.transaction.Transactional;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.List;
 
 @Controller
 public class MailController {

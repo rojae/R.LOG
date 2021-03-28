@@ -77,6 +77,7 @@ public class PostService {
             target.setWriter(
                     new AccountDto(origin.getWriter().getEmail()
                             ,origin.getWriter().getUserName()
+                            ,origin.getWriter().getProfileImage()
                     )
             );
             target.setUrl("/post/"+origin.getId());

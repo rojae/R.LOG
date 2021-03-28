@@ -1,5 +1,6 @@
 package kr.or.rlog.account;
 
+import kr.or.rlog.account.platform.PlatformType;
 import kr.or.rlog.mail.Mail;
 import kr.or.rlog.mail.MailService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +33,7 @@ public class AccountController {
             return "login";
         }
         // 아래 두개는 합치는게 .. 좋으려나??
-        Account savedUser = accountService.createNew(account);
+        Account savedUser = accountService.createNew(account, PlatformType.RLOG);
         Mail newMail = mailService.createMail(savedUser);
         mailService.mailSend(newMail);
         model.addAttribute("message", "회원가입이 완료되었습니다. 이메일 인증을 진행하세요.");

@@ -3,7 +3,6 @@ package kr.or.rlog.comment;
 import kr.or.rlog.account.Account;
 import kr.or.rlog.common.CurrentUser;
 import kr.or.rlog.common.Message;
-import kr.or.rlog.post.Post;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

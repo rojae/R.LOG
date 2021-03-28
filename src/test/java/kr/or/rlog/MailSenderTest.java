@@ -3,6 +3,7 @@ package kr.or.rlog;
 import kr.or.rlog.account.Account;
 import kr.or.rlog.account.AccountRepository;
 import kr.or.rlog.account.AccountService;
+import kr.or.rlog.account.platform.PlatformType;
 import kr.or.rlog.mail.Mail;
 import kr.or.rlog.mail.MailService;
 import kr.or.rlog.utils.RandomUtils;
@@ -59,7 +60,7 @@ public class MailSenderTest {
         account.setRole("USER");
         account.setAuth(true);
 
-        return accountService.createNew(account);
+        return accountService.createNew(account, PlatformType.RLOG);
     }
 
 }

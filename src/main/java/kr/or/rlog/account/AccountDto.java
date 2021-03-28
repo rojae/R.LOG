@@ -8,14 +8,16 @@ import lombok.Setter;
 public class AccountDto {
     private String email;
     private String userName;
+    private String profileImage;
 
     public AccountDto(){
 
     }
 
-    public AccountDto(String email, String userName){
+    public AccountDto(String email, String userName, String profileImage){
         this.email = email;
         this.userName = userName;
+        this.profileImage = profileImage;
     }
 
 }

@@ -1,5 +1,6 @@
 package kr.or.rlog.account;
 
+import kr.or.rlog.account.platform.PlatformType;
 import kr.or.rlog.comment.Comment;
 import kr.or.rlog.common.BaseTimeEntity;
 import kr.or.rlog.mail.Mail;
@@ -20,14 +21,27 @@ public class Account extends BaseTimeEntity {
     @GeneratedValue
     private Long id;
 
+    @Column(name = "platformType", nullable = false, columnDefinition = "VARCHAR(10) DEFAULT 'RLOG' ")
+    @Enumerated(EnumType.STRING)
+    private PlatformType platformType;
+
     @Column(name = "email", nullable = false, unique = true)
     private String email;
+
+    @Column(name = "accessToken")
+    private String accessToken;
+
+    @Column(name = "refreshToken")
+    private String refreshToken;
 
     @Column(name = "password", nullable = false)
     private String password;
 
     @Column(name = "userName", nullable = false)
     private String userName;
+
+    @Column(name = "profileImage")
+    private String profileImage;
 
     @Column(name = "role", columnDefinition = "VARCHAR(255) DEFAULT 'USER' ")
     private String role;

@@ -1,10 +1,11 @@
 package kr.or.rlog.account;
 
+import kr.or.rlog.account.platform.KakaoUser;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 
-import java.util.Arrays;
 import java.util.Collections;
+import java.util.UUID;
 
 public class UserAccount extends User {
     private Account account;
@@ -14,14 +15,23 @@ public class UserAccount extends User {
         this.account = account;
     }
 
+    public UserAccount(KakaoUser kakaoUser){
+        super(kakaoUser.getUserName(), String.valueOf(UUID.randomUUID()), Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + kakaoUser.getRole())));
+        Account newUser = new Account();
+        newUser.setUserName(kakaoUser.getUserName());
+        newUser.setProfileImage(kakaoUser.getProfileImage());
+        newUser.setRole(kakaoUser.getRole());
+        newUser.setAccessToken(kakaoUser.getAccessToken().getTokenValue());
+        newUser.setAuth(true);
+        newUser.setPlatformType(kakaoUser.getPlatformType());
+        newUser.setEmail(kakaoUser.getEmail());
+        newUser.setPassword(super.getPassword());
+        this.account = newUser;
+    }
+
     public Account getAccount() {
         return account;
     }
 
-    @Override
-    public String toString() {
-        return "UserAccount{" +
-                "account=" + account +
-                '}';
-    }
+
 }

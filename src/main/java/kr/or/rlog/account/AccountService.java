@@ -1,5 +1,6 @@
 package kr.or.rlog.account;
 
+import kr.or.rlog.account.platform.PlatformType;
 import kr.or.rlog.mail.Mail;
 import kr.or.rlog.mail.MailRepository;
 import kr.or.rlog.mail.MailService;
@@ -63,7 +64,8 @@ public class AccountService implements UserDetailsService {
         return true;
     }
 
-    public Account createNew(Account account) {
+    public Account createNew(Account account, PlatformType platformType) {
+        account.setPlatformType(platformType);
         account.encodePassword(passwordEncoder);
         return this.accountRepository.save(account);
     }

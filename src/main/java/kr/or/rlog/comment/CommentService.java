@@ -56,7 +56,7 @@ public class CommentService {
         Map<Long, List<CommentDto>> groupingByParent = commentRepository.findAll()
                 .stream()
                 .filter(comment -> comment.getPost().getId().equals(postId))
-                .map(ce -> new CommentDto(ce.getId(), ce.getContent(), new AccountDto(ce.getWriter().getEmail(), ce.getWriter().getUserName()), ce.getModifiedDate(), ce.getParentId()))
+                .map(ce -> new CommentDto(ce.getId(), ce.getContent(), new AccountDto(ce.getWriter().getEmail(), ce.getWriter().getUserName(), ce.getWriter().getProfileImage()), ce.getModifiedDate(), ce.getParentId()))
                 .collect(groupingBy(CommentDto::getParentId));
 
         CommentDto rootCommentDto = new CommentDto(0L, "ROOT", null, null, null);

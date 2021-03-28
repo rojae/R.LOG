@@ -1,9 +1,7 @@
 package kr.or.rlog.config;
 
 
-import kr.or.rlog.account.AccountService;
-import kr.or.rlog.account.OAuth2Provider;
-import kr.or.rlog.account.OAuth2UserService;
+import kr.or.rlog.account.*;
 import kr.or.rlog.common.LoggerFilter;
 import kr.or.rlog.handler.LoginFailHandler;
 import kr.or.rlog.handler.LoginSuccessHandler;
@@ -24,6 +22,7 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.oauth2.client.CommonOAuth2Provider;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.oauth2.client.registration.InMemoryClientRegistrationRepository;
@@ -44,6 +43,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     AccountService accountService;
+
+    @Autowired
+    CustomOAuth2AuthorizedClientService customOAuth2AuthorizedClientService;
+
+    @Autowired
+    OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
+
+    @Bean
+    public OAuth2AuthorizedClientService authorizedClientService() {
+        return new CustomOAuth2AuthorizedClientService();
+    }
 
     OAuth2ClientProperties oAuth2ClientProperties = new OAuth2ClientProperties();
 
@@ -92,8 +102,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/login"))
                 .and()
                 .oauth2Login()
-                .userInfoEndpoint()
-                .userService(new OAuth2UserService());
+                .successHandler(oAuth2LoginSuccessHandler);
 
 
         http.formLogin()
@@ -126,6 +135,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return super.authenticationManager();
     }
 
+    /*
+        Oauth2 로그인
+        현재 카카오 로그인까지만 개발완료
+     */
     @Bean
     public ClientRegistrationRepository clientRegistrationRepository(
             @Value("${spring.security.oauth2.kakao.client-id}") String kakaoClientId,
@@ -177,4 +190,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         return null;
     }
+
+
 }
