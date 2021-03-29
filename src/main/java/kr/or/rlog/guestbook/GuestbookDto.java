@@ -13,14 +13,16 @@ public class GuestbookDto {
     private String content;
     private AccountDto writer;
     private LocalDateTime modifiedDate;
+    private boolean mine;
 
     public GuestbookDto(){}
 
-    public GuestbookDto(Long id, String content, AccountDto writer, LocalDateTime modifiedDate){
+    public GuestbookDto(Long id, String content, AccountDto writer, LocalDateTime modifiedDate, boolean mine){
         this.id = id;
         this.content = content;
         this.writer = writer;
         this.modifiedDate = modifiedDate;
+        this.mine = mine;
     }
 
 }

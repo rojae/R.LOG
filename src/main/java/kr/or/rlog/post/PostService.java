@@ -75,7 +75,9 @@ public class PostService {
                     )
             );
             target.setWriter(
-                    new AccountDto(origin.getWriter().getEmail()
+                    new AccountDto(
+                            origin.getWriter().getId()
+                            ,origin.getWriter().getEmail()
                             ,origin.getWriter().getUserName()
                             ,origin.getWriter().getProfileImage()
                     )

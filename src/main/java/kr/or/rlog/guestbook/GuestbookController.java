@@ -14,6 +14,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+import java.util.Optional;
+
 
 /*
     R.LOG -> 방명록 기능
@@ -44,9 +47,9 @@ public class GuestbookController {
     }
 
     @GetMapping("/guestbook")
-    public String getGuestbooks(Model model, @PageableDefault(page = 0, size = pageSize, sort = "createdDate", direction = Sort.Direction.DESC)
+    public String getGuestbooks(Model model, @CurrentUser Account user, @PageableDefault(page = 0, size = pageSize, sort = "createdDate", direction = Sort.Direction.DESC)
             Pageable pageable) {
-        Page<GuestbookDto> guestbookPage = guestbookService.getPage(pageable);
+        Page<GuestbookDto> guestbookPage = guestbookService.getPage(pageable, user);
 
         int pageNumber = (guestbookPage.getPageable().isPaged()) ? guestbookPage.getPageable().getPageNumber() : 0;    //  현재페이지
         int totalPages = guestbookPage.getTotalPages(); //총 페이지 수. 검색에따라 10개면 10개..
@@ -61,5 +64,35 @@ public class GuestbookController {
 
         return "guestbook";
     }
+
+    @PostMapping("/guestbook/{bookId}")
+    public String editView(Model model, @PathVariable Long bookId, @CurrentUser Account user) {
+        Guestbook guestbook = guestbookService.getOneIfMine(bookId, user);
+        if (guestbook == null) {
+            model.addAttribute("message", "존재하지 않거나 권한이 없는 요청입니다");
+        } else {
+            model.addAttribute("content", guestbook.getContent());
+        }
+        return "guestbook-edit";
+    }
+
+    @PutMapping("/guestbook/{bookId}")
+    @ResponseBody
+    public ResponseEntity<Message> editProc(@RequestBody Map<String, Object> params, @PathVariable Long bookId, @CurrentUser Account user) {
+        if (guestbookService.editProc(bookId, (String) params.get("content")))
+            return new ResponseEntity<Message>(Message.builder().response("수정되었습니다").code("200").build(), HttpStatus.OK);
+        else
+            return new ResponseEntity<Message>(Message.builder().response("존재하지 않거나 권한이 없는 요청입니다").code("500").build(), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @DeleteMapping("/guestbook/{bookId}")
+    @ResponseBody
+    public ResponseEntity<Message> deleteProc(@PathVariable Long bookId, @CurrentUser Account user){
+        if (guestbookService.deleteProc(bookId))
+            return new ResponseEntity<Message>(Message.builder().response("삭제되었습니다").code("200").build(), HttpStatus.OK);
+        else
+            return new ResponseEntity<Message>(Message.builder().response("존재하지 않거나 권한이 없는 요청입니다").code("500").build(), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
 
 }
