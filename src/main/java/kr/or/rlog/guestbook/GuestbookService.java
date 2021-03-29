@@ -43,7 +43,7 @@ public class GuestbookService {
                     )
             );
 
-            if(user.getId().equals(origin.getWriter().getId()))
+            if(user != null && user.getId().equals(origin.getWriter().getId()))
                 target.setMine(true);
 
             list.add(target);
