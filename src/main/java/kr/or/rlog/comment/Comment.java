@@ -2,6 +2,7 @@ package kr.or.rlog.comment;
 
 import kr.or.rlog.account.Account;
 import kr.or.rlog.common.BaseTimeEntity;
+import kr.or.rlog.common.Status;
 import kr.or.rlog.post.Post;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
@@ -28,4 +29,7 @@ public class Comment extends BaseTimeEntity {
     @Column(columnDefinition = "bigint(20) default '0'", nullable = false)
     private Long parentId;
 
+    @Column(name = "status", nullable = false, columnDefinition = "VARCHAR(10) DEFAULT 'ENABLE' ")
+    @Enumerated(EnumType.STRING)
+    private Status status;
 }

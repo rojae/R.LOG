@@ -2,6 +2,7 @@ package kr.or.rlog.comment;
 
 import kr.or.rlog.account.Account;
 import kr.or.rlog.account.AccountDto;
+import kr.or.rlog.common.Status;
 import kr.or.rlog.post.Post;
 import kr.or.rlog.post.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,18 +47,23 @@ public class CommentService {
             comment.setWriter(user);
             comment.setPost(savedPost.get());
             comment.setParentId(parentId);
+            comment.setStatus(Status.ENABLE);
             savedPost.get().addComment(comment);
         }
         commentRepository.save(comment);
         return true;
     }
 
-    public CommentDto createRoot(Long postId) {
-        Map<Long, List<CommentDto>> groupingByParent = commentRepository.findAll()
+    public CommentDto createRoot(Long postId, Account user) {
+        Map<Long, List<CommentDto>> groupingByParent = commentRepository.findAllByStatus(Status.ENABLE)
                 .stream()
                 .filter(comment -> comment.getPost().getId().equals(postId))
-                .map(ce -> new CommentDto(ce.getId(), ce.getContent(), new AccountDto(ce.getWriter().getEmail(), ce.getWriter().getUserName(), ce.getWriter().getProfileImage()), ce.getModifiedDate(), ce.getParentId()))
+                .map(ce -> new CommentDto(ce.getId(), ce.getContent()
+                        , new AccountDto(ce.getWriter().getId(), ce.getWriter().getEmail(), ce.getWriter().getUserName(), ce.getWriter().getProfileImage())
+                        , user, ce.getModifiedDate(), ce.getParentId())
+                )
                 .collect(groupingBy(CommentDto::getParentId));
+
 
         CommentDto rootCommentDto = new CommentDto(0L, "ROOT", null, null, null);
         addSubComment(rootCommentDto, groupingByParent);
@@ -79,5 +85,30 @@ public class CommentService {
                 });
     }
 
+    public Optional<Comment> getOne(Long commentId){
+        return commentRepository.findById(commentId);
+    }
 
+
+    @Transactional
+    public boolean editProc(Long id, String content) {
+        Optional<Comment> savedComment = commentRepository.findById(id);
+        if(savedComment.isPresent()) {
+            savedComment.get().setContent(content);
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    @Transactional
+    public boolean deleteProc(Long id) {
+        Optional<Comment> savedComment = commentRepository.findById(id);
+        if(savedComment.isPresent()) {
+            savedComment.get().setStatus(Status.UNABLE);
+            return true;
+        }else{
+            return false;
+        }
+    }
 }
