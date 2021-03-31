@@ -30,9 +30,13 @@ public class PostService {
         return postRepository.findById(pId);
     }
 
+    /*
+        관리자의 경우 -> 삭제되지 않은 글 전체
+        사용자의 경우 -> 활성화된 글만 조회
+     */
     public Optional<Post> getPost(Long pId, boolean isAdmin) {
         if(isAdmin)
-            return postRepository.findById(pId);
+            return postRepository.findByIdAndStatusNot(pId, Status.UNABLE);
         else
             return postRepository.findByIdAndStatus(pId, Status.ENABLE);
     }
@@ -62,15 +66,19 @@ public class PostService {
         return null;
     }
 
+    /*
+        관리자의 경우 -> 삭제되지 않은 글 전체
+        사용자의 경우 -> 활성화된 글만 조회
+    */
     @Transactional
     public Page<PostDto> getPage(Pageable pageable, String keyword, Account user) {
         Page<Post> pages;
 
         if(user != null && user.getRole().equals("ADMIN")){
             if (keyword.equals(""))
-                pages = postRepository.findAllByOrderByCreatedDateDesc(pageable);
+                pages = postRepository.findAllByStatusNotOrderByCreatedDateDesc(pageable, Status.UNABLE);
             else
-                pages = postRepository.findAllByTitleContainsIgnoreCaseOrderByCreatedDateDesc(pageable, keyword);
+                pages = postRepository.findAllByTitleContainsIgnoreCaseAndStatusNotOrderByCreatedDateDesc(pageable, keyword, Status.UNABLE);
         }
         else {
             if (keyword.equals(""))
