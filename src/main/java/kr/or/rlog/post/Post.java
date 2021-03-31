@@ -4,6 +4,7 @@ import kr.or.rlog.account.Account;
 import kr.or.rlog.category.Category;
 import kr.or.rlog.comment.Comment;
 import kr.or.rlog.common.BaseTimeEntity;
+import kr.or.rlog.common.Status;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -43,6 +44,10 @@ public class Post extends BaseTimeEntity {
     @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     @Fetch(FetchMode.JOIN)
     private Set<Comment> comments = new HashSet<Comment>();
+
+    @Column(name = "status", nullable = false, columnDefinition = "VARCHAR(10) DEFAULT 'ENABLE' ")
+    @Enumerated(EnumType.STRING)
+    private Status status;
 
     public void addComment(Comment comment){
         this.comments.add(comment);

@@ -4,6 +4,7 @@ import kr.or.rlog.account.Account;
 import kr.or.rlog.category.CategoryService;
 import kr.or.rlog.comment.CommentService;
 import kr.or.rlog.common.CurrentUser;
+import kr.or.rlog.common.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -91,11 +92,11 @@ public class PostController {
     // delete to update로 수정하여, 삭제되도 보관되도록 개발 필요
     @DeleteMapping("post/{id}")
     @ResponseBody
-    public Object deletePost(Model model, @PathVariable Long id, @CurrentUser Account account) {
-        postService.deletePost(id, account);
-        Map<String, Object> map = new HashMap<>();
-        map.put("response", "삭제되었습니다. 자동으로 메인으로 이동합니다.");
-        return map;
+    public ResponseEntity<Message> deletePost(Model model, @PathVariable Long id, @CurrentUser Account account) {
+        if(postService.deletePost(id, account))
+            return new ResponseEntity<Message>(Message.builder().response("삭제되었습니다. 자동으로 메인으로 이동합니다.").code("200").build(), HttpStatus.OK);
+        else
+            return new ResponseEntity<Message>(Message.builder().response("접근이 거부되었습니다.").code("403").build(), HttpStatus.FORBIDDEN);
     }
 
     @GetMapping("posts")

@@ -68,8 +68,12 @@ public class Account extends BaseTimeEntity {
         post.setWriter(this);
     }
 
-    public void deletePost(Post post) {
-        posts.removeIf(one -> one.getId().equals(post.getId()));
+    public boolean postIsMine(Post post) {
+        for(Post p : this.posts){
+            if(p.getId().equals(post.getId()))
+                return true;
+        }
+        return false;
     }
 
     public void addComment(Comment comment) {

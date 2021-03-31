@@ -5,6 +5,7 @@ import kr.or.rlog.account.AccountDto;
 import kr.or.rlog.category.Category;
 import kr.or.rlog.category.CategoryDto;
 import kr.or.rlog.category.CategoryRepository;
+import kr.or.rlog.common.Status;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -30,12 +31,13 @@ public class PostService {
     }
 
     @Transactional
-    public void deletePost(Long pId, Account user){
+    public boolean deletePost(Long pId, Account user){
         Optional<Post> post = postRepository.findById(pId);
-        if(post.isPresent()) {
-            postRepository.deleteById(pId);
-            user.deletePost(post.get());
+        if(post.isPresent() && user.postIsMine(post.get())) {
+            post.get().setStatus(Status.UNABLE);
+            return true;
         }
+        return false;
     }
 
     @Transactional
@@ -46,6 +48,7 @@ public class PostService {
             user.addPost(post);
             post.setCategory(category.get());
             post.setWriter(user);
+            post.setStatus(Status.ENABLE);
             return postRepository.save(post);
         }
         return null;
@@ -60,9 +63,9 @@ public class PostService {
         Page<Post> pages;
 
         if(keyword.equals(""))
-            pages = postRepository.findAllByOrderByCreatedDateDesc(pageable);
+            pages = postRepository.findAllByStatusOrderByCreatedDateDesc(pageable, Status.ENABLE);
         else
-            pages = postRepository.findAllByTitleContainsIgnoreCaseOrderByCreatedDateDesc(pageable, keyword);
+            pages = postRepository.findAllByTitleContainsIgnoreCaseAndStatusOrderByCreatedDateDesc(pageable, keyword, Status.ENABLE);
 
         List<PostDto> list = new ArrayList<>();
         for (Post origin : pages) {
