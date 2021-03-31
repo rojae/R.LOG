@@ -30,6 +30,7 @@ public class CommentService {
             comment.setWriter(user);
             comment.setPost(savedPost.get());
             comment.setParentId(0L);
+            comment.setStatus(Status.ENABLE);
             savedPost.get().addComment(comment);
         }
         commentRepository.save(comment);
