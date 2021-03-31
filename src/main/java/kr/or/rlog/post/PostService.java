@@ -30,6 +30,14 @@ public class PostService {
         return postRepository.findById(pId);
     }
 
+    public Optional<Post> getPost(Long pId, boolean isAdmin) {
+        if(isAdmin)
+            return postRepository.findById(pId);
+        else
+            return postRepository.findByIdAndStatus(pId, Status.ENABLE);
+    }
+
+
     @Transactional
     public boolean deletePost(Long pId, Account user){
         Optional<Post> post = postRepository.findById(pId);
@@ -48,25 +56,28 @@ public class PostService {
             user.addPost(post);
             post.setCategory(category.get());
             post.setWriter(user);
-            post.setStatus(Status.ENABLE);
+            post.setStatus(post.getStatus());
             return postRepository.save(post);
         }
         return null;
     }
 
-    public List<Post> postAll() {
-        return postRepository.findAllByOrderByCreatedDateDesc();
-    }
-
     @Transactional
-    public Page<PostDto> getPage(Pageable pageable, String keyword) {
+    public Page<PostDto> getPage(Pageable pageable, String keyword, Account user) {
         Page<Post> pages;
 
-        if(keyword.equals(""))
-            pages = postRepository.findAllByStatusOrderByCreatedDateDesc(pageable, Status.ENABLE);
-        else
-            pages = postRepository.findAllByTitleContainsIgnoreCaseAndStatusOrderByCreatedDateDesc(pageable, keyword, Status.ENABLE);
-
+        if(user != null && user.getRole().equals("ADMIN")){
+            if (keyword.equals(""))
+                pages = postRepository.findAllByOrderByCreatedDateDesc(pageable);
+            else
+                pages = postRepository.findAllByTitleContainsIgnoreCaseOrderByCreatedDateDesc(pageable, keyword);
+        }
+        else {
+            if (keyword.equals(""))
+                pages = postRepository.findAllByStatusOrderByCreatedDateDesc(pageable, Status.ENABLE);
+            else
+                pages = postRepository.findAllByTitleContainsIgnoreCaseAndStatusOrderByCreatedDateDesc(pageable, keyword, Status.ENABLE);
+        }
         List<PostDto> list = new ArrayList<>();
         for (Post origin : pages) {
             PostDto target = new PostDto();
@@ -91,6 +102,7 @@ public class PostService {
         return new PageImpl<PostDto>(list, pages.getPageable(), pages.getTotalElements());
     }
 
+
     /*
         ~ 게시글 수정 저장 부분
         AccountService에서의 메일인증 이후, 권한 변경에 이어서
@@ -103,6 +115,7 @@ public class PostService {
         savedPost.get().setTitle(newPost.getTitle());
         savedPost.get().setHeader(newPost.getHeader());
         savedPost.get().setContent(newPost.getContent());
+        savedPost.get().setStatus(newPost.getStatus());
     }
 
 }

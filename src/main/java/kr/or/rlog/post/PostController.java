@@ -14,6 +14,7 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -77,16 +78,18 @@ public class PostController {
     }
 
     @GetMapping("post/{id}")
-    public String getPost(Model model, @PathVariable Long id, @CurrentUser Account account) {
-        Optional<Post> post = postService.getPost(id);
+    public ModelAndView getPost(@PathVariable Long id, @CurrentUser Account account) {
+        ModelAndView mav = new ModelAndView("page-blog-post");
+        Optional<Post> post = postService.getPost(id, account != null && account.getRole().equals("ADMIN"));
+
         if (post.isPresent()) {
             if (account != null)
-                model.addAttribute("isWriter", post.get().getWriter().getId().equals(account.getId()));
-            model.addAttribute("post", post.get());
-            model.addAttribute("categories", categoryService.getParentsAndMe(post.get().getCategory()));
+                mav.addObject("isWriter", post.get().getWriter().getId().equals(account.getId()));
+            mav.addObject("post", post.get());
+            mav.addObject("categories", categoryService.getParentsAndMe(post.get().getCategory()));
         } else
-            model.addAttribute("message", "존재하지 않는 글입니다");
-        return "page-blog-post";
+            mav.addObject("message", "존재하지 않는 글입니다");
+        return mav;
     }
 
     // delete to update로 수정하여, 삭제되도 보관되도록 개발 필요
@@ -99,11 +102,4 @@ public class PostController {
             return new ResponseEntity<Message>(Message.builder().response("접근이 거부되었습니다.").code("403").build(), HttpStatus.FORBIDDEN);
     }
 
-    @GetMapping("posts")
-    @ResponseBody
-    public ResponseEntity getPosts(Pageable pageable, @RequestParam(value = "keyword", defaultValue = "") String keyword) {
-        System.out.println(pageable.getPageNumber());
-        Page<PostDto> posts = postService.getPage(pageable, keyword);
-        return new ResponseEntity<>(posts, HttpStatus.OK);
-    }
 }

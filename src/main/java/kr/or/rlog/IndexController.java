@@ -30,10 +30,11 @@ public class IndexController {
 
     @GetMapping("/index")
     public String welcome(Model model
+            , @CurrentUser Account user
             , @RequestParam(value = "keyword", defaultValue = "") String keyword
             , @PageableDefault(page = 0, size = pageSize, sort = "createdDate", direction = Sort.Direction.DESC) Pageable pageable) {
 
-        Page<PostDto> postPage = postService.getPage(pageable, keyword);
+        Page<PostDto> postPage = postService.getPage(pageable, keyword, user);
 
         int pageNumber = (postPage.getPageable().isPaged()) ? postPage.getPageable().getPageNumber() : 0;    //  현재페이지
         int totalPages = postPage.getTotalPages(); //총 페이지 수. 검색에따라 10개면 10개..
