@@ -22,13 +22,17 @@ public class GuestbookService {
     private GuestbookRepository guestbookRepository;
 
     public boolean createNew(Account account, Guestbook guestbook){
-        Guestbook newGuestbook = new Guestbook(account, guestbook.getContent(), Status.ENABLE);
+        Guestbook newGuestbook = new Guestbook(account, guestbook.getContent(), guestbook.getStatus());
         guestbookRepository.save(newGuestbook);
         return true;
     }
 
     public Page<GuestbookDto> getPage(Pageable pageable, Account user){
-        Page<Guestbook> pages = guestbookRepository.findAllByStatusOrderByCreatedDateDesc(pageable, Status.ENABLE);
+        Page<Guestbook> pages;
+        if(user != null && user.getRole().equals("ADMIN"))
+            pages = guestbookRepository.findAllByOrderByCreatedDateDesc(pageable);
+        else
+            pages = guestbookRepository.findAllByWriterOrStatusOrderByCreatedDateDesc(pageable, user, Status.ENABLE);
 
         List<GuestbookDto> list = new ArrayList<>();
         for (Guestbook origin : pages) {
@@ -42,9 +46,11 @@ public class GuestbookService {
                             ,origin.getWriter().getProfileImage()
                     )
             );
+            target.setStatus(origin.getStatus());
 
-            if(user != null && user.getId().equals(origin.getWriter().getId()))
+            if(user != null && user.getId().equals(origin.getWriter().getId())) {
                 target.setMine(true);
+            }
 
             list.add(target);
         }
@@ -64,10 +70,11 @@ public class GuestbookService {
     }
 
     @Transactional
-    public boolean editProc(Long id, String content) {
+    public boolean editProc(Long id, Guestbook guestbook) {
         Optional<Guestbook> savedGuestbook = guestbookRepository.findById(id);
         if(savedGuestbook.isPresent()) {
-            savedGuestbook.get().setContent(content);
+            savedGuestbook.get().setContent(guestbook.getContent());
+            savedGuestbook.get().setStatus(guestbook.getStatus());
             return true;
         }else{
             return false;

@@ -6,6 +6,8 @@ import kr.or.rlog.common.BaseTimeEntity;
 import kr.or.rlog.common.Status;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 

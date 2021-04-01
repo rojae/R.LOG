@@ -78,8 +78,8 @@ public class GuestbookController {
 
     @PutMapping("/guestbook/{bookId}")
     @ResponseBody
-    public ResponseEntity<Message> editProc(@RequestBody Map<String, Object> params, @PathVariable Long bookId, @CurrentUser Account user) {
-        if (guestbookService.editProc(bookId, (String) params.get("content")))
+    public ResponseEntity<Message> editProc(@RequestBody Guestbook guestbook, @PathVariable Long bookId, @CurrentUser Account user) {
+        if (guestbookService.editProc(bookId, guestbook))
             return new ResponseEntity<Message>(Message.builder().response("수정되었습니다").code("200").build(), HttpStatus.OK);
         else
             return new ResponseEntity<Message>(Message.builder().response("존재하지 않거나 권한이 없는 요청입니다").code("500").build(), HttpStatus.INTERNAL_SERVER_ERROR);

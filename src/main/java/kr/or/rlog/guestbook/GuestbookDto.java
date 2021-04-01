@@ -1,6 +1,7 @@
 package kr.or.rlog.guestbook;
 
 import kr.or.rlog.account.AccountDto;
+import kr.or.rlog.common.Status;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,6 +15,7 @@ public class GuestbookDto {
     private AccountDto writer;
     private LocalDateTime modifiedDate;
     private boolean mine;
+    private Status status;
 
     public GuestbookDto(){}
 
