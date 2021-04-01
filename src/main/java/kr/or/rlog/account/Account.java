@@ -3,10 +3,13 @@ package kr.or.rlog.account;
 import kr.or.rlog.account.platform.PlatformType;
 import kr.or.rlog.comment.Comment;
 import kr.or.rlog.common.BaseTimeEntity;
+import kr.or.rlog.guestbook.Guestbook;
 import kr.or.rlog.mail.Mail;
 import kr.or.rlog.post.Post;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
@@ -52,11 +55,14 @@ public class Account extends BaseTimeEntity {
     @OneToMany(mappedBy = "account")
     private Set<Mail> mails = new HashSet<Mail>();
 
-    @OneToMany(mappedBy = "writer", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "writer", fetch = FetchType.LAZY)
     private Set<Post> posts = new HashSet<Post>();
 
     @OneToMany(mappedBy = "writer")
     private Set<Comment> comments = new HashSet<Comment>();
+
+    @OneToMany(mappedBy = "writer", fetch = FetchType.LAZY)
+    private Set<Guestbook> guestbooks = new HashSet<>();
 
     public void addMail(Mail mail) {
         this.mails.add(mail);
