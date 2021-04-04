@@ -77,8 +77,8 @@ public class CommentController {
 
     @PutMapping("/comment/{commentId}")
     @ResponseBody
-    public ResponseEntity<Message> editProc(@RequestBody Map<String, Object> params, @PathVariable Long commentId, @CurrentUser Account user) {
-        if (commentService.editProc(commentId, (String) params.get("content")))
+    public ResponseEntity<Message> editProc(@RequestBody Comment comment, @PathVariable Long commentId, @CurrentUser Account user) {
+        if (commentService.editProc(commentId, comment))
             return new ResponseEntity<Message>(Message.builder().response("수정되었습니다").code("200").build(), HttpStatus.OK);
         else
             return new ResponseEntity<Message>(Message.builder().response("존재하지 않거나 권한이 없는 요청입니다").code("500").build(), HttpStatus.INTERNAL_SERVER_ERROR);

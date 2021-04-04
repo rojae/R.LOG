@@ -30,7 +30,6 @@ public class CommentService {
             comment.setWriter(user);
             comment.setPost(savedPost.get());
             comment.setParentId(0L);
-            comment.setStatus(Status.ENABLE);
             savedPost.get().addComment(comment);
         }
         commentRepository.save(comment);
@@ -48,7 +47,6 @@ public class CommentService {
             comment.setWriter(user);
             comment.setPost(savedPost.get());
             comment.setParentId(parentId);
-            comment.setStatus(Status.ENABLE);
             savedPost.get().addComment(comment);
         }
         commentRepository.save(comment);
@@ -56,13 +54,19 @@ public class CommentService {
     }
 
     public CommentDto createRoot(Long postId, Account user) {
-        Map<Long, List<CommentDto>> groupingByParent = commentRepository.findAllByStatus(Status.ENABLE)
+        Map<Long, List<CommentDto>> groupingByParent = commentRepository.findAllByPostAndStatusNotOrderByCreatedDateDesc(new Post(postId), Status.UNABLE)
                 .stream()
-                .filter(comment -> comment.getPost().getId().equals(postId))
-                .map(ce -> new CommentDto(ce.getId(), ce.getContent()
-                        , new AccountDto(ce.getWriter().getId(), ce.getWriter().getEmail(), ce.getWriter().getUserName(), ce.getWriter().getProfileImage())
-                        , user, ce.getModifiedDate(), ce.getParentId())
-                )
+                .map(ce -> {
+                    if (ce.getStatus().equals(Status.SECRET) && (user == null || !ce.getWriter().getId().equals(user.getId()))) {
+                        return new CommentDto(ce.getId(), "비밀댓글입니다"
+                                , new AccountDto("", "???", "/assets/img/illustrations/profiles/question-mark.png")
+                                , ce.getModifiedDate(), ce.getParentId(), ce.getStatus());
+                    } else {
+                        return new CommentDto(ce.getId(), ce.getContent()
+                                , new AccountDto(ce.getWriter().getId(), ce.getWriter().getEmail(), ce.getWriter().getUserName(), ce.getWriter().getProfileImage())
+                                , user, ce.getModifiedDate(), ce.getParentId(), ce.getStatus());
+                    }
+                })
                 .collect(groupingBy(CommentDto::getParentId));
 
 
@@ -86,18 +90,19 @@ public class CommentService {
                 });
     }
 
-    public Optional<Comment> getOne(Long commentId){
+    public Optional<Comment> getOne(Long commentId) {
         return commentRepository.findById(commentId);
     }
 
 
     @Transactional
-    public boolean editProc(Long id, String content) {
+    public boolean editProc(Long id, Comment comment) {
         Optional<Comment> savedComment = commentRepository.findById(id);
-        if(savedComment.isPresent()) {
-            savedComment.get().setContent(content);
+        if (savedComment.isPresent()) {
+            savedComment.get().setContent(comment.getContent());
+            savedComment.get().setStatus(comment.getStatus());
             return true;
-        }else{
+        } else {
             return false;
         }
     }
@@ -105,10 +110,10 @@ public class CommentService {
     @Transactional
     public boolean deleteProc(Long id) {
         Optional<Comment> savedComment = commentRepository.findById(id);
-        if(savedComment.isPresent()) {
+        if (savedComment.isPresent()) {
             savedComment.get().setStatus(Status.UNABLE);
             return true;
-        }else{
+        } else {
             return false;
         }
     }

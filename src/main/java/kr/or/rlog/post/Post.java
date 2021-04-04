@@ -21,6 +21,10 @@ import java.util.Set;
 @Entity(name = "TBL_POST")
 public class Post extends BaseTimeEntity {
 
+    public Post(Long id){
+        this.id = id;
+    }
+
     @Id @GeneratedValue
     private Long id;
 
