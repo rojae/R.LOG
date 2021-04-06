@@ -3,6 +3,7 @@ package kr.or.rlog.guestbook;
 import kr.or.rlog.account.Account;
 import kr.or.rlog.account.AccountDto;
 import kr.or.rlog.common.Status;
+import kr.or.rlog.utils.TimeUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -47,7 +48,7 @@ public class GuestbookService {
                     )
             );
             target.setStatus(origin.getStatus());
-
+            target.setModifiedDate(TimeUtils.dateTimeToYYYYMMDD(origin.getModifiedDate()));
             if(user != null && user.getId().equals(origin.getWriter().getId())) {
                 target.setMine(true);
             }

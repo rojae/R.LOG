@@ -6,6 +6,7 @@ import kr.or.rlog.category.Category;
 import kr.or.rlog.category.CategoryDto;
 import kr.or.rlog.category.CategoryRepository;
 import kr.or.rlog.common.Status;
+import kr.or.rlog.utils.TimeUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -104,6 +105,8 @@ public class PostService {
                             ,origin.getWriter().getProfileImage()
                     )
             );
+            target.setModifiedDate(TimeUtils.dateTimeToYYYYMMDD(origin.getModifiedDate()));
+            target.setCreatedDate(TimeUtils.dateTimeToYYYYMMDD(origin.getModifiedDate()));
             target.setUrl("/post/"+origin.getId());
             list.add(target);
         }

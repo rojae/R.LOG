@@ -14,8 +14,8 @@ public class PostDto {
     private String header;
     private String title;
     private AccountDto writer;
-    private LocalDateTime createdDate;
-    private LocalDateTime modifiedDate;
+    private String createdDate;
+    private String modifiedDate;
     private String url;
 
     public PostDto(){

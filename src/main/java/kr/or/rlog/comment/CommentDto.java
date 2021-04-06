@@ -3,6 +3,7 @@ package kr.or.rlog.comment;
 import kr.or.rlog.account.Account;
 import kr.or.rlog.account.AccountDto;
 import kr.or.rlog.common.Status;
+import kr.or.rlog.utils.TimeUtils;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,7 +19,7 @@ public class CommentDto {
     private AccountDto writer;
     private boolean mine;
     private Long parentId;
-    private LocalDateTime modifiedDate;
+    private String modifiedDate;
     private List<CommentDto> subComments;
     private Status status;
 
@@ -26,7 +27,7 @@ public class CommentDto {
         this.commentId = commentId;
         this.content = content;
         this.writer = writer;
-        this.modifiedDate = modifiedDate;
+        this.modifiedDate = TimeUtils.dateTimeToYYYYMMDD(modifiedDate);
         this.parentId = parentId;
     }
 
@@ -34,7 +35,7 @@ public class CommentDto {
         this.commentId = commentId;
         this.content = content;
         this.writer = writer;
-        this.modifiedDate = modifiedDate;
+        this.modifiedDate = TimeUtils.dateTimeToYYYYMMDD(modifiedDate);
         this.parentId = parentId;
         this.status = status;
     }
@@ -43,7 +44,7 @@ public class CommentDto {
         this.commentId = commentId;
         this.content = content;
         this.writer = writer;
-        this.modifiedDate = modifiedDate;
+        this.modifiedDate = TimeUtils.dateTimeToYYYYMMDD(modifiedDate);
         this.parentId = parentId;
         this.setMine(checkMine(user));
         this.status = status;

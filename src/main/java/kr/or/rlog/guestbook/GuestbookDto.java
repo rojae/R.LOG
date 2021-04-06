@@ -2,6 +2,7 @@ package kr.or.rlog.guestbook;
 
 import kr.or.rlog.account.AccountDto;
 import kr.or.rlog.common.Status;
+import kr.or.rlog.utils.TimeUtils;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,7 +14,7 @@ public class GuestbookDto {
     private Long id;
     private String content;
     private AccountDto writer;
-    private LocalDateTime modifiedDate;
+    private String modifiedDate;
     private boolean mine;
     private Status status;
 
@@ -23,7 +24,7 @@ public class GuestbookDto {
         this.id = id;
         this.content = content;
         this.writer = writer;
-        this.modifiedDate = modifiedDate;
+        this.modifiedDate = TimeUtils.dateTimeToYYYYMMDD(modifiedDate);
         this.mine = mine;
     }
 
