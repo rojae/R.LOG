@@ -1,6 +1,7 @@
 package kr.or.rlog.account;
 
 import kr.or.rlog.account.platform.KakaoUser;
+import kr.or.rlog.account.platform.PlatformType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -31,16 +32,16 @@ public class OAuth2LoginSuccessHandler implements org.springframework.security.w
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         KakaoUser kakaoUser = new KakaoUser(((DefaultOAuth2User) authentication.getPrincipal()).getAttributes(), ((DefaultOAuth2User) authentication.getPrincipal()).getAttribute("accessToken"), "ROLE");
         Authentication newAuth = new UsernamePasswordAuthenticationToken(
-                this.getUserAccount(kakaoUser.getEmail()),
+                this.getUserAccount(kakaoUser.getEmail(), kakaoUser.getPlatformType()),
                 String.valueOf(UUID.randomUUID()),
                 Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + kakaoUser.getRole()))
         );
         SecurityContextHolder.getContext().setAuthentication(newAuth);
-        response.sendRedirect("/index");
+        response.sendRedirect("/");
     }
 
-    public UserDetails getUserAccount(String email){
-        return accountService.loadUserByUsername(email);
+    public UserDetails getUserAccount(String email, PlatformType platformType){
+        return accountService.loadUserByUsername(email, platformType);
     }
 
 }

@@ -28,7 +28,7 @@ public class LoginSuccessHandler implements org.springframework.security.web.aut
         // Security가 요청을 가로챈 경우 사용자가 원래 요청했던 URI 정보를 저장한 객체
         RequestCache requestCache = new HttpSessionRequestCache();
         SavedRequest savedRequest = requestCache.getRequest(httpServletRequest, httpServletResponse);
-        String uri = "/index";
+        String uri = "/";
 
         // 있을 경우 URI 등 정보를 가져와서 사용
         if (savedRequest != null) {

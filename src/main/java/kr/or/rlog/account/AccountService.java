@@ -5,6 +5,12 @@ import kr.or.rlog.mail.Mail;
 import kr.or.rlog.mail.MailRepository;
 import kr.or.rlog.mail.MailService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AccountExpiredException;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -31,17 +37,33 @@ public class AccountService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Account account = accountRepository.findByEmailAndIsAuthIsTrue(email);
-        if (account == null && accountRepository.findByEmail(email) == null) {
-            // not sign-up
-            throw new UsernameNotFoundException("not sign-up");
-        }else if (account == null){
-            // should be mail authentication
-            throw new UsernameNotFoundException("mail Authentication");
+        Account account = accountRepository.findByEmailAndIsAuthIsTrueAndPlatformType(email, PlatformType.RLOG);
+        if(account != null) {
+            System.out.println(account.getUserName() + "님이 로그인 시도.");
+            return new UserAccount(account);
         }
+        else if (accountRepository.findByEmailAndIsAuthIsTrueAndPlatformType(email, PlatformType.KAKAO) != null) {
+            System.out.println("카카오톡 회원입니다. 카카오톡을 통해서 로그인을 해야합니다.");
+            throw new AccountExpiredException("카카오톡 회원입니다. 카카오톡을 통해서 로그인을 해야합니다.");
+        }else if(accountRepository.findByEmail(email) != null){
+            System.out.println("메일 인증이 되지 않은 사용자입니다");
+            throw new DisabledException("메일 인증이 되지 않은 사용자입니다");
+        }else{
+            System.out.println("존재하지 않는 사용자입니다");
+            throw new BadCredentialsException("존재하지 않는 사용자 혹은 비밀번호입니다");
+        }
+    }
 
-        System.out.println(account.getUserName() + "님이 로그인 성공하셨습니다.");
-        return new UserAccount(account);
+    public UserDetails loadUserByUsername(String email, PlatformType platformType) throws UsernameNotFoundException {
+        Account account = accountRepository.findByEmailAndIsAuthIsTrueAndPlatformType(email, platformType);
+        if(account != null) {
+            System.out.println("["+platformType.name()+"]  - "+account.getUserName() + "님이 로그인 성공하셨습니다.");
+            return new UserAccount(account);
+        }
+        else{
+            System.out.println("존재하지 않는 사용자입니다");
+            throw new UsernameNotFoundException("존재하지 않는 사용자입니다");
+        }
     }
 
     /*

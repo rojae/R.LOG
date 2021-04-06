@@ -24,7 +24,7 @@ public class IndexController {
     PostService postService;
 
     @GetMapping("/")
-    public String index(Model model, @CurrentUser Account account) {
+    public String index() {
         return "redirect:/index";
     }
 
