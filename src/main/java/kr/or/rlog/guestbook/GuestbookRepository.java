@@ -9,8 +9,8 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface GuestbookRepository extends JpaRepository<Guestbook, Long> {
-    public Page<Guestbook> findAllByOrderByCreatedDateDesc(Pageable pageable);
+    public Page<Guestbook> findAllByStatusNotOrderByCreatedDateDesc(Pageable pageable, Status unable);
 
-    public Page<Guestbook> findAllByWriterOrStatusOrderByCreatedDateDesc(Pageable pageable, Account writer, Status status);
+    public Page<Guestbook> findAllByWriterAndStatusNotOrStatusOrderByCreatedDateDesc(Pageable pageable, Account writer, Status unable, Status enable);
 
 }

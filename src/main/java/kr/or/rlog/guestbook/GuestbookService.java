@@ -31,9 +31,9 @@ public class GuestbookService {
     public Page<GuestbookDto> getPage(Pageable pageable, Account user){
         Page<Guestbook> pages;
         if(user != null && user.getRole().equals("ADMIN"))
-            pages = guestbookRepository.findAllByOrderByCreatedDateDesc(pageable);
+            pages = guestbookRepository.findAllByStatusNotOrderByCreatedDateDesc(pageable, Status.UNABLE);
         else
-            pages = guestbookRepository.findAllByWriterOrStatusOrderByCreatedDateDesc(pageable, user, Status.ENABLE);
+            pages = guestbookRepository.findAllByWriterAndStatusNotOrStatusOrderByCreatedDateDesc(pageable, user, Status.UNABLE, Status.ENABLE);
 
         List<GuestbookDto> list = new ArrayList<>();
         for (Guestbook origin : pages) {
