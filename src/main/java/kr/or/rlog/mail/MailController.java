@@ -30,9 +30,9 @@ public class MailController {
     @GetMapping("/api/v1/signup/mail")
     public String mailAuth(Model model, @RequestParam String secretKey, @RequestParam String email){
         if(accountService.doSignup(email, secretKey))
-            model.addAttribute("message", "이메일 인증이 완료되었습니다. 로그인을 진행하세요");
+            model.addAttribute("loginResult", "이메일 인증이 완료되었습니다. 로그인을 진행하세요");
         else
-            model.addAttribute("message", "잘못된 접근입니다");
+            model.addAttribute("loginResult", "잘못된 접근입니다");
         return "login";
 
     }

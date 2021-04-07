@@ -18,7 +18,7 @@ public class LogInOutController {
     @GetMapping("/logout")
     public String logoutForm(Model model) {
         model.asMap().clear();
-        model.addAttribute("message", "로그아웃 되었습니다");
+        model.addAttribute("loginResult", "로그아웃 되었습니다");
         return "logout";
     }
 
