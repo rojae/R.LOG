@@ -19,7 +19,7 @@ public class MailService {
     private MailRepository mailRepository;
 
     private static final String testUrl = "http://localhost:8080/api/v1/signup/mail";
-    private static final String hostUrl = "http://rlog.or.kr/api/v1/signup/mail";
+    private static final String hostUrl = "https://rlog.or.kr/api/v1/signup/mail";
     private static final String fromAddress = "rojae@rlog.or.kr";
 
     private JavaMailSender mailSender;
@@ -35,7 +35,7 @@ public class MailService {
                 "                    <tr><td style=\"padding-right:27px; padding-left:21px\">" +
                 "                            <table border=\"0\" cellpadding=\"0\" cellspacing=\"0\">" +
                 "                                <tbody><tr><td style=\"\" width=\"61\">" +
-                "                                        <img src=\"http://rojae2.cafe24.com/rlog/images/logo.png\" alt=\"IALAB\" width=\"61\" loading=\"lazy\">" +
+                "                                        <img src=\"https://rojae2.cafe24.com/rlog/images/logo.png\" alt=\"IALAB\" width=\"61\" loading=\"lazy\">" +
                 "                                    </td><td style=\"padding-left:5px\">" +
                 "                                        <img src=\"https://ssl.pstatic.net/static/common/ems/nid_dm/nid_201412.gif\" alt=\"회원정보\" width=\"42\" loading=\"lazy\">" +
                 "                                    </td></tr>                            " +

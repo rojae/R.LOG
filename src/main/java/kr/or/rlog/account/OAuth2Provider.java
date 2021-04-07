@@ -9,7 +9,7 @@ public enum OAuth2Provider {
         @Override
         public ClientRegistration.Builder getBuilder(String registrationId) {
             ClientRegistration.Builder builder = getBuilder(registrationId,
-                    ClientAuthenticationMethod.POST, DEFAULT_LOGIN_REDIRECT_URL);
+                    ClientAuthenticationMethod.POST);
             builder.scope("profile,account_email");
             builder.authorizationUri("https://kauth.kakao.com/oauth/authorize");
             builder.tokenUri("https://kauth.kakao.com/oauth/token");
@@ -23,7 +23,7 @@ public enum OAuth2Provider {
         @Override
         public ClientRegistration.Builder getBuilder(String registrationId) {
             ClientRegistration.Builder builder = getBuilder(registrationId,
-                    ClientAuthenticationMethod.POST, DEFAULT_LOGIN_REDIRECT_URL);
+                    ClientAuthenticationMethod.POST);
             builder.scope("profile");
             builder.authorizationUri("https://nid.naver.com/oauth2.0/authorize");
             builder.tokenUri("https://nid.naver.com/oauth2.0/token");
@@ -34,14 +34,14 @@ public enum OAuth2Provider {
         }
     };
 
-    private static final String DEFAULT_LOGIN_REDIRECT_URL = "{baseUrl}/login/oauth2/code/{registrationId}";
 
     protected final ClientRegistration.Builder getBuilder(
-            String registrationId, ClientAuthenticationMethod method, String redirectUri) {
+            String registrationId, ClientAuthenticationMethod method) {
         ClientRegistration.Builder builder = ClientRegistration.withRegistrationId(registrationId);
         builder.clientAuthenticationMethod(method);
         builder.authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE);
-        builder.redirectUriTemplate(redirectUri);
+        builder.redirectUri("https://rlog.or.kr/login/oauth2/code/{registrationId}");
+        //builder.redirectUri("{baseUrl}/login/oauth2/code/{registrationId}");
         return builder;
     }
 
