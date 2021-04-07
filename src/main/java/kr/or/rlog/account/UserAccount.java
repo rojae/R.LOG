@@ -19,7 +19,7 @@ public class UserAccount extends User {
         super(kakaoUser.getUserName(), String.valueOf(UUID.randomUUID()), Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + kakaoUser.getRole())));
         Account newUser = new Account();
         newUser.setUserName(kakaoUser.getUserName());
-        if(newUser.getProfileImage() != null)
+        if(kakaoUser.getProfileImage() != null)
             newUser.setProfileImage(kakaoUser.getProfileImage());
         else
             newUser.setProfileImage("https://rlog.or.kr/assets/img/illustrations/profiles/profile-2.png");
