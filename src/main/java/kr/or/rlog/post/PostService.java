@@ -2,6 +2,7 @@ package kr.or.rlog.post;
 
 import kr.or.rlog.account.Account;
 import kr.or.rlog.account.AccountDto;
+import kr.or.rlog.account.AccountRepository;
 import kr.or.rlog.category.Category;
 import kr.or.rlog.category.CategoryDto;
 import kr.or.rlog.category.CategoryRepository;
@@ -26,6 +27,9 @@ public class PostService {
 
     @Autowired
     CategoryRepository categoryRepository;
+
+    @Autowired
+    AccountRepository accountRepository;
 
     public Optional<Post> getPost(Long pId) {
         return postRepository.findById(pId);
@@ -56,11 +60,13 @@ public class PostService {
     @Transactional
     public Post createNew(Post post, Account user) {
         Optional<Category> category = categoryRepository.findById(post.getCategory().getId());
+        Account account = accountRepository.findAccountByEmail(user.getEmail());
+
         if (category.isPresent()) {
             category.get().addPost(post);
-            user.addPost(post);
+            account.addPost(post);
             post.setCategory(category.get());
-            post.setWriter(user);
+            post.setWriter(account);
             post.setStatus(post.getStatus());
             return postRepository.save(post);
         }
