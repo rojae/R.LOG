@@ -133,6 +133,7 @@ public class PostService {
         savedPost.get().setHeader(newPost.getHeader());
         savedPost.get().setContent(newPost.getContent());
         savedPost.get().setStatus(newPost.getStatus());
+        savedPost.get().setThumbNail(newPost.getThumbNail());
     }
 
 }

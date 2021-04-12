@@ -25,12 +25,17 @@ public class Post extends BaseTimeEntity {
         this.id = id;
     }
 
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="post_seq")
+    @SequenceGenerator(name = "post_seq", sequenceName = "post_seq", initialValue = 60, allocationSize=1)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @Fetch(FetchMode.JOIN)
     private Category category;
+
+    @Column(name = "thumbNail", nullable = true)
+    private String thumbNail;
 
     @Column(name = "header", nullable = false)
     private String header;

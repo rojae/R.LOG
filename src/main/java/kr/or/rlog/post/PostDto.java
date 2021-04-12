@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 public class PostDto {
     private CategoryDto category;
     private String header;
+    private String thumbNail;
     private String title;
     private AccountDto writer;
     private String createdDate;
