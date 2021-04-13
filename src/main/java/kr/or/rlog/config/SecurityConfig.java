@@ -94,7 +94,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.addFilterBefore(new LoggerFilter(), WebAsyncManagerIntegrationFilter.class);
 
         http.authorizeRequests()
-                .mvcMatchers("/admin/**").hasRole("ADMIN")
+                .mvcMatchers("/admin/**", "/manage/**").hasRole("ADMIN")
                 .anyRequest().permitAll()
                 .accessDecisionManager(accessDecisionManager())
                 .and()
