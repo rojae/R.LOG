@@ -1,6 +1,7 @@
 package kr.or.rlog.common;
 
 
+import kr.or.rlog.utils.ClientUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StopWatch;
@@ -21,11 +22,12 @@ public class LoggerFilter extends GenericFilterBean {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         StopWatch stopWatch = new StopWatch();
         stopWatch.start(((HttpServletRequest)request).getRequestURI());
-
         chain.doFilter(request, response);       // next filter
-
         stopWatch.stop();
 
-        logger.info(stopWatch.prettyPrint());
+        logger.info("--- IP : " + ClientUtils.getClientIP((HttpServletRequest) request));
+        logger.info("--- Agent : " + ((HttpServletRequest) request).getHeader("User-Agent"));
+        logger.info("--- StopWatch : " + stopWatch.toString());
+        logger.info("--- Refer : " + ((HttpServletRequest) request).getHeader("referer"));
     }
 }
