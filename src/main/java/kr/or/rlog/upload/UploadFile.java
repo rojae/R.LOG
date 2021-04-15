@@ -5,17 +5,14 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
-import kr.or.rlog.common.BaseTimeEntity;
-import lombok.Data;
+import kr.or.rlog.common.TimeEntity;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.time.LocalDateTime;
 
 @Entity(name = "TBL_UPLOAD_FILE")
 @Getter
 @Setter
-public class UploadFile extends BaseTimeEntity {
+public class UploadFile extends TimeEntity {
     
     @Id
     @GeneratedValue

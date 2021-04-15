@@ -2,14 +2,12 @@ package kr.or.rlog.account;
 
 import kr.or.rlog.account.platform.PlatformType;
 import kr.or.rlog.comment.Comment;
-import kr.or.rlog.common.BaseTimeEntity;
+import kr.or.rlog.common.TimeEntity;
 import kr.or.rlog.guestbook.Guestbook;
 import kr.or.rlog.mail.Mail;
 import kr.or.rlog.post.Post;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
@@ -19,7 +17,7 @@ import java.util.Set;
 @Entity(name = "TBL_ACCOUNT")
 @Getter
 @Setter
-public class Account extends BaseTimeEntity {
+public class Account extends TimeEntity {
     @Id
     @GeneratedValue
     private Long id;

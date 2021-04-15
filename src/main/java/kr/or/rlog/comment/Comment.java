@@ -1,18 +1,17 @@
 package kr.or.rlog.comment;
 
 import kr.or.rlog.account.Account;
-import kr.or.rlog.common.BaseTimeEntity;
+import kr.or.rlog.common.TimeEntity;
 import kr.or.rlog.common.Status;
 import kr.or.rlog.post.Post;
 import lombok.*;
-import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 
 @Setter
 @Getter
 @Entity(name = "TBL_COMMENT")
-public class Comment extends BaseTimeEntity {
+public class Comment extends TimeEntity {
 
     @Id @GeneratedValue
     private Long id;

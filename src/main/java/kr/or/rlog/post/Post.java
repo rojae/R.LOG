@@ -3,7 +3,7 @@ package kr.or.rlog.post;
 import kr.or.rlog.account.Account;
 import kr.or.rlog.category.Category;
 import kr.or.rlog.comment.Comment;
-import kr.or.rlog.common.BaseTimeEntity;
+import kr.or.rlog.common.TimeEntity;
 import kr.or.rlog.common.Status;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,7 +19,7 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @Entity(name = "TBL_POST")
-public class Post extends BaseTimeEntity {
+public class Post extends TimeEntity {
 
     public Post(Long id){
         this.id = id;

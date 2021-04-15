@@ -1,20 +1,17 @@
 package kr.or.rlog.guestbook;
 
 import kr.or.rlog.account.Account;
-import kr.or.rlog.account.platform.PlatformType;
-import kr.or.rlog.common.BaseTimeEntity;
+import kr.or.rlog.common.TimeEntity;
 import kr.or.rlog.common.Status;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 
 @Setter
 @Getter
 @Entity(name = "TBL_GUESTBOOK")
-public class Guestbook extends BaseTimeEntity {
+public class Guestbook extends TimeEntity {
 
     public Guestbook(){
 
