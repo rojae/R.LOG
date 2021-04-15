@@ -3,6 +3,8 @@ package kr.or.rlog.admin;
 import kr.or.rlog.account.Account;
 import kr.or.rlog.common.CurrentUser;
 import kr.or.rlog.common.Message;
+import kr.or.rlog.visit.VisitorService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
@@ -12,6 +14,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 public class ManageController {
+
+    @Autowired
+    VisitorService visitorService;
 
     @GetMapping("/gate/manage")
     @ResponseBody
@@ -26,8 +31,27 @@ public class ManageController {
 
     @GetMapping("/manage")
     @Secured("ADMIN")
-    public String manage(@CurrentUser Account user){
-        return "admin";
+    public String  manage(@CurrentUser Account user){
+       return "manage/admin";
     }
 
+    @GetMapping("/manage/statistic/today")
+    @Secured("ADMIN")
+    public ResponseEntity<Message> getToday(){
+        Long cnt = visitorService.todayCount();
+        return new ResponseEntity<Message>(Message.builder().code("200").response(String.valueOf(cnt)).build(), HttpStatus.OK);
+    }
+    @GetMapping("/manage/statistic/month")
+    @Secured("ADMIN")
+    public ResponseEntity<Message> getMonth(){
+        Long cnt = visitorService.monthCount();
+        return new ResponseEntity<Message>(Message.builder().code("200").response(String.valueOf(cnt)).build(), HttpStatus.OK);
+    }
+
+    @GetMapping("/manage/statistic/all")
+    @Secured("ADMIN")
+    public ResponseEntity<Message> getAll(){
+        Long cnt = visitorService.allCount();
+        return new ResponseEntity<Message>(Message.builder().code("200").response(String.valueOf(cnt)).build(), HttpStatus.OK);
+    }
 }

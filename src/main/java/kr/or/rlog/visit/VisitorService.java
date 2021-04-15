@@ -9,5 +9,15 @@ public class VisitorService {
     @Autowired
     private VisitorRepository visitorRepository;
 
+    public long todayCount(){
+        return visitorRepository.getTodayCount();
+    }
 
+    public long monthCount(){
+        return visitorRepository.getMonthCount();
+    }
+
+    public long allCount(){
+        return visitorRepository.getAllCount();
+    }
 }
