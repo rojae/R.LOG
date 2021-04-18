@@ -1,5 +1,6 @@
 package kr.or.rlog.account;
 
+import com.mysql.cj.util.StringUtils;
 import kr.or.rlog.account.platform.KakaoUser;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -19,10 +20,10 @@ public class UserAccount extends User {
         super(kakaoUser.getUserName(), String.valueOf(UUID.randomUUID()), Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + kakaoUser.getRole())));
         Account newUser = new Account();
         newUser.setUserName(kakaoUser.getUserName());
-        if(kakaoUser.getProfileImage() != null)
-            newUser.setProfileImage(kakaoUser.getProfileImage());
-        else
+        if(StringUtils.isNullOrEmpty(kakaoUser.getUserName()))
             newUser.setProfileImage("https://rlog.or.kr/assets/img/illustrations/profiles/profile-2.png");
+        else
+            newUser.setProfileImage(kakaoUser.getProfileImage());
         newUser.setRole(kakaoUser.getRole());
         newUser.setAccessToken(kakaoUser.getAccessToken().getTokenValue());
         newUser.setAuth(true);

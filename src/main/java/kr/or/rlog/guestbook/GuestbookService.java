@@ -2,6 +2,7 @@ package kr.or.rlog.guestbook;
 
 import kr.or.rlog.account.Account;
 import kr.or.rlog.account.AccountDto;
+import kr.or.rlog.account.AccountRepository;
 import kr.or.rlog.common.Status;
 import kr.or.rlog.utils.TimeUtils;
 import org.springframework.beans.BeanUtils;
@@ -22,7 +23,13 @@ public class GuestbookService {
     @Autowired
     private GuestbookRepository guestbookRepository;
 
+    @Autowired
+    private AccountRepository accountRepository;
+
+    @Transactional
     public boolean createNew(Account account, Guestbook guestbook){
+        Optional<Account> savedUser = accountRepository.findById(account.getId());
+        savedUser.ifPresent(user -> user.addGuestbook(guestbook));
         Guestbook newGuestbook = new Guestbook(account, guestbook.getContent(), guestbook.getStatus());
         guestbookRepository.save(newGuestbook);
         return true;

@@ -14,8 +14,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
-import java.util.Optional;
 
 
 /*
@@ -50,7 +48,6 @@ public class GuestbookController {
     public String getGuestbooks(Model model, @CurrentUser Account user, @PageableDefault(page = 0, size = pageSize, sort = "createdDate", direction = Sort.Direction.DESC)
             Pageable pageable) {
         Page<GuestbookDto> guestbookPage = guestbookService.getPage(pageable, user);
-
         int pageNumber = (guestbookPage.getPageable().isPaged()) ? guestbookPage.getPageable().getPageNumber() : 0;    //  현재페이지
         int totalPages = guestbookPage.getTotalPages(); //총 페이지 수. 검색에따라 10개면 10개..
         int pageBlock = blockSize;  //블럭의 수 1, 2, 3, 4, 5

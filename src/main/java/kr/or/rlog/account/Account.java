@@ -4,6 +4,7 @@ import kr.or.rlog.account.platform.PlatformType;
 import kr.or.rlog.comment.Comment;
 import kr.or.rlog.common.TimeEntity;
 import kr.or.rlog.guestbook.Guestbook;
+import kr.or.rlog.likey.PostLike;
 import kr.or.rlog.mail.Mail;
 import kr.or.rlog.post.Post;
 import lombok.Getter;
@@ -62,6 +63,9 @@ public class Account extends TimeEntity {
     @OneToMany(mappedBy = "writer", fetch = FetchType.LAZY)
     private Set<Guestbook> guestbooks = new HashSet<>();
 
+    @OneToMany(mappedBy = "account", fetch = FetchType.LAZY)
+    private Set<PostLike> postLikes = new HashSet<>();
+
     public void addMail(Mail mail) {
         this.mails.add(mail);
         mail.setAccount(this);
@@ -83,6 +87,16 @@ public class Account extends TimeEntity {
     public void addComment(Comment comment) {
         this.comments.add(comment);
         comment.setWriter(this);
+    }
+
+    public void addGuestbook(Guestbook guestbook){
+        this.guestbooks.add(guestbook);
+        guestbook.setWriter(this);
+    }
+
+    public void addPostLike(PostLike postLike){
+        this.postLikes.add(postLike);
+        postLike.setAccount(this);
     }
 
     public void deleteComment(Comment comment) {
