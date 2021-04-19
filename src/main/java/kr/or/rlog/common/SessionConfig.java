@@ -1,6 +1,8 @@
-package kr.or.rlog.visit;
+package kr.or.rlog.common;
 
 import kr.or.rlog.utils.ClientUtils;
+import kr.or.rlog.visit.Visitor;
+import kr.or.rlog.visit.VisitorRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.context.WebApplicationContext;
