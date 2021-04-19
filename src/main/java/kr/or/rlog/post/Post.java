@@ -5,7 +5,7 @@ import kr.or.rlog.category.Category;
 import kr.or.rlog.comment.Comment;
 import kr.or.rlog.common.TimeEntity;
 import kr.or.rlog.common.Status;
-import kr.or.rlog.likey.PostLike;
+import kr.or.rlog.likey.PostLikes;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -57,7 +57,7 @@ public class Post extends TimeEntity {
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     @Fetch(FetchMode.JOIN)
-    private Set<PostLike> postLikes = new HashSet<PostLike>();
+    private Set<PostLikes> postLikes = new HashSet<PostLikes>();
 
     @Column(name = "status", nullable = false, columnDefinition = "VARCHAR(10) DEFAULT 'ENABLE' ")
     @Enumerated(EnumType.STRING)
@@ -68,9 +68,9 @@ public class Post extends TimeEntity {
         comment.setPost(this);
     }
 
-    public void addPostLike(PostLike postLike){
-        this.postLikes.add(postLike);
-        postLike.setPost(this);
+    public void addPostLike(PostLikes postLikes){
+        this.postLikes.add(postLikes);
+        postLikes.setPost(this);
     }
 
 }

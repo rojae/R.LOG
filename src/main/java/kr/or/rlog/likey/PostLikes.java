@@ -11,13 +11,14 @@ import lombok.Setter;
 import javax.persistence.*;
 
 @NoArgsConstructor
-@Entity(name = "TBL_POST_LIKEY")
+@Entity(name = "TBL_POST_LIKES")
 @Setter
 @Getter
-public class PostLike extends TimeEntity {
+public class PostLikes extends TimeEntity {
 
-    public PostLike(Account account){
+    public PostLikes(Account account, Post post){
         this.account = account;
+        this.post = post;
         this.status = Status.ENABLE;
     }
 
@@ -26,15 +27,16 @@ public class PostLike extends TimeEntity {
     @SequenceGenerator(name = "like_post_seq", sequenceName = "like_post_seq", initialValue = 1, allocationSize=1)
     private Long id;
 
+    // ENABLE || UNABLE
+    @Column(name = "status", nullable = false, columnDefinition = "VARCHAR(10) DEFAULT 'ENABLE' ")
+    @Enumerated(EnumType.STRING)
+    private Status status;
+
     @ManyToOne
     private Account account;
 
     @ManyToOne
     private Post post;
 
-    // ENABLE || UNABLE
-    @Column(name = "status", nullable = false, columnDefinition = "VARCHAR(10) DEFAULT 'ENABLE' ")
-    @Enumerated(EnumType.STRING)
-    private Status status;
 
 }

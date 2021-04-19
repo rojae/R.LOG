@@ -6,7 +6,10 @@ import kr.or.rlog.account.AccountRepository;
 import kr.or.rlog.category.Category;
 import kr.or.rlog.category.CategoryDto;
 import kr.or.rlog.category.CategoryRepository;
+import kr.or.rlog.comment.Comment;
 import kr.or.rlog.common.Status;
+import kr.or.rlog.likey.PostLikesRepository;
+import kr.or.rlog.likey.PostLikesService;
 import kr.or.rlog.utils.TimeUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +34,9 @@ public class PostService {
     @Autowired
     AccountRepository accountRepository;
 
+    @Autowired
+    PostLikesRepository postLikesRepository;
+
     public Optional<Post> getPost(Long pId) {
         return postRepository.findById(pId);
     }
@@ -39,18 +45,24 @@ public class PostService {
         관리자의 경우 -> 삭제되지 않은 글 전체
         사용자의 경우 -> 활성화된 글만 조회
      */
-    public Optional<Post> getPost(Long pId, boolean isAdmin) {
-        if(isAdmin)
-            return postRepository.findByIdAndStatusNot(pId, Status.UNABLE);
+    public PostDetailDto getPost(Long pId, boolean isAdmin, Account user) {
+        Optional<Post> savedPost;
+        if (isAdmin)
+            savedPost = postRepository.findByIdAndStatusNot(pId, Status.UNABLE);
         else
-            return postRepository.findByIdAndStatus(pId, Status.ENABLE);
+            savedPost = postRepository.findByIdAndStatus(pId, Status.ENABLE);
+
+        return savedPost.map(post -> new PostDetailDto(post.getId(), post.getCategory(), post.getThumbNail(),
+                post.getHeader(), post.getTitle(), post.getContent(),
+                post.getWriter(), post.getComments(), postLikesRepository.existsByAccount(user),
+                post.getStatus(), TimeUtils.dateTimeToYYYYMMDD(post.getCreatedDate()), TimeUtils.dateTimeToYYYYMMDD(post.getModifiedDate()))).orElse(null);
     }
 
 
     @Transactional
-    public boolean deletePost(Long pId, Account user){
+    public boolean deletePost(Long pId, Account user) {
         Optional<Post> post = postRepository.findById(pId);
-        if(post.isPresent() && user.postIsMine(post.get())) {
+        if (post.isPresent() && user.postIsMine(post.get())) {
             post.get().setStatus(Status.UNABLE);
             return true;
         }
@@ -81,13 +93,12 @@ public class PostService {
     public Page<PostDto> getPage(Pageable pageable, String keyword, Account user) {
         Page<Post> pages;
 
-        if(user != null && user.getRole().equals("ADMIN")){
+        if (user != null && user.getRole().equals("ADMIN")) {
             if (keyword.equals(""))
                 pages = postRepository.findAllByStatusNotOrderByCreatedDateDesc(pageable, Status.UNABLE);
             else
                 pages = postRepository.findAllByTitleContainsIgnoreCaseAndStatusNotOrderByCreatedDateDesc(pageable, keyword, Status.UNABLE);
-        }
-        else {
+        } else {
             if (keyword.equals(""))
                 pages = postRepository.findAllByStatusOrderByCreatedDateDesc(pageable, Status.ENABLE);
             else
@@ -106,14 +117,14 @@ public class PostService {
             target.setWriter(
                     new AccountDto(
                             origin.getWriter().getId()
-                            ,origin.getWriter().getEmail()
-                            ,origin.getWriter().getUserName()
-                            ,origin.getWriter().getProfileImage()
+                            , origin.getWriter().getEmail()
+                            , origin.getWriter().getUserName()
+                            , origin.getWriter().getProfileImage()
                     )
             );
             target.setModifiedDate(TimeUtils.dateTimeToYYYYMMDD(origin.getModifiedDate()));
-            target.setCreatedDate(TimeUtils.dateTimeToYYYYMMDD(origin.getModifiedDate()));
-            target.setUrl("/post/"+origin.getId());
+            target.setCreatedDate(TimeUtils.dateTimeToYYYYMMDD(origin.getCreatedDate()));
+            target.setUrl("/post/" + origin.getId());
             list.add(target);
         }
         return new PageImpl<PostDto>(list, pages.getPageable(), pages.getTotalElements());

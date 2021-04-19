@@ -80,13 +80,13 @@ public class PostController {
     @GetMapping("post/{id}")
     public ModelAndView getPost(@PathVariable Long id, @CurrentUser Account account) {
         ModelAndView mav = new ModelAndView("page-blog-post");
-        Optional<Post> post = postService.getPost(id, account != null && account.getRole().equals("ADMIN"));
+        PostDetailDto postDetailDto = postService.getPost(id, account != null && account.getRole().equals("ADMIN"), account);
 
-        if (post.isPresent()) {
+        if (postDetailDto != null) {
             if (account != null)
-                mav.addObject("isWriter", post.get().getWriter().getId().equals(account.getId()));
-            mav.addObject("post", post.get());
-            mav.addObject("categories", categoryService.getParentsAndMe(post.get().getCategory()));
+                mav.addObject("isWriter", postDetailDto.getWriter().getId().equals(account.getId()));
+            mav.addObject("post", postDetailDto);
+            mav.addObject("categories", categoryService.getParentsAndMe(postDetailDto.getCategory()));
         } else
             mav.addObject("message", "존재하지 않는 글입니다");
         return mav;
