@@ -1,4 +1,4 @@
-package kr.or.rlog.common;
+package kr.or.rlog.config;
 
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;

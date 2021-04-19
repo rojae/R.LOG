@@ -1,4 +1,4 @@
-package kr.or.rlog.common;
+package kr.or.rlog.config;
 
 import kr.or.rlog.utils.ClientUtils;
 import kr.or.rlog.visit.Visitor;
