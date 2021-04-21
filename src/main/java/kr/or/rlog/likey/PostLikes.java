@@ -30,7 +30,7 @@ public class PostLikes extends TimeEntity {
     // ENABLE || UNABLE
     @Column(name = "status", nullable = false, columnDefinition = "VARCHAR(10) DEFAULT 'ENABLE' ")
     @Enumerated(EnumType.STRING)
-    private Status status;
+    private LikeyType status;
 
     @ManyToOne
     private Account account;
