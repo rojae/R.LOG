@@ -19,17 +19,36 @@ public class PostLikesService {
     private PostLikesRepository postLikesRepository;
 
     @Transactional
-    public boolean createNew(Account user, Long postId){
+    public boolean createNew(Account user, Long postId) {
         Optional<Post> savedPost = postRepository.findById(postId);
 
-        if(savedPost.isPresent()) {
+        if (savedPost.isPresent()) {
             PostLikes savedPostLikes = postLikesRepository.save(new PostLikes(user, savedPost.get()));
             savedPost.get().addPostLike(savedPostLikes);
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     }
 
+    /*
+     * proc1 : 좋아요 -> 좋아요 취소
+     * proc2 : 좋아요 취소 -> 좋아요
+     * done : 현재로써는 좋아요 > 좋아요 취소만 사용
+     */
+    @Transactional
+    public boolean editProc(Account user, Long postId) {
+        Optional<PostLikes> savedLike = Optional.ofNullable(postLikesRepository.findByAccountAndPostAndStatus(user, new Post(postId), LikesType.ENABLE));
+
+        if (!savedLike.isPresent())
+            return false;
+        else if (LikesType.isEnable(savedLike.get().getStatus()))
+            savedLike.get().setStatus(LikesType.UNABLE);
+        else if (LikesType.isUnable(savedLike.get().getStatus()))
+            savedLike.get().setStatus(LikesType.ENABLE);
+
+        return true;
+    }
+
 }
+

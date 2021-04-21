@@ -1,7 +1,6 @@
 package kr.or.rlog.likey;
 
 import kr.or.rlog.account.Account;
-import kr.or.rlog.common.Status;
 import kr.or.rlog.common.TimeEntity;
 import kr.or.rlog.post.Post;
 import lombok.Getter;
@@ -19,7 +18,7 @@ public class PostLikes extends TimeEntity {
     public PostLikes(Account account, Post post){
         this.account = account;
         this.post = post;
-        this.status = LikeyType.ENABLE;
+        this.status = LikesType.ENABLE;
     }
 
     @Id
@@ -30,7 +29,7 @@ public class PostLikes extends TimeEntity {
     // ENABLE || UNABLE
     @Column(name = "status", nullable = false, columnDefinition = "VARCHAR(10) DEFAULT 'ENABLE' ")
     @Enumerated(EnumType.STRING)
-    private LikeyType status;
+    private LikesType status;
 
     @ManyToOne
     private Account account;

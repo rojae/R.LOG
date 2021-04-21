@@ -21,6 +21,7 @@ public class PostDetailDto {
     private String content;
     private Account writer;
     private Set<Comment> comments = new HashSet<Comment>();
+    private Long likesCount;
     private boolean postLikes;
     private Status status;
     private String createdDate;
@@ -33,7 +34,7 @@ public class PostDetailDto {
     public PostDetailDto(Long id, Category category, String thumbNail,
                          String header, String title, String content,
                          Account writer, Set<Comment> comments, boolean postLikes,
-                         Status status, String createdDate, String modifiedDate) {
+                         Long likesCount, Status status, String createdDate, String modifiedDate) {
         this.id = id;
         this.category = category;
         this.thumbNail = thumbNail;
@@ -43,6 +44,7 @@ public class PostDetailDto {
         this.writer = writer;
         this.comments = comments;
         this.postLikes = postLikes;
+        this.likesCount = likesCount;
         this.status = status;
         this.createdDate = createdDate;
         this.modifiedDate = modifiedDate;

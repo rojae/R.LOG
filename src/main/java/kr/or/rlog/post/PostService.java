@@ -6,10 +6,9 @@ import kr.or.rlog.account.AccountRepository;
 import kr.or.rlog.category.Category;
 import kr.or.rlog.category.CategoryDto;
 import kr.or.rlog.category.CategoryRepository;
-import kr.or.rlog.comment.Comment;
 import kr.or.rlog.common.Status;
+import kr.or.rlog.likey.LikesType;
 import kr.or.rlog.likey.PostLikesRepository;
-import kr.or.rlog.likey.PostLikesService;
 import kr.or.rlog.utils.TimeUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,7 +53,7 @@ public class PostService {
 
         return savedPost.map(post -> new PostDetailDto(post.getId(), post.getCategory(), post.getThumbNail(),
                 post.getHeader(), post.getTitle(), post.getContent(),
-                post.getWriter(), post.getComments(), postLikesRepository.existsByAccount(user),
+                post.getWriter(), post.getComments(), postLikesRepository.existsByAccountAndPostAndStatus(user, post, LikesType.ENABLE), postLikesRepository.findCountByPostAndStatus(post),
                 post.getStatus(), TimeUtils.dateTimeToYYYYMMDD(post.getCreatedDate()), TimeUtils.dateTimeToYYYYMMDD(post.getModifiedDate()))).orElse(null);
     }
 
