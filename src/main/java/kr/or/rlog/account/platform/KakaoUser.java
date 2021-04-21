@@ -25,6 +25,8 @@ public class KakaoUser {
     }
 
     public String getProfileImage() {
+        if(((Map<String, Object>) (((Map<String, Object>) attributes.get("kakao_account")).get("profile"))).get("profile_image_url") == null)
+            return "";
         return ((Map<String, Object>) (((Map<String, Object>) attributes.get("kakao_account")).get("profile"))).get("profile_image_url").toString();
     }
 
