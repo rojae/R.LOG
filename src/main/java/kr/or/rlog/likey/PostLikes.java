@@ -19,7 +19,7 @@ public class PostLikes extends TimeEntity {
     public PostLikes(Account account, Post post){
         this.account = account;
         this.post = post;
-        this.status = Status.ENABLE;
+        this.status = LikeyType.ENABLE;
     }
 
     @Id
