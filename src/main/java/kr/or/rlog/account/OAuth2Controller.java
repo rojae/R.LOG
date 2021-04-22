@@ -8,14 +8,8 @@ import javax.servlet.http.HttpServletResponse;
 @Controller
 public class OAuth2Controller {
 
-    @GetMapping("/oauth/login")
-    public String loginPage() {
-        return "blog/connect/oauth-login";
-    }
-
     @GetMapping("/login/oauth2/code/kakao")
     public String callback_KAKAO(HttpServletResponse response){
-        System.out.println(response.toString());
         return "redirect:/index";
     }
 
