@@ -35,7 +35,7 @@ public class PostController {
     @GetMapping("/admin/write")
     @Secured("ROLE_ADMIN")
     public String write() {
-        return "/admin/page-blog-write";
+        return "blog/admin/page-blog-write";
     }
 
     @PostMapping("/admin/write")
@@ -45,7 +45,7 @@ public class PostController {
         if (savedPost != null)
             return "redirect:/post/" + savedPost.getId();
         else
-            return "/error";
+            return "blog/error";
     }
 
     @GetMapping("/admin/write/{id}")
@@ -60,7 +60,7 @@ public class PostController {
                 model.addAttribute("message", "권한이 없는 글입니다");
         } else
             model.addAttribute("message", "존재하지 않는 글입니다");
-        return "/admin/page-blog-write";
+        return "blog/admin/page-blog-write";
     }
 
     @PostMapping("/admin/write/{id}")
@@ -79,7 +79,7 @@ public class PostController {
 
     @GetMapping("post/{id}")
     public ModelAndView getPost(@PathVariable Long id, @CurrentUser Account account) {
-        ModelAndView mav = new ModelAndView("page-blog-post");
+        ModelAndView mav = new ModelAndView("blog/page-blog-post");
         PostDetailDto postDetailDto = postService.getPost(id, account != null && account.getRole().equals("ADMIN"), account);
 
         if (postDetailDto != null) {

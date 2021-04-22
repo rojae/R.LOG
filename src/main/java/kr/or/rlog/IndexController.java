@@ -47,7 +47,7 @@ public class IndexController {
         model.addAttribute("endBlockPage", endBlockPage);
         model.addAttribute("postPage", postPage);
         model.addAttribute("keyword", keyword);
-        return "index";
+        return "/blog/index";
     }
 
 }

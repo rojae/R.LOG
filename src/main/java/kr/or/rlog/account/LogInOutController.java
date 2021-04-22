@@ -11,25 +11,25 @@ public class LogInOutController {
     @GetMapping("/login")
     public String loginForm(@CurrentUser Account account) {
         if(account == null)
-            return "login";
-        return "index";
+            return "blog/login";
+        return "blog/index";
     }
 
     @GetMapping("/logout")
     public String logoutForm(Model model) {
         model.asMap().clear();
         model.addAttribute("loginResult", "로그아웃 되었습니다");
-        return "logout";
+        return "blog/logout";
     }
 
     @GetMapping("/error")
     public String error() {
-        return "error";
+        return "blog/error";
     }
 
     @GetMapping("main")
     public String main() {
-        return "main";
+        return "blog/main";
     }
 
 }

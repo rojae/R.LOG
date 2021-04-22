@@ -10,7 +10,7 @@ public class OAuth2Controller {
 
     @GetMapping("/oauth/login")
     public String loginPage() {
-        return "connect/oauth-login";
+        return "blog/connect/oauth-login";
     }
 
     @GetMapping("/login/oauth2/code/kakao")

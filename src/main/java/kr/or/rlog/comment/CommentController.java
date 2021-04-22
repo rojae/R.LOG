@@ -72,7 +72,7 @@ public class CommentController {
             model.addAttribute("commentId", comment.get().getId());
         }
 
-        return "comment-edit";
+        return "blog/comment-edit";
     }
 
     @PutMapping("/comment/{commentId}")

@@ -30,7 +30,7 @@ public class GuestbookService {
     public boolean createNew(Account account, Guestbook guestbook){
         Optional<Account> savedUser = accountRepository.findById(account.getId());
         savedUser.ifPresent(user -> user.addGuestbook(guestbook));
-        Guestbook newGuestbook = new Guestbook(account, guestbook.getContent(), guestbook.getStatus());
+        Guestbook newGuestbook = new Guestbook(account, guestbook.getContent(), guestbook.getStatus(), guestbook.getParentId());
         guestbookRepository.save(newGuestbook);
         return true;
     }
@@ -56,6 +56,8 @@ public class GuestbookService {
             );
             target.setStatus(origin.getStatus());
             target.setModifiedDate(TimeUtils.dateTimeToYYYYMMDD(origin.getModifiedDate()));
+            target.setParentId(origin.getParentId());
+
             if(user != null && user.getId().equals(origin.getWriter().getId())) {
                 target.setMine(true);
             }

@@ -21,7 +21,7 @@ public class AccountController {
 
     @GetMapping("/signup")
     public String signUp(){
-        return "page-blog-signup";
+        return "blog/page-blog-signup";
     }
 
     @PostMapping("/signup")
@@ -30,14 +30,14 @@ public class AccountController {
             model.addAttribute("loginResult", "이미 가입된 이메일입니다. 이메일 인증을 진행하세요.");
             if(accountService.isAuth(account))
                 model.addAttribute("loginResult", "이미 가입된 이메일입니다. 로그인을 진행해주세요.");
-            return "login";
+            return "blog/login";
         }
         // 아래 두개는 합치는게 .. 좋으려나??
         Account savedUser = accountService.createNew(account, PlatformType.RLOG);
         Mail newMail = mailService.createMail(savedUser);
         mailService.mailSend(newMail);
         model.addAttribute("loginResult", "회원가입이 완료되었습니다. 이메일 인증을 진행하세요.");
-        return "login";
+        return "blog/login";
     }
 
 }
