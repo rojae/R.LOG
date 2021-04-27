@@ -8,6 +8,7 @@ import kr.or.rlog.category.CategoryDto;
 import kr.or.rlog.category.CategoryRepository;
 import kr.or.rlog.common.Status;
 import kr.or.rlog.likey.LikesType;
+import kr.or.rlog.likey.PostLikes;
 import kr.or.rlog.likey.PostLikesRepository;
 import kr.or.rlog.utils.TimeUtils;
 import org.springframework.beans.BeanUtils;
@@ -36,6 +37,7 @@ public class PostService {
     @Autowired
     PostLikesRepository postLikesRepository;
 
+
     public Optional<Post> getPost(Long pId) {
         return postRepository.findById(pId);
     }
@@ -56,7 +58,6 @@ public class PostService {
                 post.getWriter(), post.getComments(), postLikesRepository.existsByAccountAndPostAndStatus(user, post, LikesType.ENABLE), postLikesRepository.findCountByPostAndStatus(post),
                 post.getStatus(), TimeUtils.dateTimeToYYYYMMDD(post.getCreatedDate()), TimeUtils.dateTimeToYYYYMMDD(post.getModifiedDate()))).orElse(null);
     }
-
 
     @Transactional
     public boolean deletePost(Long pId, Account user) {
@@ -91,6 +92,7 @@ public class PostService {
     @Transactional
     public Page<PostDto> getPage(Pageable pageable, String keyword, Account user) {
         Page<Post> pages;
+        List<PostDto> list = new ArrayList<>();
 
         if (user != null && user.getRole().equals("ADMIN")) {
             if (keyword.equals(""))
@@ -103,7 +105,7 @@ public class PostService {
             else
                 pages = postRepository.findAllByTitleContainsIgnoreCaseAndStatusOrderByCreatedDateDesc(pageable, keyword, Status.ENABLE);
         }
-        List<PostDto> list = new ArrayList<>();
+
         for (Post origin : pages) {
             PostDto target = new PostDto();
             BeanUtils.copyProperties(origin, target);
@@ -127,6 +129,43 @@ public class PostService {
             list.add(target);
         }
         return new PageImpl<PostDto>(list, pages.getPageable(), pages.getTotalElements());
+    }
+
+    @Transactional
+    public List<PostDto> getTopPost(int topSize){
+        List<Post> postList = new ArrayList<>();
+        List<PostDto> list = new ArrayList<>();
+
+        List<Long> postLikes = postLikesRepository.findByLikeDesc(topSize);
+
+        for(Long topLikesId : postLikes){
+            postList.add(postRepository.findById(topLikesId).orElse(null));
+        }
+
+        for (Post origin : postList) {
+            PostDto target = new PostDto();
+            BeanUtils.copyProperties(origin, target);
+            target.setCategory(
+                    new CategoryDto(origin.getCategory().getId()
+                            , origin.getCategory().getCategoryName()
+                            , origin.getCategory().getParentId()
+                    )
+            );
+            target.setWriter(
+                    new AccountDto(
+                            origin.getWriter().getId()
+                            , origin.getWriter().getEmail()
+                            , origin.getWriter().getUserName()
+                            , origin.getWriter().getProfileImage()
+                    )
+            );
+            target.setModifiedDate(TimeUtils.dateTimeToYYYYMMDD(origin.getModifiedDate()));
+            target.setCreatedDate(TimeUtils.dateTimeToYYYYMMDD(origin.getCreatedDate()));
+            target.setUrl("/post/" + origin.getId());
+            list.add(target);
+        }
+
+        return list;
     }
 
 

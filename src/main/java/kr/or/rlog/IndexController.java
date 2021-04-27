@@ -14,11 +14,14 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.List;
+
 @Controller
 public class IndexController {
 
     private final static int pageSize = 7;
     private final static int blockSize = 5;
+    private final static int popularSize = 3;
 
     @Autowired
     PostService postService;
@@ -34,6 +37,7 @@ public class IndexController {
             , @RequestParam(value = "keyword", defaultValue = "") String keyword
             , @PageableDefault(page = 0, size = pageSize, sort = "createdDate", direction = Sort.Direction.DESC) Pageable pageable) {
 
+        List<PostDto> topPost = postService.getTopPost(popularSize);
         Page<PostDto> postPage = postService.getPage(pageable, keyword, user);
 
         int pageNumber = (postPage.getPageable().isPaged()) ? postPage.getPageable().getPageNumber() : 0;    //  현재페이지
@@ -46,6 +50,7 @@ public class IndexController {
         model.addAttribute("startBlockPage", startBlockPage);
         model.addAttribute("endBlockPage", endBlockPage);
         model.addAttribute("postPage", postPage);
+        model.addAttribute("topPost", topPost);
         model.addAttribute("keyword", keyword);
         return "/blog/index";
     }
