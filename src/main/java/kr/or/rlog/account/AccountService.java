@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Service
 public class AccountService implements UserDetailsService {
@@ -38,17 +39,16 @@ public class AccountService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         Account account = accountRepository.findByEmailAndIsAuthIsTrueAndPlatformType(email, PlatformType.RLOG);
-        if(account != null) {
+        if (account != null) {
             System.out.println(account.getUserName() + "님이 로그인 시도.");
             return new UserAccount(account);
-        }
-        else if (accountRepository.findByEmailAndIsAuthIsTrueAndPlatformType(email, PlatformType.KAKAO) != null) {
+        } else if (accountRepository.findByEmailAndIsAuthIsTrueAndPlatformType(email, PlatformType.KAKAO) != null) {
             System.out.println("카카오톡 회원입니다. 카카오톡을 통해서 로그인을 해야합니다.");
             throw new AccountExpiredException("카카오톡 회원입니다. 카카오톡을 통해서 로그인을 해야합니다.");
-        }else if(accountRepository.findByEmail(email) != null){
+        } else if (accountRepository.findByEmail(email) != null) {
             System.out.println("메일 인증이 되지 않은 사용자입니다");
             throw new DisabledException("메일 인증이 되지 않은 사용자입니다");
-        }else{
+        } else {
             System.out.println("존재하지 않는 사용자입니다");
             throw new BadCredentialsException("존재하지 않는 사용자 혹은 비밀번호입니다");
         }
@@ -56,11 +56,10 @@ public class AccountService implements UserDetailsService {
 
     public UserDetails loadUserByUsername(String email, PlatformType platformType) throws UsernameNotFoundException {
         Account account = accountRepository.findByEmailAndIsAuthIsTrueAndPlatformType(email, platformType);
-        if(account != null) {
-            System.out.println("["+platformType.name()+"]  - "+account.getUserName() + "님이 로그인 성공하셨습니다.");
+        if (account != null) {
+            System.out.println("[" + platformType.name() + "]  - " + account.getUserName() + "님이 로그인 성공하셨습니다.");
             return new UserAccount(account);
-        }
-        else{
+        } else {
             System.out.println("존재하지 않는 사용자입니다");
             throw new UsernameNotFoundException("존재하지 않는 사용자입니다");
         }
@@ -74,16 +73,34 @@ public class AccountService implements UserDetailsService {
     @Transactional
     public boolean doSignup(String email, String secretKey) {
         Mail mail = mailRepository.findByEmailAndSecretKeyAndExpireDateGreaterThan(email, secretKey, LocalDateTime.now());
-        if(mail == null)
+        if (mail == null)
             return false;
 
         Account account = accountRepository.findByMailsContains(mail);
-        if(account == null)
+        if (account == null)
             return false;
 
         mail.setAuth(true);
         account.setAuth(true);
         return true;
+    }
+
+    public AccountInfoDto getMyInfo(Long accountId) {
+        Optional<Account> user = accountRepository.findById(accountId);
+        return user.map(AccountInfoDto::new).orElse(null);
+    }
+
+    @Transactional
+    public boolean saveMyInfo(Long currentUserId, AccountInfoDto accountInfoDto){
+        Optional<Account> user = accountRepository.findById(currentUserId);
+        if(user.isPresent()){
+            user.get().setProfileImage(accountInfoDto.getProfileImage());
+            user.get().setEmail(accountInfoDto.getEmail());
+            user.get().setUserName(accountInfoDto.getUserName());
+            user.get().setRecvMail(accountInfoDto.isRecvMail());
+            return true;
+        }
+        return false;
     }
 
     public Account createNew(Account account, PlatformType platformType) {
@@ -93,11 +110,11 @@ public class AccountService implements UserDetailsService {
         return this.accountRepository.save(account);
     }
 
-    public boolean isDuplicate(Account account){
+    public boolean isDuplicate(Account account) {
         return this.accountRepository.existsAccountByEmail(account.getEmail());
     }
 
-    public boolean isAuth(Account account){
+    public boolean isAuth(Account account) {
         return this.accountRepository.existsAccountByEmailAndIsAuthIsTrue(account.getEmail());
     }
 

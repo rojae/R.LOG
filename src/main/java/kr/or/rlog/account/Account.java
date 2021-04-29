@@ -48,6 +48,9 @@ public class Account extends TimeEntity {
     @Column(name = "role", columnDefinition = "VARCHAR(255) DEFAULT 'USER' ")
     private String role;
 
+    @Column(name = "recvMail", columnDefinition = "TINYINT DEFAULT 0", length = 1)
+    private boolean recvMail;
+
     @Column(name = "isAuth", columnDefinition = "TINYINT DEFAULT 0", length = 1)
     private boolean isAuth;
 
