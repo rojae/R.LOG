@@ -22,11 +22,6 @@ public class LogInOutController {
         return "blog/logout";
     }
 
-    @GetMapping("/error")
-    public String error() {
-        return "blog/error";
-    }
-
     @GetMapping("main")
     public String main() {
         return "blog/main";
