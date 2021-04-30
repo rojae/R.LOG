@@ -95,7 +95,7 @@ public class AccountController {
             Message message = Message.builder().code("201").response("입력하신 현재 비밀번호가 틀립니다. 다시 시도하세요.").build();
             return new ResponseEntity<>(message, HttpStatus.OK);
         }else if(accountService.passwordUpdate(newPwd, user.getId())){
-            Message message = Message.builder().code("200").response("비밀번호가 수정되었습니다. 로그인 페이지로 이동합니다.").build();
+            Message message = Message.builder().code("200").response("비밀번호가 수정되었습니다. 다시 로그인해주세요.").build();
             return new ResponseEntity<>(message, HttpStatus.OK);
         }else{
             Message message = Message.builder().code("500").response("시스템 오류입니다").build();
