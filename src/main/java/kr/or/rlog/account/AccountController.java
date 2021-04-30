@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.mail.MessagingException;
+import java.util.Map;
 
 @Controller
 public class AccountController {
@@ -76,6 +77,34 @@ public class AccountController {
             return new ResponseEntity<>(message, HttpStatus.OK);
         }
     }
+
+    @GetMapping("/my/info/password")
+    public String updatePasswordView(){
+        return "blog/my-info-password";
+    }
+
+    @PutMapping("/my/info/password")
+    public ResponseEntity<Message> updatePassword(@CurrentUser Account user, @RequestBody Map<String, Object> data){
+        String currentPwd = (String) data.get("currentPwd");
+        String newPwd = (String) data.get("newPwd");
+
+        if(user == null) {
+            Message message = Message.builder().code("403").response("권한이 없는 요청입니다").build();
+            return new ResponseEntity<>(message, HttpStatus.OK);
+        }else if(!accountService.passwordCheck(currentPwd, user.getPassword())){
+            Message message = Message.builder().code("201").response("입력하신 현재 비밀번호가 틀립니다. 다시 시도하세요.").build();
+            return new ResponseEntity<>(message, HttpStatus.OK);
+        }else if(accountService.passwordUpdate(newPwd, user.getId())){
+            Message message = Message.builder().code("200").response("비밀번호가 수정되었습니다. 로그인 페이지로 이동합니다.").build();
+            return new ResponseEntity<>(message, HttpStatus.OK);
+        }else{
+            Message message = Message.builder().code("500").response("시스템 오류입니다").build();
+            return new ResponseEntity<>(message, HttpStatus.OK);
+        }
+
+    }
+
+
 
 
 }

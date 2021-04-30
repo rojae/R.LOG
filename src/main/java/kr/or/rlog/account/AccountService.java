@@ -118,4 +118,14 @@ public class AccountService implements UserDetailsService {
         return this.accountRepository.existsAccountByEmailAndIsAuthIsTrue(account.getEmail());
     }
 
+    public boolean passwordCheck(String currentPwd, String password) {
+        return passwordEncoder.matches(currentPwd, password);
+    }
+
+    @Transactional
+    public boolean passwordUpdate(String newPwd, Long userId) {
+        Optional<Account> savedAccount = accountRepository.findById(userId);
+        savedAccount.ifPresent(account -> account.setPassword(passwordEncoder.encode(newPwd)));
+        return true;
+    }
 }
