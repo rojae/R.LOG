@@ -28,7 +28,6 @@ public class Mail {
     @Column(name = "userName", nullable = false)
     private String userName;
 
-    // 이메일은 같을 수 없다
     @Column(name = "email", nullable = false)
     private String email;
 

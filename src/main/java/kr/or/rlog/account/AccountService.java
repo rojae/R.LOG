@@ -114,6 +114,10 @@ public class AccountService implements UserDetailsService {
         return this.accountRepository.existsAccountByEmail(account.getEmail());
     }
 
+    public boolean isDuplicate(String email) {
+        return this.accountRepository.existsAccountByEmail(email);
+    }
+
     public boolean isAuth(Account account) {
         return this.accountRepository.existsAccountByEmailAndIsAuthIsTrue(account.getEmail());
     }
@@ -126,6 +130,21 @@ public class AccountService implements UserDetailsService {
     public boolean passwordUpdate(String newPwd, Long userId) {
         Optional<Account> savedAccount = accountRepository.findById(userId);
         savedAccount.ifPresent(account -> account.setPassword(passwordEncoder.encode(newPwd)));
+        return true;
+    }
+
+    @Transactional
+    public boolean mailUpdate(String secretKey, String newEmail) {
+        Mail mail = mailRepository.findByEmailAndSecretKeyAndExpireDateGreaterThan(newEmail, secretKey, LocalDateTime.now());
+        if (mail == null)
+            return false;
+
+        Account account = mail.getAccount();
+        if (account == null)
+            return false;
+
+        mail.setAuth(true);
+        account.setEmail(newEmail);
         return true;
     }
 }
