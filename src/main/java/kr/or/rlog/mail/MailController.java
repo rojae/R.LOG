@@ -41,7 +41,7 @@ public class MailController {
     @GetMapping("/api/v1/update/mail")
     public String updateMail(Model model, @RequestParam String secretKey, @RequestParam String email) throws MessagingException {
         Mail savedMail = mailRepository.findByEmailAndSecretKeyAndExpireDateGreaterThan(email, secretKey, LocalDateTime.now());
-        mailService.expireMail(mailService.createMail(savedMail.getAccount()), "신규 이메일 인증으로 인해서 해당 메일이 만료되었습니다.");
+        mailService.expireMail(mailService.createMail(savedMail.getAccount(), MailType.MAIL_EXPIRE), "신규 이메일 인증으로 인해서 해당 메일이 만료되었습니다.");
 
         if(accountService.mailUpdate(secretKey, email))
             model.addAttribute("loginResult", "신규 이메일 인증이 완료되었습니다. 로그인을 진행하세요");

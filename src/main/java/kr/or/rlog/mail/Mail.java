@@ -48,6 +48,11 @@ public class Mail {
     @Column(name = "isAuth", nullable = true, columnDefinition = "TINYINT DEFAULT 0", length = 1)
     private boolean auth;
 
+    // 메일의 용도
+    @Column(name= "type", nullable = false, columnDefinition = "VARCHAR(20) DEFAULT 'USER_SIGNUP' ")
+    @Enumerated(EnumType.STRING)
+    private MailType mailType;
+
     @Override
     public String toString() {
         return "Mail{" +

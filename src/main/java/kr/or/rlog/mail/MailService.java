@@ -222,7 +222,7 @@ public class MailService {
     }
 
 
-    public Mail createMail(Account account) {
+    public Mail createMail(Account account, MailType mailType) {
         Optional<Account> savedAccount = accountRepository.findById(account.getId());
         Mail mail = new Mail.MailBuilder()
                 .account(account)
@@ -231,6 +231,7 @@ public class MailService {
                 .secretKey(RandomUtils.getAlpha(64))
                 .expireDate(LocalDateTime.now().plusMinutes(5))
                 //.sentDate(LocalDateTime.now())
+                .mailType(mailType)
                 .userName(account.getUserName())
                 .build();
         Mail savedMail = this.mailRepository.save(mail);
@@ -252,6 +253,7 @@ public class MailService {
                     .expireDate(LocalDateTime.now().plusMinutes(5))
                     //.sentDate(LocalDateTime.now())
                     .userName(savedAccount.get().getUserName())
+                    .mailType(MailType.MAIL_UPDATE)
                     .build();
             Mail savedMail = this.mailRepository.save(mail);
             savedAccount.get().addMail(savedMail);

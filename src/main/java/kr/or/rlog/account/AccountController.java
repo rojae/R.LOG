@@ -5,6 +5,7 @@ import kr.or.rlog.common.CurrentUser;
 import kr.or.rlog.common.Message;
 import kr.or.rlog.mail.Mail;
 import kr.or.rlog.mail.MailService;
+import kr.or.rlog.mail.MailType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,7 +41,7 @@ public class AccountController {
         }
         // 아래 두개는 합치는게 .. 좋으려나??
         Account savedUser = accountService.createNew(account, PlatformType.RLOG);
-        Mail newMail = mailService.createMail(savedUser);
+        Mail newMail = mailService.createMail(savedUser, MailType.USER_SIGNUP);
         mailService.signupSend(newMail);
         model.addAttribute("loginResult", "회원가입이 완료되었습니다. 이메일 인증을 진행하세요.");
         return "blog/login";
