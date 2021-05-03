@@ -1,12 +1,18 @@
 package kr.or.rlog.account;
 
 import kr.or.rlog.account.platform.PlatformType;
+import kr.or.rlog.comment.CommentDto;
+import kr.or.rlog.comment.CommentService;
 import kr.or.rlog.common.CurrentUser;
 import kr.or.rlog.common.Message;
 import kr.or.rlog.mail.Mail;
 import kr.or.rlog.mail.MailService;
 import kr.or.rlog.mail.MailType;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -20,11 +26,17 @@ import java.util.Map;
 @Controller
 public class AccountController {
 
+    private final static int pageSize = 7;
+    private final static int blockSize = 5;
+
     @Autowired
     AccountService accountService;
 
     @Autowired
     MailService mailService;
+
+    @Autowired
+    CommentService commentService;
 
     @GetMapping("/signup")
     public String signUp() {
@@ -137,7 +149,12 @@ public class AccountController {
             Message message = Message.builder().code("200").response("해당 이메일로 인증메일을 보냈습니다. 인증 이후 로그인을 진행하세요.").build();
             return new ResponseEntity<>(message, HttpStatus.OK);
         }
+    }
 
+    @GetMapping("/my/info/comments")
+    @ResponseBody
+    public Page<CommentDto> myComments(@CurrentUser Account user, @PageableDefault(page = 0, size = pageSize, sort = "createdDate", direction = Sort.Direction.DESC) Pageable pageable){
+        return commentService.getPage(pageable, user);
     }
 
 

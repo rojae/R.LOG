@@ -6,6 +6,8 @@ import kr.or.rlog.common.Status;
 import kr.or.rlog.post.Post;
 import kr.or.rlog.post.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -116,5 +118,10 @@ public class CommentService {
         } else {
             return false;
         }
+    }
+
+    public Page<CommentDto> getPage(Pageable pageable, Account user) {
+        Page<Comment> pages = commentRepository.findAllByWriter(pageable, user);
+            return pages.map(CommentDto::of);
     }
 }
