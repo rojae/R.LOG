@@ -27,6 +27,7 @@ public class CommentLikesService {
         if (savedComment.isPresent()) {
             CommentLikes savedPostLikes = commentLikesRepository.save(new CommentLikes(user, savedComment.get()));
             savedComment.get().addCommentLike(savedPostLikes);
+            savedComment.get().setLikeCount(savedComment.get().plusLikeCount());
             return true;
         } else {
             return false;
@@ -39,15 +40,20 @@ public class CommentLikesService {
      * done : 현재로써는 좋아요 > 좋아요 취소만 사용
      */
     @Transactional
-    public boolean editProc(Account user, Long postId) {
-        Optional<CommentLikes> savedLike = Optional.ofNullable(commentLikesRepository.findByAccountAndPostAndStatus(user, new Post(postId), LikesType.ENABLE));
+    public boolean editProc(Account user, Long commentId) {
+        Optional<CommentLikes> savedLike = Optional.ofNullable(commentLikesRepository.findByAccountAndCommentAndStatus(user, new Comment(commentId), LikesType.ENABLE));
+        Optional<Comment> savedComment = commentRepository.findById(commentId);
 
-        if (!savedLike.isPresent())
+        if (!savedLike.isPresent() || !savedComment.isPresent())
             return false;
-        else if (LikesType.isEnable(savedLike.get().getStatus()))
+        else if (LikesType.isEnable(savedLike.get().getStatus())) {
             savedLike.get().setStatus(LikesType.UNABLE);
-        else if (LikesType.isUnable(savedLike.get().getStatus()))
+            savedComment.get().setLikeCount(savedComment.get().minusLikeCount());
+        }
+        else if (LikesType.isUnable(savedLike.get().getStatus())) {
             savedLike.get().setStatus(LikesType.ENABLE);
+            savedComment.get().setLikeCount(savedComment.get().plusLikeCount());
+        }
 
         return true;
     }

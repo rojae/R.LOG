@@ -17,7 +17,12 @@ import java.util.Set;
 @Setter
 @Getter
 @Entity(name = "TBL_COMMENT")
+@NoArgsConstructor
 public class Comment extends TimeEntity {
+
+    public Comment(Long id){
+        this.id = id;
+    }
 
     @Id @GeneratedValue
     private Long id;
@@ -38,6 +43,9 @@ public class Comment extends TimeEntity {
     @Enumerated(EnumType.STRING)
     private Status status;
 
+    @Column(columnDefinition = "bigint(5) default '0'", nullable = false)
+    private Long likeCount;
+
     @OneToMany(mappedBy = "comment", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     @Fetch(FetchMode.JOIN)
     private Set<CommentLikes> commentLikes = new HashSet<CommentLikes>();
@@ -45,6 +53,14 @@ public class Comment extends TimeEntity {
     public void addCommentLike(CommentLikes commentLikes){
         this.commentLikes.add(commentLikes);
         commentLikes.setComment(this);
+    }
+
+    public Long minusLikeCount(){
+        return this.getLikeCount() - 1;
+    }
+
+    public Long plusLikeCount(){
+        return this.getLikeCount() + 1;
     }
 
 }

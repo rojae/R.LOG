@@ -3,6 +3,8 @@ package kr.or.rlog.comment;
 import kr.or.rlog.account.Account;
 import kr.or.rlog.account.AccountDto;
 import kr.or.rlog.common.Status;
+import kr.or.rlog.likey.CommentLikesRepository;
+import kr.or.rlog.likey.LikesType;
 import kr.or.rlog.post.Post;
 import kr.or.rlog.post.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,9 @@ public class CommentService {
     CommentRepository commentRepository;
 
     @Autowired
+    CommentLikesRepository commentLikesRepository;
+
+    @Autowired
     PostRepository postRepository;
 
     @Transactional
@@ -32,6 +37,7 @@ public class CommentService {
             comment.setWriter(user);
             comment.setPost(savedPost.get());
             comment.setParentId(0L);
+            comment.setLikeCount(0L);
             savedPost.get().addComment(comment);
         }
         commentRepository.save(comment);
@@ -49,6 +55,7 @@ public class CommentService {
             comment.setWriter(user);
             comment.setPost(savedPost.get());
             comment.setParentId(parentId);
+            comment.setLikeCount(0L);
             savedPost.get().addComment(comment);
         }
         commentRepository.save(comment);
@@ -59,14 +66,20 @@ public class CommentService {
         Map<Long, List<CommentDto>> groupingByParent = commentRepository.findAllByPostAndStatusNotOrderByCreatedDateDesc(new Post(postId), Status.UNABLE)
                 .stream()
                 .map(ce -> {
-                    if (ce.getStatus().equals(Status.SECRET) && (user == null || !ce.getWriter().getId().equals(user.getId()))) {
-                        return new CommentDto(ce.getId(), "비밀댓글입니다"
-                                , new AccountDto("", "???", "/assets/img/illustrations/profiles/question-mark.png")
-                                , ce.getModifiedDate(), ce.getParentId(), ce.getStatus());
-                    } else {
+                    if (user != null && user.getRole().equals("ADMIN")) {
                         return new CommentDto(ce.getId(), ce.getContent()
                                 , new AccountDto(ce.getWriter().getId(), ce.getWriter().getEmail(), ce.getWriter().getUserName(), ce.getWriter().getProfileImage())
-                                , user, ce.getModifiedDate(), ce.getParentId(), ce.getStatus());
+                                , user, ce.getModifiedDate(), ce.getLikeCount(), commentLikesRepository.existsCommentLikesByAccountAndCommentAndStatus(user, new Comment(ce.getId()), LikesType.ENABLE), ce.getParentId(), ce.getStatus());
+                    }
+                    else if (ce.getStatus().equals(Status.SECRET) && (user == null || !ce.getWriter().getId().equals(user.getId()))) {
+                        return new CommentDto(ce.getId(), "비밀댓글입니다"
+                                , new AccountDto("", "???", "/assets/img/illustrations/profiles/question-mark.png")
+                                , ce.getModifiedDate(), ce.getLikeCount(), commentLikesRepository.existsCommentLikesByAccountAndCommentAndStatus(user, new Comment(ce.getId()), LikesType.ENABLE), ce.getParentId(), ce.getStatus());
+                    }
+                    else {
+                        return new CommentDto(ce.getId(), ce.getContent()
+                                , new AccountDto(ce.getWriter().getId(), ce.getWriter().getEmail(), ce.getWriter().getUserName(), ce.getWriter().getProfileImage())
+                                , user, ce.getModifiedDate(), ce.getLikeCount(), commentLikesRepository.existsCommentLikesByAccountAndCommentAndStatus(user, new Comment(ce.getId()), LikesType.ENABLE), ce.getParentId(), ce.getStatus());
                     }
                 })
                 .collect(groupingBy(CommentDto::getParentId));
@@ -122,6 +135,6 @@ public class CommentService {
 
     public Page<CommentDto> getPage(Pageable pageable, Account user) {
         Page<Comment> pages = commentRepository.findAllByWriter(pageable, user);
-            return pages.map(CommentDto::of);
+        return pages.map(CommentDto::of);
     }
 }

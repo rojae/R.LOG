@@ -3,6 +3,7 @@ package kr.or.rlog.comment;
 import kr.or.rlog.account.Account;
 import kr.or.rlog.account.AccountDto;
 import kr.or.rlog.common.Status;
+import kr.or.rlog.likey.LikesType;
 import kr.or.rlog.post.Post;
 import kr.or.rlog.utils.TimeUtils;
 import lombok.Getter;
@@ -27,6 +28,8 @@ public class CommentDto {
     private List<CommentDto> subComments;
     private Status status;
 
+    private boolean commentLike;
+    private Long likeCount;
     private Long postId;
     private String postTitle;
 
@@ -38,21 +41,25 @@ public class CommentDto {
         this.parentId = parentId;
     }
 
-    public CommentDto(Long commentId, String content, AccountDto writer, LocalDateTime modifiedDate, Long parentId, Status status){
+    public CommentDto(Long commentId, String content, AccountDto writer, LocalDateTime modifiedDate, Long likeCount, boolean commentLike, Long parentId, Status status){
         this.commentId = commentId;
         this.content = content;
         this.writer = writer;
         this.modifiedDate = TimeUtils.dateTimeToYYYYMMDD(modifiedDate);
+        this.likeCount = likeCount;
+        this.commentLike = commentLike;
         this.parentId = parentId;
         this.status = status;
     }
 
-    public CommentDto(Long commentId, String content, AccountDto writer, Account user, LocalDateTime modifiedDate, Long parentId, Status status){
+    public CommentDto(Long commentId, String content, AccountDto writer, Account user, LocalDateTime modifiedDate, Long likeCount, boolean commentLike, Long parentId, Status status){
         this.commentId = commentId;
         this.content = content;
         this.writer = writer;
         this.modifiedDate = TimeUtils.dateTimeToYYYYMMDD(modifiedDate);
         this.parentId = parentId;
+        this.likeCount = likeCount;
+        this.commentLike = commentLike;
         this.setMine(checkMine(user));
         this.status = status;
     }
