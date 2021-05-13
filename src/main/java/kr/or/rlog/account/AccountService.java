@@ -147,4 +147,10 @@ public class AccountService implements UserDetailsService {
         account.setEmail(newEmail);
         return true;
     }
+
+    @Transactional
+    public Account findMe(Account user) {
+        return accountRepository.findById(user.getId())
+                .orElseThrow(RuntimeException::new);
+    }
 }

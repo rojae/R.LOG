@@ -3,6 +3,7 @@ package kr.or.rlog.post;
 import kr.or.rlog.account.Account;
 import kr.or.rlog.account.AccountDto;
 import kr.or.rlog.account.AccountRepository;
+import kr.or.rlog.account.AccountService;
 import kr.or.rlog.category.Category;
 import kr.or.rlog.category.CategoryDto;
 import kr.or.rlog.category.CategoryRepository;
@@ -37,6 +38,8 @@ public class PostService {
     @Autowired
     PostLikesRepository postLikesRepository;
 
+    @Autowired
+    AccountService accountService;
 
     public Optional<Post> getPost(Long pId) {
         return postRepository.findById(pId);
@@ -62,7 +65,7 @@ public class PostService {
     @Transactional
     public boolean deletePost(Long pId, Account user) {
         Optional<Post> post = postRepository.findById(pId);
-        if (post.isPresent() && user.postIsMine(post.get())) {
+        if (post.isPresent() && accountService.findMe(user).postIsMine(post.get())) {
             post.get().setStatus(Status.UNABLE);
             return true;
         }
