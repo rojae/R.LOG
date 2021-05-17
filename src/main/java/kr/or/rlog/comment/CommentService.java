@@ -134,7 +134,7 @@ public class CommentService {
     }
 
     public Page<CommentDto> getPage(Pageable pageable, Account user) {
-        Page<Comment> pages = commentRepository.findAllByWriter(pageable, user);
+        Page<Comment> pages = commentRepository.findAllByWriterAndStatusNot(pageable, user, Status.UNABLE);
         return pages.map(CommentDto::of);
     }
 }

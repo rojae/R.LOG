@@ -28,7 +28,7 @@ public class CommentDto {
     private List<CommentDto> subComments;
     private Status status;
 
-    private boolean commentLike;
+    private boolean myLike;
     private Long likeCount;
     private Long postId;
     private String postTitle;
@@ -41,25 +41,25 @@ public class CommentDto {
         this.parentId = parentId;
     }
 
-    public CommentDto(Long commentId, String content, AccountDto writer, LocalDateTime modifiedDate, Long likeCount, boolean commentLike, Long parentId, Status status){
+    public CommentDto(Long commentId, String content, AccountDto writer, LocalDateTime modifiedDate, Long likeCount, boolean myLike, Long parentId, Status status){
         this.commentId = commentId;
         this.content = content;
         this.writer = writer;
         this.modifiedDate = TimeUtils.dateTimeToYYYYMMDD(modifiedDate);
         this.likeCount = likeCount;
-        this.commentLike = commentLike;
+        this.myLike = myLike;
         this.parentId = parentId;
         this.status = status;
     }
 
-    public CommentDto(Long commentId, String content, AccountDto writer, Account user, LocalDateTime modifiedDate, Long likeCount, boolean commentLike, Long parentId, Status status){
+    public CommentDto(Long commentId, String content, AccountDto writer, Account user, LocalDateTime modifiedDate, Long likeCount, boolean myLike, Long parentId, Status status){
         this.commentId = commentId;
         this.content = content;
         this.writer = writer;
         this.modifiedDate = TimeUtils.dateTimeToYYYYMMDD(modifiedDate);
         this.parentId = parentId;
         this.likeCount = likeCount;
-        this.commentLike = commentLike;
+        this.myLike = myLike;
         this.setMine(checkMine(user));
         this.status = status;
     }

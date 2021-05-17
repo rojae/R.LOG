@@ -15,6 +15,6 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     List<Comment> findAllByStatus(Status enable);
     List<Comment> findAllByWriterOrStatusOrderByCreatedDateDesc(Account user, Status enable);
     List<Comment> findAllByPostAndStatusNotOrderByCreatedDateDesc(Post postId, Status status);
-
-    Page<Comment> findAllByWriter(Pageable pageable, Account writer);
+    List<Comment> findAllByPost(Post postId);
+    Page<Comment> findAllByWriterAndStatusNot(Pageable pageable, Account writer, Status status);
 }
