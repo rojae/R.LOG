@@ -7,6 +7,8 @@ import kr.or.rlog.account.AccountService;
 import kr.or.rlog.category.Category;
 import kr.or.rlog.category.CategoryDto;
 import kr.or.rlog.category.CategoryRepository;
+import kr.or.rlog.comment.Comment;
+import kr.or.rlog.comment.CommentRepository;
 import kr.or.rlog.common.Status;
 import kr.or.rlog.likey.LikesType;
 import kr.or.rlog.likey.PostLikes;
@@ -41,6 +43,9 @@ public class PostService {
     @Autowired
     AccountService accountService;
 
+    @Autowired
+    CommentRepository commentRepository;
+
     public Optional<Post> getPost(Long pId) {
         return postRepository.findById(pId);
     }
@@ -65,8 +70,16 @@ public class PostService {
     @Transactional
     public boolean deletePost(Long pId, Account user) {
         Optional<Post> post = postRepository.findById(pId);
+        List<Comment> commments = commentRepository.findAllByPost(new Post(pId));
+
         if (post.isPresent() && accountService.findMe(user).postIsMine(post.get())) {
             post.get().setStatus(Status.UNABLE);
+
+            // 해당 글의 댓글도 비활성화로 전환
+            for(Comment i : commments){
+                i.setStatus(Status.UNABLE);
+            }
+
             return true;
         }
         return false;
