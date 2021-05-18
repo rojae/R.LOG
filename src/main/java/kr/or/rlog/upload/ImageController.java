@@ -32,6 +32,18 @@ public class ImageController {
         }
     }
 
+    @PostMapping("/my/image")
+    @ResponseBody
+    public ResponseEntity<?> myFileUpload(@RequestParam("file") MultipartFile file) {
+        try {
+            UploadFile uploadedFile = imageService.store(file);
+            return ResponseEntity.ok().body("/image/" + uploadedFile.getId());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
     @GetMapping("/image/{fileId}")
     @ResponseBody
     public ResponseEntity<?> serveFile(@PathVariable Long fileId) {
