@@ -8,11 +8,15 @@ import kr.or.rlog.common.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -22,6 +26,9 @@ import java.util.Optional;
 
 @Controller
 public class PostController {
+
+    private final static int pageSize = 7;
+    private final static int blockSize = 5;
 
     @Autowired
     PostService postService;
@@ -96,10 +103,32 @@ public class PostController {
     @DeleteMapping("post/{id}")
     @ResponseBody
     public ResponseEntity<Message> deletePost(Model model, @PathVariable Long id, @CurrentUser Account account) {
-        if(postService.deletePost(id, account))
+        if (postService.deletePost(id, account))
             return new ResponseEntity<Message>(Message.builder().response("삭제되었습니다. 자동으로 메인으로 이동합니다.").code("200").build(), HttpStatus.OK);
         else
             return new ResponseEntity<Message>(Message.builder().response("접근이 거부되었습니다.").code("403").build(), HttpStatus.FORBIDDEN);
+    }
+
+    @GetMapping("posts")
+    @Secured("ADMIN")
+    @ResponseBody
+    public ResponseEntity myPosts(@CurrentUser Account user, @PageableDefault(page = 0, size = pageSize, sort = "createdDate", direction = Sort.Direction.DESC) Pageable pageable) {
+        Map<String, Object> message = new HashMap<>();
+
+        Page<PostDto> posts = postService.getPage(pageable, "", user);
+
+        int pageNumber = (posts.getPageable().isPaged()) ? posts.getPageable().getPageNumber() : 0;    //  현재페이지
+        int totalPages = posts.getTotalPages(); //총 페이지 수. 검색에따라 10개면 10개..
+        int pageBlock = blockSize;  //블럭의 수 1, 2, 3, 4, 5
+        int startBlockPage = ((pageNumber) / pageBlock) * pageBlock + 1; //현재 페이지가 7이라면 1*5+1=6
+        int endBlockPage = startBlockPage + pageBlock - 1; //6+5-1=10. 6,7,8,9,10해서 10.
+        endBlockPage = Math.min(totalPages, endBlockPage);
+
+        message.put("startBlockPage", startBlockPage);
+        message.put("endBlockPage", endBlockPage);
+        message.put("posts", posts);
+
+        return new ResponseEntity<>(message, HttpStatus.OK);
     }
 
 }

@@ -2,6 +2,7 @@ package kr.or.rlog.post;
 
 import kr.or.rlog.account.AccountDto;
 import kr.or.rlog.category.CategoryDto;
+import kr.or.rlog.common.Status;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,6 +19,7 @@ public class PostDto {
     private String createdDate;
     private String modifiedDate;
     private String url;
+    private Status status;
 
     public PostDto(){
 

@@ -142,6 +142,8 @@ public class PostService {
             target.setModifiedDate(TimeUtils.dateTimeToYYYYMMDD(origin.getModifiedDate()));
             target.setCreatedDate(TimeUtils.dateTimeToYYYYMMDD(origin.getCreatedDate()));
             target.setUrl("/post/" + origin.getId());
+            target.setStatus(origin.getStatus());
+
             list.add(target);
         }
         return new PageImpl<PostDto>(list, pages.getPageable(), pages.getTotalElements());
