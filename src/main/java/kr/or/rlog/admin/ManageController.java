@@ -20,10 +20,10 @@ public class ManageController {
 
     @GetMapping("/gate/manage")
     @ResponseBody
-    public ResponseEntity<Message> open(@CurrentUser Account user){
-        if(user == null)
+    public ResponseEntity<Message> open(@CurrentUser Account user) {
+        if (user == null)
             return new ResponseEntity<Message>(Message.builder().code("403").response("관리자만 사용 가능한 기능입니다. 로그인을 해야합니다.").build(), HttpStatus.OK);
-        else if(user.getRole().contains("ADMIN"))
+        else if (user.getRole().contains("ADMIN"))
             return new ResponseEntity<Message>(Message.builder().code("200").response("관리자 페이지로 이동합니다").build(), HttpStatus.OK);
         else
             return new ResponseEntity<Message>(Message.builder().code("403").response("관리자만 사용 가능한 기능입니다").build(), HttpStatus.OK);
@@ -31,26 +31,45 @@ public class ManageController {
 
     @GetMapping("/manage")
     @Secured("ADMIN")
-    public String  manage(@CurrentUser Account user){
-       return "manage/admin";
+    public String dashBoard(@CurrentUser Account user) {
+        return "manage/dashboard";
+    }
+
+    @GetMapping("/manage/my/info")
+    @Secured("ADMIN")
+    public String myInfo(@CurrentUser Account user) {
+        return "manage/my-info";
+    }
+
+    @GetMapping("/manage/posts")
+    @Secured("ADMIN")
+    public String myPosts(@CurrentUser Account user) {
+        return "manage/posts";
+    }
+
+    @GetMapping("/manage/categories")
+    @Secured("ADMIN")
+    public String categories(@CurrentUser Account user) {
+        return "manage/categories";
     }
 
     @GetMapping("/manage/statistic/today")
     @Secured("ADMIN")
-    public ResponseEntity<Message> getToday(){
+    public ResponseEntity<Message> getToday() {
         Long cnt = visitorService.todayCount();
         return new ResponseEntity<Message>(Message.builder().code("200").response(String.valueOf(cnt)).build(), HttpStatus.OK);
     }
+
     @GetMapping("/manage/statistic/month")
     @Secured("ADMIN")
-    public ResponseEntity<Message> getMonth(){
+    public ResponseEntity<Message> getMonth() {
         Long cnt = visitorService.monthCount();
         return new ResponseEntity<Message>(Message.builder().code("200").response(String.valueOf(cnt)).build(), HttpStatus.OK);
     }
 
     @GetMapping("/manage/statistic/all")
     @Secured("ADMIN")
-    public ResponseEntity<Message> getAll(){
+    public ResponseEntity<Message> getAll() {
         Long cnt = visitorService.allCount();
         return new ResponseEntity<Message>(Message.builder().code("200").response(String.valueOf(cnt)).build(), HttpStatus.OK);
     }
