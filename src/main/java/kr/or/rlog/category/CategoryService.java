@@ -1,11 +1,16 @@
 package kr.or.rlog.category;
 
 import com.sun.istack.NotNull;
+import kr.or.rlog.comment.Comment;
+import kr.or.rlog.comment.CommentDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.groupingBy;
 
@@ -60,4 +65,9 @@ public class CategoryService {
         return list;
     }
 
+
+    public List<CategoryOne> getByParentId(Long parentId) {
+        List<Category> list = categoryRepository.findByParentId(parentId);
+        return list.stream().map(CategoryOne::of).collect(Collectors.toList());
+    }
 }
