@@ -79,7 +79,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 "/css/**",
                 "/ico/**",
                 "/images/**",
-                "/js/**"
+                "/js/**",
+                "/plugins/**"
         };
 
         web.ignoring()

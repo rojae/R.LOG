@@ -5,6 +5,7 @@ import kr.or.rlog.post.Post;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -12,6 +13,7 @@ import java.util.Set;
 
 @Entity(name = "TBL_CATEGORY")
 @Getter
+@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Category {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,6 +32,11 @@ public class Category {
     public Category(String categoryName, Long parentId){
         this.categoryName = categoryName;
         this.parentId = parentId;
+    }
+
+    public Category(CategoryOne categoryOne){
+        this.categoryName = categoryOne.getCategoryName();
+        this.parentId = categoryOne.getParentId();
     }
 
 }
