@@ -29,6 +29,10 @@ public class Category {
         post.setCategory(this);
     }
 
+    public Category(Long id){
+        this.id = id;
+    }
+
     public Category(String categoryName, Long parentId){
         this.categoryName = categoryName;
         this.parentId = parentId;

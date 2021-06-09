@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -143,5 +144,31 @@ public class PostController {
 
         return new ResponseEntity<>(message, HttpStatus.OK);
     }
+
+    @GetMapping("category/{categoryId}/posts")
+    public String  getPostByCategory(Model model
+            , @PathVariable Long categoryId
+            , @CurrentUser Account user
+            , @RequestParam(value = "keyword", defaultValue = "") String keyword
+            , @PageableDefault(page = 0, size = pageSize, sort = "createdDate", direction = Sort.Direction.DESC) Pageable pageable) {
+
+        Page<PostDto> postPage = postService.getPageByCategory(pageable, keyword, user, categoryId);
+
+        int pageNumber = (postPage.getPageable().isPaged()) ? postPage.getPageable().getPageNumber() : 0;    //  현재페이지
+        int totalPages = postPage.getTotalPages(); //총 페이지 수. 검색에따라 10개면 10개..
+        int pageBlock = blockSize;  //블럭의 수 1, 2, 3, 4, 5
+        int startBlockPage = ((pageNumber) / pageBlock) * pageBlock + 1; //현재 페이지가 7이라면 1*5+1=6
+        int endBlockPage = startBlockPage + pageBlock - 1; //6+5-1=10. 6,7,8,9,10해서 10.
+        endBlockPage = Math.min(totalPages, endBlockPage);
+
+        model.addAttribute("startBlockPage", startBlockPage);
+        model.addAttribute("endBlockPage", endBlockPage);
+        model.addAttribute("postPage", postPage);
+        model.addAttribute("keyword", keyword);
+        model.addAttribute("categoryName", categoryService.getById(categoryId).get().getCategoryName());
+
+        return ".blog.nav/page-blog-category";
+    }
+
 
 }

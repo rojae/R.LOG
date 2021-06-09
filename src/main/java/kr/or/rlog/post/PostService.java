@@ -149,6 +149,54 @@ public class PostService {
         return new PageImpl<PostDto>(list, pages.getPageable(), pages.getTotalElements());
     }
 
+    /*
+        관리자의 경우 -> 삭제되지 않은 글 전체
+        사용자의 경우 -> 활성화된 글만 조회
+    */
+    @Transactional
+    public Page<PostDto> getPageByCategory(Pageable pageable, String keyword, Account user, Long categoryId) {
+        Page<Post> pages;
+        List<PostDto> list = new ArrayList<>();
+
+        if (user != null && user.getRole().equals("ADMIN")) {
+            if (keyword.equals(""))
+                pages = postRepository.findAllByStatusNotAndCategoryOrderByCreatedDateDesc(pageable, Status.UNABLE, new Category(categoryId));
+            else
+                pages = postRepository.findAllByTitleContainsIgnoreCaseAndStatusNotAndCategoryOrderByCreatedDateDesc(pageable, keyword, Status.UNABLE, new Category(categoryId));
+        } else {
+            if (keyword.equals(""))
+                pages = postRepository.findAllByStatusAndCategoryOrderByCreatedDateDesc(pageable, Status.ENABLE, new Category(categoryId));
+            else
+                pages = postRepository.findAllByTitleContainsIgnoreCaseAndStatusAndCategoryOrderByCreatedDateDesc(pageable, keyword, Status.ENABLE, new Category(categoryId));
+        }
+
+        for (Post origin : pages) {
+            PostDto target = new PostDto();
+            BeanUtils.copyProperties(origin, target);
+            target.setCategory(
+                    new CategoryDto(origin.getCategory().getId()
+                            , origin.getCategory().getCategoryName()
+                            , origin.getCategory().getParentId()
+                    )
+            );
+            target.setWriter(
+                    new AccountDto(
+                            origin.getWriter().getId()
+                            , origin.getWriter().getEmail()
+                            , origin.getWriter().getUserName()
+                            , origin.getWriter().getProfileImage()
+                    )
+            );
+            target.setModifiedDate(TimeUtils.dateTimeToYYYYMMDD(origin.getModifiedDate()));
+            target.setCreatedDate(TimeUtils.dateTimeToYYYYMMDD(origin.getCreatedDate()));
+            target.setUrl("/post/" + origin.getId());
+            target.setStatus(origin.getStatus());
+
+            list.add(target);
+        }
+        return new PageImpl<PostDto>(list, pages.getPageable(), pages.getTotalElements());
+    }
+
     @Transactional
     public List<PostDto> getTopPost(int topSize){
         List<Post> postList = new ArrayList<>();
