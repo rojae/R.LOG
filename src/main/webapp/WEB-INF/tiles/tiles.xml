@@ -5,7 +5,6 @@
 
     <!-- blog layout -->
     <definition name="blogTemplate" template="/WEB-INF/jsp/blog/layout/main.jsp" preparer="kr.or.rlog.common.TileViewPreparer">
-        <put-attribute name="header" value="/WEB-INF/jsp/blog/layout/header.jsp" />
         <put-attribute name="footer" value="/WEB-INF/jsp/blog/layout/footer.jsp" />
     </definition>
 
@@ -15,16 +14,44 @@
         <put-attribute name="footer" value="/WEB-INF/jsp/admin/common/footer.jsp" />
     </definition>
 
-    <!-- blog -->
-    <definition name=".blog/*" extends="blogTemplate">
+    <!--
+        blog 1 Depth
+    -->
+    <definition name=".blog.nav/*" extends="blogTemplate">
+        <put-attribute name="header" value="/WEB-INF/jsp/blog/layout/header.jsp" />
         <put-attribute name="body" value="/WEB-INF/jsp/blog/{1}.jsp" />
     </definition>
 
-    <definition name=".blog/*/*" extends="blogTemplate">
+    <definition name=".blog.nav-fixed/*" extends="blogTemplate">
+        <put-attribute name="header" value="/WEB-INF/jsp/blog/layout/header-fixed.jsp" />
+        <put-attribute name="body" value="/WEB-INF/jsp/blog/{1}.jsp" />
+    </definition>
+
+    <definition name=".blog.nav-transparent/*" extends="blogTemplate">
+        <put-attribute name="header" value="/WEB-INF/jsp/blog/layout/header-transparent.jsp" />
+        <put-attribute name="body" value="/WEB-INF/jsp/blog/{1}.jsp" />
+    </definition>
+
+    <!--
+        blog 2 Depth
+    -->
+    <definition name=".blog.nav/*/*" extends="blogTemplate">
+        <put-attribute name="header" value="/WEB-INF/jsp/blog/layout/header.jsp" />
         <put-attribute name="body" value="/WEB-INF/jsp/blog/{1}/{2}.jsp" />
     </definition>
 
-    <!-- blog -->
+    <definition name=".blog.nav-fixed/*/*" extends="blogTemplate">
+        <put-attribute name="header" value="/WEB-INF/jsp/blog/layout/header-fixed.jsp" />
+        <put-attribute name="body" value="/WEB-INF/jsp/blog/{1}/{2}.jsp" />
+    </definition>
+
+    <definition name=".blog.nav-transparent/*/*" extends="blogTemplate">
+        <put-attribute name="header" value="/WEB-INF/jsp/blog/layout/header-transparent.jsp" />
+        <put-attribute name="body" value="/WEB-INF/jsp/blog/{1}/{2}.jsp" />
+    </definition>
+
+
+    <!-- Admin -->
     <definition name=".admin/*" extends="adminTemplate">
         <put-attribute name="body" value="/WEB-INF/jsp/admin/{1}.jsp" />
     </definition>

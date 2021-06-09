@@ -36,6 +36,10 @@ public class IndexController {
         return "redirect:/index";
     }
 
+    /*
+     * Index 첫 페이지
+     * Tiles 사용
+     */
     @GetMapping("/index")
     public String welcome(Model model
             , @CurrentUser Account user
@@ -57,7 +61,7 @@ public class IndexController {
         model.addAttribute("postPage", postPage);
         model.addAttribute("topPost", topPost);
         model.addAttribute("keyword", keyword);
-        return ".blog/index";
+        return ".blog.nav-fixed/index";
     }
 
 

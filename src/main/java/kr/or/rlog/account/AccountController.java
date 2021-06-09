@@ -59,9 +59,13 @@ public class AccountController {
         return "blog/login";
     }
 
+    /*
+     *  페이지 : 내 정보 관리
+     *  Tiles 사용
+     */
     @GetMapping("/my/info")
     public ModelAndView myInfo(@CurrentUser Account user) {
-        ModelAndView mav = new ModelAndView("blog/my-info");
+        ModelAndView mav = new ModelAndView(".blog.nav/my-info");
         if (user == null)
             mav.addObject("message", "로그인 이후에 접근 가능한 페이지입니다.");
         else if (user.getPlatformType().equals(PlatformType.RLOG))

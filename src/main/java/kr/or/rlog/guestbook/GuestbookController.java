@@ -44,6 +44,10 @@ public class GuestbookController {
         }
     }
 
+    /*
+     * 방명록 페이지
+     * Tiles 사용
+     */
     @GetMapping("/guestbook")
     public String getGuestbooks(Model model, @CurrentUser Account user, @PageableDefault(page = 0, size = pageSize, sort = "createdDate", direction = Sort.Direction.DESC)
             Pageable pageable) {
@@ -59,7 +63,7 @@ public class GuestbookController {
         model.addAttribute("endBlockPage", endBlockPage);
         model.addAttribute("guestbookPage", guestbookPage);
 
-        return "blog/guestbook";
+        return ".blog.nav/guestbook";
     }
 
     @PostMapping("/guestbook/{bookId}")

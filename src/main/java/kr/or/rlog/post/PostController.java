@@ -42,9 +42,12 @@ public class PostController {
     @GetMapping("/admin/write")
     @Secured("ROLE_ADMIN")
     public String write() {
-        return "blog/admin/page-blog-write";
+        return ".blog.nav/admin/page-blog-write";
     }
 
+    /*
+     * 글 쓰기 완료
+     */
     @PostMapping("/admin/write")
     @Secured("ROLE_ADMIN")
     public String savePost(@CurrentUser Account user, @ModelAttribute Post post) {
@@ -55,6 +58,11 @@ public class PostController {
             return "blog/error";
     }
 
+    /*
+     * 페이지
+     * 글 쓰기
+     * Tiles 사용
+     */
     @GetMapping("/admin/write/{id}")
     @Secured("ROLE_ADMIN")
     public String edit(Model model, @PathVariable Long id, @CurrentUser Account account) {
@@ -67,7 +75,7 @@ public class PostController {
                 model.addAttribute("message", "권한이 없는 글입니다");
         } else
             model.addAttribute("message", "존재하지 않는 글입니다");
-        return "blog/admin/page-blog-write";
+        return ".blog.nav/admin/page-blog-write";
     }
 
     @PostMapping("/admin/write/{id}")
@@ -84,9 +92,14 @@ public class PostController {
         return "redirect:/post/" + newPost.getId();
     }
 
+    /*
+     * 페이지
+     * 글 조회
+     * Tiles 사용
+     */
     @GetMapping("post/{id}")
     public ModelAndView getPost(@PathVariable Long id, @CurrentUser Account account) {
-        ModelAndView mav = new ModelAndView("blog/page-blog-post");
+        ModelAndView mav = new ModelAndView(".blog.nav/page-blog-post");
         PostDetailDto postDetailDto = postService.getPost(id, account != null && account.getRole().equals("ADMIN"), account);
 
         if (postDetailDto != null) {
