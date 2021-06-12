@@ -1,6 +1,7 @@
 package kr.or.rlog.account;
 
 import kr.or.rlog.account.platform.KakaoUser;
+import org.hibernate.cfg.NotYetImplementedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
@@ -8,7 +9,6 @@ import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.core.OAuth2AccessToken;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import javax.transaction.Transactional;
 
@@ -41,11 +41,11 @@ public class CustomOAuth2AuthorizedClientService implements OAuth2AuthorizedClie
 
     @Override
     public <T extends OAuth2AuthorizedClient> T loadAuthorizedClient(String s, String s1) {
-        throw new NotImplementedException();
+        throw new NotYetImplementedException();
     }
 
     @Override
     public void removeAuthorizedClient(String s, String s1) {
-        throw new NotImplementedException();
+        throw new NotYetImplementedException();
     }
 }
