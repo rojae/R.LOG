@@ -10,11 +10,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Arrays;
 import java.util.List;
 
-public interface CommentRepository extends JpaRepository<Comment, Long> {
-    List<Comment> findByPostOrderByCreatedDateDesc(Post post);
+public interface CommentRepository extends JpaRepository<Comment, Long>, CommentRepositorySupport {
     List<Comment> findAllByStatus(Status enable);
-    List<Comment> findAllByWriterOrStatusOrderByCreatedDateDesc(Account user, Status enable);
-    List<Comment> findAllByPostAndStatusNotOrderByCreatedDateDesc(Post postId, Status status);
     List<Comment> findAllByPost(Post postId);
-    Page<Comment> findAllByWriterAndStatusNot(Pageable pageable, Account writer, Status status);
+    //Page<Comment> findAllByWriterAndStatusNot(Pageable pageable, Account writer, Status status);
 }
