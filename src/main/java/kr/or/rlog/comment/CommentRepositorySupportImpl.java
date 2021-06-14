@@ -34,7 +34,7 @@ public class CommentRepositorySupportImpl implements CommentRepositorySupport{
         return query.selectFrom(comment)
                 .where(
                         comment.post.eq(postId)
-                        .and(comment.status.eq(status))
+                        .and(comment.status.notIn(status))
                 ).orderBy(comment.createdDate.desc())
                 .fetch();
     }
