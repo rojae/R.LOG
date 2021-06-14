@@ -10,14 +10,10 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface PostLikesRepository extends JpaRepository<PostLikes, Long> {
-
-    boolean existsByAccountAndPostAndStatus(Account account, Post post, LikesType status);
+public interface PostLikesRepository extends JpaRepository<PostLikes, Long>, PostLikesRepositorySupport {
 
     @Query("select count(t) from TBL_POST_LIKES t where t.post = :post and t.status = 'ENABLE' ")
     Long findCountByPostAndStatus(@Param("post") Post post);
-
-    PostLikes findByAccountAndPostAndStatus(Account user, Post post, LikesType likesType);
 
     /**
      * 인기 글 POST ID 반환 쿼리 (좋아요 갯수)
