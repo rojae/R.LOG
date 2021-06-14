@@ -44,7 +44,7 @@ public class Post extends TimeEntity {
     @Column(name = "title", nullable = false)
     private String title;
 
-    @Column(columnDefinition = "TEXT", name = "content", nullable = false)
+    @Column(columnDefinition = "MEDIUMTEXT", name = "content", nullable = false)
     private String content;
 
     @ManyToOne(fetch = FetchType.EAGER)
