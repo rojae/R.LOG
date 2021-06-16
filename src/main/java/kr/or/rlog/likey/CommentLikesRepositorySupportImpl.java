@@ -1,9 +1,13 @@
 package kr.or.rlog.likey;
 
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.QueryResults;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import kr.or.rlog.account.Account;
 import kr.or.rlog.comment.Comment;
 import org.springframework.beans.factory.annotation.Autowired;
+
 
 import static kr.or.rlog.likey.QCommentLikes.commentLikes;
 
@@ -14,41 +18,33 @@ public class CommentLikesRepositorySupportImpl implements CommentLikesRepository
 
     @Override
     public CommentLikes findByAccountAndCommentAndStatus(Account account, Comment comment, LikesType likesType) {
-        if (account == null) {
-            return query.selectFrom(commentLikes)
-                    .where(
-                            commentLikes.comment.eq(comment)
-                                    .and(commentLikes.status.eq(likesType))
-                    ).fetchOne();
-        } else {
-            return query.selectFrom(commentLikes)
-                    .where(
-                            commentLikes.account.eq(account)
-                                    .and(commentLikes.comment.eq(comment))
-                                    .and(commentLikes.status.eq(likesType))
-                    ).fetchOne();
-        }
+        return query.selectFrom(commentLikes)
+                .where(
+                        eqAccount(account),
+                        commentLikes.comment.eq(comment),
+                        commentLikes.status.eq(likesType)
+                ).fetchOne();
     }
 
     @Override
     public boolean existsCommentLikesByAccountAndCommentAndStatus(Account account, Comment comment, LikesType likesType) {
-        Integer result = null;
-
-        if(account == null) {
-            result = query.selectOne()
-                    .from(commentLikes)
-                    .where(
-                            commentLikes.comment.eq(comment)
-                    ).fetchOne();
-        }else{
-            result = query.selectOne()
-                    .from(commentLikes)
-                    .where(
-                            commentLikes.account.eq(account)
-                            .and(commentLikes.comment.eq(comment))
-                    ).fetchOne();
-        }
+        Integer result = query.selectOne()
+                .from(commentLikes)
+                .where(
+                        eqAccount(account),
+                        commentLikes.comment.eq(comment),
+                        commentLikes.status.eq(likesType)
+                ).fetchOne();
 
         return result != null;
     }
+
+    private BooleanExpression eqAccount(Account account) {
+        if (account == null) {
+            return null;
+        }
+
+        return commentLikes.account.eq(account);
+    }
+
 }
