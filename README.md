@@ -1,6 +1,6 @@
 ---
 R.LOG
 ---
-[배포 예정 사이트](http://rlog.or.kr)
+[R.LOG - 주소] (https://rlog.or.kr)
 
 
