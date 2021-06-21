@@ -24,7 +24,6 @@ public class ReportRepositorySupportImpl implements ReportRepositorySupport {
                 .select(Projections.constructor(ReportListDto.class,
                         report.id,
                         report.content,
-                        report.readStatus,
                         report.checkStatus,
                         Expressions.stringTemplate("DATE_FORMAT({0}, {1})", report.createdDate, "%m/%d/%Y")
                         )

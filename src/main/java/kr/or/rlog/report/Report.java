@@ -3,7 +3,6 @@ package kr.or.rlog.report;
 import kr.or.rlog.account.Account;
 import kr.or.rlog.common.CheckStatus;
 import kr.or.rlog.common.CreateTimeEntity;
-import kr.or.rlog.common.ReadStatus;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -27,14 +26,9 @@ public class Report extends CreateTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     private Account writer;
 
-    @Column(name = "read_status", nullable = false, columnDefinition = "VARCHAR(10) DEFAULT 'UNREAD' ")
-    @Enumerated(EnumType.STRING)
-    private ReadStatus readStatus;
-
     @Column(name = "check_status", nullable = false, columnDefinition = "VARCHAR(10) DEFAULT 'UNCHECK' ")
     @Enumerated(EnumType.STRING)
     private CheckStatus checkStatus;
-
 
 
 }

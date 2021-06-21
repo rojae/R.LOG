@@ -12,10 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -36,10 +33,10 @@ public class ReportController {
     public String error() {
         return "/blog/error";
     }
+
     @PostMapping("/error/report")
     public ResponseEntity<Message> reportSave(@CurrentUser Account user, @RequestBody Report report) {
         report.setWriter(user);
-        report.setReadStatus(ReadStatus.UNREAD);
         report.setCheckStatus(CheckStatus.UNCHECK);
         reportRepository.save(report);
         return new ResponseEntity<Message>(Message.builder()
@@ -50,7 +47,7 @@ public class ReportController {
 
     @Secured("ADMIN")
     @GetMapping("/manage/error")
-    public String errorView(Model model){
+    public String errorView(Model model) {
         model.addAttribute("list", reportRepository.findAll());
         return "/manage/blog-error-list";
     }
@@ -58,7 +55,7 @@ public class ReportController {
     @Secured("ADMIN")
     @GetMapping("/error/reports")
     @ResponseBody
-    public ResponseEntity getReport(@PageableDefault(page = 0, size = pageSize, sort = "createdDate", direction = Sort.Direction.DESC) Pageable pageable) {
+    public ResponseEntity getReports(@PageableDefault(page = 0, size = pageSize, sort = "createdDate", direction = Sort.Direction.DESC) Pageable pageable) {
         Map<String, Object> message = new HashMap<>();
 
         Page<ReportListDto> reports = reportService.getReports(pageable);
@@ -77,6 +74,13 @@ public class ReportController {
         return new ResponseEntity<>(message, HttpStatus.OK);
     }
 
+    @Secured("ADMIN")
+    @GetMapping("/error/report/{id}")
+    @ResponseBody
+    public ResponseEntity getReport(@PathVariable Long id) {
+        ReportDto report = reportService.findOne(id);
+        return (report == null) ? new ResponseEntity<>(null, HttpStatus.OK) : new ResponseEntity<>(report, HttpStatus.OK);
+    }
 
 
 }
