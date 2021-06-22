@@ -1,11 +1,13 @@
 package kr.or.rlog.report;
 
 import kr.or.rlog.account.AccountDto;
+import kr.or.rlog.common.CheckStatus;
 import kr.or.rlog.utils.TimeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -28,5 +30,17 @@ public class ReportService {
                     report.get().getCheckStatus(), TimeUtils.dateTimeToYYYYMMDD(report.get().getCreatedDate()));
         } else return report.map(value -> new ReportDto(value.getId(), value.getContent(),
                 null, value.getCheckStatus(), TimeUtils.dateTimeToYYYYMMDD(value.getCreatedDate()))).orElse(null);
+    }
+
+    @Transactional
+    public boolean updateCheckStatus(Long id, CheckStatus checkStatus) {
+        Optional<Report> savedReport = reportRepository.findById(id);
+        if(savedReport.isPresent()) {
+            savedReport.get().setCheckStatus(checkStatus);
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 }

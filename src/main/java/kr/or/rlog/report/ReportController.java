@@ -82,5 +82,14 @@ public class ReportController {
         return (report == null) ? new ResponseEntity<>(null, HttpStatus.OK) : new ResponseEntity<>(report, HttpStatus.OK);
     }
 
+    @Secured("ADMIN")
+    @PutMapping("/error/report/{id}")
+    @ResponseBody
+    public ResponseEntity updateReport(@PathVariable Long id, @RequestBody Report newCheckStatus){
+        if(reportService.updateCheckStatus(id, newCheckStatus.getCheckStatus()))
+            return new ResponseEntity<Message>(Message.builder().response("정상적으로 변경되었습니다").code("200").build(), HttpStatus.OK);
+        else
+            return new ResponseEntity<Message>(Message.builder().response("시스템 오류입니다.").code("500").build(), HttpStatus.OK);
+    }
 
 }
