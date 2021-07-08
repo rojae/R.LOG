@@ -39,8 +39,10 @@ public class AccountController {
     CommentService commentService;
 
     @GetMapping("/signup")
-    public String signUp() {
-        return "blog/page-blog-signup";
+    public String signUp(@CurrentUser Account account) {
+        if(account == null)
+            return "blog/page-blog-signup";
+        return "redirect:index";
     }
 
     @PostMapping("/signup")

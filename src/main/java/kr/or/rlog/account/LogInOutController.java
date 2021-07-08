@@ -12,7 +12,7 @@ public class LogInOutController {
     public String loginForm(@CurrentUser Account account) {
         if(account == null)
             return "blog/login";
-        return "blog/index";
+        return "redirect:index";
     }
 
     @GetMapping("/logout")
