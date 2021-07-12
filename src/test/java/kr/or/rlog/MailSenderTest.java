@@ -49,7 +49,7 @@ public class MailSenderTest {
 
         System.out.println("Generated Mail : " + mail);
 
-        mailService.mailSend(mail);
+        mailService.signupSend(mail);
     }
 
     public Account createUser(String userName, String password){
