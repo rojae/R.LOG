@@ -46,7 +46,7 @@ public class IndexController {
             , @RequestParam(value = "keyword", defaultValue = "") String keyword
             , @PageableDefault(page = 0, size = pageSize, sort = "createdDate", direction = Sort.Direction.DESC) Pageable pageable) {
 
-        List<PostDto> topPost = postService.getTopPost(popularSize);
+        List<PostDto> topPost = postService.getTopPosts(popularSize);
         Page<PostDto> postPage = postService.getPage(pageable, keyword, user);
 
         int pageNumber = (postPage.getPageable().isPaged()) ? postPage.getPageable().getPageNumber() : 0;    //  현재페이지

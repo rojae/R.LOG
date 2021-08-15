@@ -1,5 +1,6 @@
 package kr.or.rlog.post;
 
+import com.querydsl.core.QueryResults;
 import kr.or.rlog.account.Account;
 import kr.or.rlog.account.AccountDto;
 import kr.or.rlog.account.AccountRepository;
@@ -76,7 +77,7 @@ public class PostService {
             post.get().setStatus(Status.UNABLE);
 
             // 해당 글의 댓글도 비활성화로 전환
-            for(Comment i : commments){
+            for (Comment i : commments) {
                 i.setStatus(Status.UNABLE);
             }
 
@@ -197,41 +198,17 @@ public class PostService {
         return new PageImpl<PostDto>(list, pages.getPageable(), pages.getTotalElements());
     }
 
+    /**
+     * @methodName: getTopPosts
+     * @author: rojae
+     * @date: 2021-08-15
+     * @Description: 상위 인기 글을 조회하는 기능.
+     * 좋아요 테이블을 크게 돌기 때문에, 어플리케이션 메모리에서 list로 넘겨주어, sql in으로 조회
+     * @Bug: QueryDSL 버그로 인한 subQuery limit 미동작.
+     */
     @Transactional
-    public List<PostDto> getTopPost(int topSize){
-        List<Post> postList = new ArrayList<>();
-        List<PostDto> list = new ArrayList<>();
-
-        List<Long> postLikes = postLikesRepository.findByLikeDesc(topSize);
-
-        for(Long topLikesId : postLikes){
-            postList.add(postRepository.findById(topLikesId).orElse(null));
-        }
-
-        for (Post origin : postList) {
-            PostDto target = new PostDto();
-            BeanUtils.copyProperties(origin, target);
-            target.setCategory(
-                    new CategoryDto(origin.getCategory().getId()
-                            , origin.getCategory().getCategoryName()
-                            , origin.getCategory().getParentId()
-                    )
-            );
-            target.setWriter(
-                    new AccountDto(
-                            origin.getWriter().getId()
-                            , origin.getWriter().getEmail()
-                            , origin.getWriter().getUserName()
-                            , origin.getWriter().getProfileImage()
-                    )
-            );
-            target.setModifiedDate(TimeUtils.dateTimeToYYYYMMDD(origin.getModifiedDate()));
-            target.setCreatedDate(TimeUtils.dateTimeToYYYYMMDD(origin.getCreatedDate()));
-            target.setUrl("/post/" + origin.getId());
-            list.add(target);
-        }
-
-        return list;
+    public List<PostDto> getTopPosts(int popularSize) {
+        return postLikesRepository.findByPostIds(popularSize);
     }
 
 

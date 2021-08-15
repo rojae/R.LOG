@@ -45,6 +45,7 @@ public class CategoryService {
         return parent.orElse(null);
     }
 
+
     public List<Category> getParentsAndMe(Category category){
         ArrayList<Category> list = new ArrayList<>();
         list.add(category);
