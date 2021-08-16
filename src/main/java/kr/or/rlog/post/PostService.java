@@ -15,6 +15,7 @@ import kr.or.rlog.likey.LikesType;
 import kr.or.rlog.likey.PostLikes;
 import kr.or.rlog.likey.PostLikesRepository;
 import kr.or.rlog.utils.TimeUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -28,6 +29,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Slf4j
 public class PostService {
     @Autowired
     PostRepository postRepository;
@@ -108,46 +110,11 @@ public class PostService {
     */
     @Transactional
     public Page<PostDto> getPage(Pageable pageable, String keyword, Account user) {
-        Page<Post> pages;
-        List<PostDto> list = new ArrayList<>();
+        log.info("PostService :: getPage called");
+        Page<PostDto> postPage = postRepository.findPostPage(pageable, keyword, user);
+        log.info("PostService :: getPage end");
 
-        if (user != null && user.getRole().equals("ADMIN")) {
-            if (keyword.equals(""))
-                pages = postRepository.findAllByStatusNotOrderByCreatedDateDesc(pageable, Status.UNABLE);
-            else
-                pages = postRepository.findAllByTitleContainsIgnoreCaseAndStatusNotOrderByCreatedDateDesc(pageable, keyword, Status.UNABLE);
-        } else {
-            if (keyword.equals(""))
-                pages = postRepository.findAllByStatusOrderByCreatedDateDesc(pageable, Status.ENABLE);
-            else
-                pages = postRepository.findAllByTitleContainsIgnoreCaseAndStatusOrderByCreatedDateDesc(pageable, keyword, Status.ENABLE);
-        }
-
-        for (Post origin : pages) {
-            PostDto target = new PostDto();
-            BeanUtils.copyProperties(origin, target);
-            target.setCategory(
-                    new CategoryDto(origin.getCategory().getId()
-                            , origin.getCategory().getCategoryName()
-                            , origin.getCategory().getParentId()
-                    )
-            );
-            target.setWriter(
-                    new AccountDto(
-                            origin.getWriter().getId()
-                            , origin.getWriter().getEmail()
-                            , origin.getWriter().getUserName()
-                            , origin.getWriter().getProfileImage()
-                    )
-            );
-            target.setModifiedDate(TimeUtils.dateTimeToYYYYMMDD(origin.getModifiedDate()));
-            target.setCreatedDate(TimeUtils.dateTimeToYYYYMMDD(origin.getCreatedDate()));
-            target.setUrl("/post/" + origin.getId());
-            target.setStatus(origin.getStatus());
-
-            list.add(target);
-        }
-        return new PageImpl<PostDto>(list, pages.getPageable(), pages.getTotalElements());
+        return postPage;
     }
 
     /*
@@ -208,7 +175,11 @@ public class PostService {
      */
     @Transactional
     public List<PostDto> getTopPosts(int popularSize) {
-        return postLikesRepository.findByPostIds(popularSize);
+        log.info("PostService :: getTopPosts called");
+        List<PostDto> topPosts = postLikesRepository.findByPostIds(popularSize);
+        log.info("PostService :: getTopPosts end");
+
+        return topPosts;
     }
 
 

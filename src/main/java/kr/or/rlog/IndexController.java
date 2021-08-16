@@ -4,6 +4,7 @@ import kr.or.rlog.account.Account;
 import kr.or.rlog.common.CurrentUser;
 import kr.or.rlog.post.PostDto;
 import kr.or.rlog.post.PostService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.List;
 
 @Controller
+@Slf4j
 public class IndexController {
 
     private final static int pageSize = 7;
