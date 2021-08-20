@@ -22,6 +22,16 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
 
+/**
+ * @fileName : IndexController.java
+ * @author: rojae
+ * @date: 2021-08-21
+ * @description: 첫 페이지 컨트롤러.
+ * ===========================================================
+ * DATE         AUTHOR      NOTE
+ * -----------------------------------------------------------
+ * 2021-08-21   rojae       최초생성
+ */
 @Controller
 @Slf4j
 public class IndexController {
@@ -33,15 +43,31 @@ public class IndexController {
     @Autowired
     PostService postService;
 
+    /**
+     * ==================================================================
+     * @methodName : Index
+     * @description : 첫 페이지
+     * @func1 : '/index'로 리다이렉트
+     * @author : rojae
+     * @date :  2021-08-21
+     * ==================================================================
+     **/
     @GetMapping("/")
     public String index() {
         return "redirect:/index";
     }
 
-    /*
-     * Index 첫 페이지
-     * Tiles 사용
-     */
+    /**
+     * ==================================================================
+     * @methodName : welcome
+     * @description : 첫 페이지
+     * @func1 : 게시글 전반적인 전체 조회.
+     * @func2 : 게시글 페이징.
+     * @func3 : 메뉴 출력 (Tiles)
+     * @author : rojae
+     * @date :  2021-08-21
+     * ==================================================================
+     **/
     @GetMapping("/index")
     public String welcome(Model model
             , @CurrentUser Account user
