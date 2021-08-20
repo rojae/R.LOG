@@ -1,5 +1,7 @@
 package kr.or.rlog.utils;
 
+import kr.or.rlog.account.Account;
+import kr.or.rlog.account.UserAccount;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -17,6 +19,12 @@ public class SecurityUtils {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
         return authorities;
+    }
+
+    public static Account getAccount(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserAccount account = (UserAccount) authentication.getPrincipal();
+        return account.getAccount();
     }
 
     public static boolean isAdmin(){
