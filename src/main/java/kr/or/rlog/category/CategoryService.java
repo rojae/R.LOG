@@ -41,6 +41,7 @@ public class CategoryService {
     }
 
     public Category getParent(Category category){
+        if(category.getParentId() == null) return null;
         Optional<Category> parent = categoryRepository.findById(category.getParentId());
         return parent.orElse(null);
     }

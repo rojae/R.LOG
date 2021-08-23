@@ -18,4 +18,12 @@ public interface PostRepositorySupport {
      * @Description: post의 리스트를 전체적으로 뽑는 기능. (카테고리에 상관 없이 뽑는다)
      */
     public Page<PostDto> findPostPage(Pageable pageable, String keyword, Account user);
+
+    /**
+     * @methodName: getPostDetail
+     * @author: rojae
+     * @date: 2021-08-21
+     * @Description: 단일 페이지 관련 데이터 뽑는 기능.
+     */
+    public PostDetailDto getPostDetail(Long pId);
 }

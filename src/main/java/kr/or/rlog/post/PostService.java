@@ -53,21 +53,23 @@ public class PostService {
         return postRepository.findById(pId);
     }
 
-    /*
-        관리자의 경우 -> 삭제되지 않은 글 전체
-        사용자의 경우 -> 활성화된 글만 조회
-     */
-    public PostDetailDto getPost(Long pId, boolean isAdmin, Account user) {
-        Optional<Post> savedPost;
-        if (isAdmin)
-            savedPost = postRepository.findByIdAndStatusNot(pId, Status.UNABLE);
-        else
-            savedPost = postRepository.findByIdAndStatus(pId, Status.ENABLE);
-
-        return savedPost.map(post -> new PostDetailDto(post.getId(), post.getCategory(), post.getThumbNail(),
-                post.getHeader(), post.getTitle(), post.getContent(),
-                post.getWriter(), post.getComments(), postLikesRepository.existsByAccountAndPostAndStatus(user, post, LikesType.ENABLE), postLikesRepository.findCountByPostAndStatus(post),
-                post.getStatus(), TimeUtils.dateTimeToYYYYMMDD(post.getCreatedDate()), TimeUtils.dateTimeToYYYYMMDD(post.getModifiedDate()))).orElse(null);
+    /** ==================================================================
+     * @methodName : getPost
+     * @description : 단일 페이지 내용 조회
+     *         - 관리자의 경우 -> 삭제되지 않은 글 전체
+     *         - 사용자의 경우 -> 활성화된 글만 조회
+     *         QueryDSL로 최적화를 어떻게 하지...
+     * @func1 : 게시글 관련 정보 가져오기.
+     * @func2 : 게시글 좋아요. 정보 가져오기.
+     * @func3 : 사용자의 게시글 좋아요. 활성화 여부 가져오기.
+     * @author: rojae
+     * @date : 2021-08-21
+     ==================================================================**/
+    public PostDetailDto getPostDetail(Long pId) {
+        PostDetailDto postDetail = postRepository.getPostDetail(pId);
+        postDetail.setPostLikes(postLikesRepository.isLike(pId));
+        postDetail.setLikesCount(postLikesRepository.getLikeCount(pId));
+        return postDetail;
     }
 
     @Transactional

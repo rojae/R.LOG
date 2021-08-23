@@ -1,9 +1,10 @@
 package kr.or.rlog.post;
 
-import kr.or.rlog.account.Account;
-import kr.or.rlog.category.Category;
+import kr.or.rlog.account.AccountDto;
+import kr.or.rlog.category.CategoryDto;
 import kr.or.rlog.comment.Comment;
 import kr.or.rlog.common.Status;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,14 +13,15 @@ import java.util.Set;
 
 @Getter
 @Setter
+@AllArgsConstructor
 public class PostDetailDto {
     private Long id;
-    private Category category;
+    private CategoryDto category;
     private String thumbNail;
     private String header;
     private String title;
     private String content;
-    private Account writer;
+    private AccountDto writer;
     private Set<Comment> comments = new HashSet<Comment>();
     private Long likesCount;
     private boolean postLikes;
@@ -31,10 +33,7 @@ public class PostDetailDto {
 
     }
 
-    public PostDetailDto(Long id, Category category, String thumbNail,
-                         String header, String title, String content,
-                         Account writer, Set<Comment> comments, boolean postLikes,
-                         Long likesCount, Status status, String createdDate, String modifiedDate) {
+    public PostDetailDto(Long id, CategoryDto category, String thumbNail, String header, String title, String content, AccountDto writer, Long likesCount, boolean postLikes, Status status, String createdDate, String modifiedDate) {
         this.id = id;
         this.category = category;
         this.thumbNail = thumbNail;
@@ -42,9 +41,8 @@ public class PostDetailDto {
         this.title = title;
         this.content = content;
         this.writer = writer;
-        this.comments = comments;
-        this.postLikes = postLikes;
         this.likesCount = likesCount;
+        this.postLikes = postLikes;
         this.status = status;
         this.createdDate = createdDate;
         this.modifiedDate = modifiedDate;

@@ -18,6 +18,12 @@ public class PostLikesService {
     @Autowired
     private PostLikesRepository postLikesRepository;
 
+    /** ==================================================================
+     * @methodName : createNew
+     * @description : 현재 글에 대한 좋아요 객체 생성
+     * @author: rojae
+     * @date : 2021-08-21
+     ==================================================================**/
     @Transactional
     public boolean createNew(Account user, Long postId) {
         Optional<Post> savedPost = postRepository.findById(postId);
@@ -31,14 +37,17 @@ public class PostLikesService {
         }
     }
 
-    /*
-     * proc1 : 좋아요 -> 좋아요 취소
-     * proc2 : 좋아요 취소 -> 좋아요
-     * done : 현재로써는 좋아요 > 좋아요 취소만 사용
-     */
+    /** ==================================================================
+     * @methodName : editPostLikes
+     * @description : 좋아요 상태 토글 기능.
+     * @func1 : 좋아요 -> 좋아요 취소
+     * @func2 : 좋아요 취소 -> 좋아요
+     * @author: rojae
+     * @date : 2021-08-21
+     ==================================================================**/
     @Transactional
-    public boolean editProc(Account user, Long postId) {
-        Optional<PostLikes> savedLike = Optional.ofNullable(postLikesRepository.findByAccountAndPostAndStatus(user, new Post(postId), LikesType.ENABLE));
+    public boolean editPostLikes(Account user, Long postId) {
+        Optional<PostLikes> savedLike = Optional.ofNullable(postLikesRepository.getPostLikes(postId));
 
         if (!savedLike.isPresent())
             return false;

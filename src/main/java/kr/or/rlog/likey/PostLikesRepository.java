@@ -12,8 +12,7 @@ import java.util.List;
 @Repository
 public interface PostLikesRepository extends JpaRepository<PostLikes, Long>, PostLikesRepositorySupport {
 
-    @Query("select count(t) from TBL_POST_LIKES t where t.post = :post and t.status = 'ENABLE' ")
-    Long findCountByPostAndStatus(@Param("post") Post post);
+
 
 
 }

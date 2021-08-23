@@ -49,7 +49,7 @@ public class PostLikesController {
                     .response(MessageUtils.getMessage("post.like.edit.deny.message"))
                     .build(),
                     HttpStatus.OK);
-        }else if(postLikesService.editProc(user, postId)){
+        }else if(postLikesService.editPostLikes(user, postId)){
             return new ResponseEntity<>(Message.builder()
                     .code(MessageUtils.getMessage("post.like.edit.ok.code"))
                     .response(MessageUtils.getMessage("post.like.edit.ok.message"))

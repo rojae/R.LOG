@@ -1,6 +1,8 @@
 package kr.or.rlog.post;
 
 import kr.or.rlog.account.Account;
+import kr.or.rlog.category.Category;
+import kr.or.rlog.category.CategoryDto;
 import kr.or.rlog.category.CategoryService;
 import kr.or.rlog.comment.CommentService;
 import kr.or.rlog.common.CurrentUser;
@@ -46,9 +48,14 @@ public class PostController {
         return ".blog.nav/admin/page-blog-write";
     }
 
-    /*
-     * 글 쓰기 완료
-     */
+    /** ==================================================================
+     * @methodName : savePost
+     * @description : 글 쓰기 완료
+     * @func1 : 글 쓰기로 인한 글 저장.
+     * @func2 : 리다이렉트.
+     * @author: rojae
+     * @date : 2021-08-23
+     ==================================================================**/
     @PostMapping("/admin/write")
     @Secured("ROLE_ADMIN")
     public String savePost(@CurrentUser Account user, @ModelAttribute Post post) {
@@ -59,11 +66,14 @@ public class PostController {
             return "blog/error";
     }
 
-    /*
-     * 페이지
-     * 글 쓰기
-     * Tiles 사용
-     */
+    /** ==================================================================
+     * @methodName : edit
+     * @description : 글 수정 화면.
+     * @func1 : 해당 글을 1차 캐싱 이후, 데이터 전달.
+     * @func2 : 글 수정 권한 검사.
+     * @author: rojae
+     * @date : 2021-08-23
+     ==================================================================**/
     @GetMapping("/admin/write/{id}")
     @Secured("ROLE_ADMIN")
     public String edit(Model model, @PathVariable Long id, @CurrentUser Account account) {
@@ -79,6 +89,14 @@ public class PostController {
         return ".blog.nav/admin/page-blog-write";
     }
 
+    /** ==================================================================
+     * @methodName : editSave
+     * @description : 글 수정 작업 완료.
+     * @func1 : 글 수정 작업, 권한 검사.
+     * @func2 : 해당 글을 1차 캐싱 이후, 수정 완료.
+     * @author : rojae
+     * @date : 2021-08-23
+     ==================================================================**/
     @PostMapping("/admin/write/{id}")
     @Secured("ROLE_ADMIN")
     public String editSave(Model model, @ModelAttribute Post newPost, @PathVariable Long id, @CurrentUser Account account) {
@@ -93,27 +111,37 @@ public class PostController {
         return "redirect:/post/" + newPost.getId();
     }
 
-    /*
-     * 페이지
-     * 글 조회
-     * Tiles 사용
-     */
+    /** ==================================================================
+     * @methodName : getPost
+     * @description : 단일 게시글 조회.
+     * @func1 : 단일 게시글의 데이터를, 객체로 데이터 전송.
+     * @author: rojae
+     * @date : 2021-08-23
+     ==================================================================**/
     @GetMapping("post/{id}")
     public ModelAndView getPost(@PathVariable Long id, @CurrentUser Account account) {
         ModelAndView mav = new ModelAndView(".blog.nav/page-blog-post");
-        PostDetailDto postDetailDto = postService.getPost(id, account != null && account.getRole().equals("ADMIN"), account);
+        PostDetailDto postDetailDto = postService.getPostDetail(id);
+        CategoryDto category = postDetailDto.getCategory();
 
         if (postDetailDto != null) {
             if (account != null)
                 mav.addObject("isWriter", postDetailDto.getWriter().getId().equals(account.getId()));
             mav.addObject("post", postDetailDto);
-            mav.addObject("categories", categoryService.getParentsAndMe(postDetailDto.getCategory()));
+            mav.addObject("categories", categoryService.getParentsAndMe(new Category(category.getCategoryId())));
         } else
             mav.addObject("message", "존재하지 않는 글입니다");
         return mav;
     }
 
-    // delete to update로 수정하여, 삭제되도 보관되도록 개발 필요
+    /** ==================================================================
+     * @methodName : deletePost
+     * @description : 해당 게시글을 삭제한다.
+     * @func1 : 게시글 삭제.
+     * @func2 : 페이지 이동.
+     * @author: rojae
+     * @date : 2021-08-23
+     ==================================================================**/
     @DeleteMapping("post/{id}")
     @ResponseBody
     public ResponseEntity<Message> deletePost(Model model, @PathVariable Long id, @CurrentUser Account account) {
@@ -123,6 +151,13 @@ public class PostController {
             return new ResponseEntity<Message>(Message.builder().response("접근이 거부되었습니다.").code("403").build(), HttpStatus.FORBIDDEN);
     }
 
+    /** ==================================================================
+     * @methodName : myPosts
+     * @description : 내 정보 > 내가 쓴 글 조회
+     * @func1 : 내 글 페이징 조회.
+     * @author: rojae
+     * @date : 2021-08-23
+     ==================================================================**/
     @GetMapping("posts")
     @Secured("ADMIN")
     @ResponseBody
@@ -145,6 +180,13 @@ public class PostController {
         return new ResponseEntity<>(message, HttpStatus.OK);
     }
 
+    /** ==================================================================
+     * @methodName : getPostByCategory
+     * @description : 카테고리 선택을 통한, 글 조회
+     * @func1 : 내 글 페이징 조회.
+     * @author: rojae
+     * @date : 2021-08-23
+    ==================================================================**/
     @GetMapping("category/{categoryId}/posts")
     public String  getPostByCategory(Model model
             , @PathVariable Long categoryId
