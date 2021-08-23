@@ -33,4 +33,7 @@ build/
 .vscode/
 
 ### My Config File ###
-application.properties
+/src/main/resources/*
+
+### My Front-End ###
+/src/main/webapp/*
