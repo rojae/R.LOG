@@ -11,6 +11,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -21,14 +23,26 @@ public class SecurityUtilsTest {
 
     /** =================================
      * Security getAccount Method Test
+     * With ADMIN
      =================================== **/
     @Test
     @WithAdmin
     @Transactional
-    public void accountTest() {
+    public void accountTest_admin() {
         Account account = SecurityUtils.getAccount();
         log.info("CLASS TYPE : " + account.getClass());
         log.info("GET ACCOUNT NAME : " + account.getUserName());
+    }
+
+    /** =================================
+     * Security getAccount Method Test
+     * With NOT USER
+     =================================== **/
+    @Test
+    @Transactional
+    public void accountTest_notUser() {
+        Account account = SecurityUtils.getAccount();
+        assertThat(account).isEqualTo(null);
     }
 
 
