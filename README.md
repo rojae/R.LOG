@@ -7,7 +7,7 @@
         - 백업 배치 프로그램 개발
             - https://github.com/rojae/R.LOG-Batch
     - 2020.10.01
-        - AWS EC2 이전완료
+        - AWS EC2 이전완료 (SSL)
 
 
 ## 블로그 기능 정리
