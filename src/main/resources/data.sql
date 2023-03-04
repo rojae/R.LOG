@@ -1,3 +1,4 @@
+select 1 from dual;
 -- -- ================ Root 카테고리
 -- insert into tbl_category(category_name, parent_id) values ('패션', 0);
 -- insert into tbl_category(category_name, parent_id) values ('가전/디지털', 0);
