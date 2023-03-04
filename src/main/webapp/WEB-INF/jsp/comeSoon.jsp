@@ -4,7 +4,7 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=EUC-KR">
-    <meta property="og:url" content="http://rlog.or.kr/">
+    <meta property="og:url" content="http://blog.rojae.kr/">
     <meta property="og:title" content="R.Log">
     <meta property="og:type" content="website">
     <meta property="og:image" content="http://www.mydomain.com/myimage.jpg">

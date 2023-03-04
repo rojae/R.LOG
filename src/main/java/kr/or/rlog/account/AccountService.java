@@ -106,7 +106,7 @@ public class AccountService implements UserDetailsService {
     public Account createNew(Account account, PlatformType platformType) {
         account.setPlatformType(platformType);
         account.encodePassword(passwordEncoder);
-        account.setProfileImage("https://rlog.or.kr/assets/img/illustrations/profiles/profile-2.png");
+        account.setProfileImage("https://blog.rojae.kr/assets/img/illustrations/profiles/profile-2.png");
         return this.accountRepository.save(account);
     }
 

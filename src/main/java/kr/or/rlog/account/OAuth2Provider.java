@@ -40,7 +40,7 @@ public enum OAuth2Provider {
         ClientRegistration.Builder builder = ClientRegistration.withRegistrationId(registrationId);
         builder.clientAuthenticationMethod(method);
         builder.authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE);
-        builder.redirectUri("https://rlog.or.kr/login/oauth2/code/{registrationId}");
+        builder.redirectUri("https://blog.rojae.kr/login/oauth2/code/{registrationId}");
         //builder.redirectUri("{baseUrl}/login/oauth2/code/{registrationId}");
         return builder;
     }

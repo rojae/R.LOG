@@ -21,7 +21,7 @@ public class UserAccount extends User {
         Account newUser = new Account();
         newUser.setUserName(kakaoUser.getUserName());
         if(StringUtils.isNullOrEmpty(kakaoUser.getProfileImage()))
-            newUser.setProfileImage("https://rlog.or.kr/assets/img/illustrations/profiles/profile-2.png");
+            newUser.setProfileImage("https://blog.rojae.kr/assets/img/illustrations/profiles/profile-2.png");
         else
             newUser.setProfileImage(kakaoUser.getProfileImage());
         newUser.setRole(kakaoUser.getRole());

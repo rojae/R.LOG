@@ -27,8 +27,8 @@ public class MailService {
     private static final String signupUrlTest = "http://localhost:8080/api/v1/signup/mail";
     private static final String updateUrlTest = "http://localhost:8080/api/v1/update/mail";
 
-    private static final String signupUrl = "https://rlog.or.kr/api/v1/signup/mail";
-    private static final String updateUrl = "https://rlog.or.kr/api/v1/update/mail";
+    private static final String signupUrl = "https://blog.rojae.kr/api/v1/signup/mail";
+    private static final String updateUrl = "https://blog.rojae.kr/api/v1/update/mail";
 
     private static final String fromAddress = "rojae@rlog.or.kr";
 
@@ -91,7 +91,7 @@ public class MailService {
                 "<a href=\"" + signupUrl + "?secretKey=" + mail.getSecretKey() + "&email=" + mail.getEmail() + "\"style=\"display:inline-block;padding:10px 10px 10px; margin-top:10px; background-color:#08a600; color:#fff;text-align: center; text-decoration: none;\" target=\"_blank\" rel=\"noreferrer noopener\">인증하기</a>" +
                 "</td></tr>" +
                 "<tr><td height=\"24\"></td></tr>" +
-                "<!-- footer -->                    <tr><td style=\"padding-top:26px;padding-left:21px;padding-right:21px;padding-bottom:13px;background:#f9f9f9;font-size:12px;font-family:'나눔고딕',NanumGothic,'맑은고딕',Malgun Gothic,'돋움',Dotum,Helvetica,'Apple SD Gothic Neo',Sans-serif;color:#696969;line-height:17px\">                            본 메일은 발신전용 입니다. 서비스에 대한 문의사항은 R.LOG <a href=\"http://rlog.or.kr\" style=\"color:#696969;font-weight:bold;text-decoration:underline\" rel=\"noreferrer noopener\" target=\"_blank\">홈페이지</a>에서 확인해주세요.                        </td></tr>                    <tr><td style=\"padding-left:21px;padding-right:21px;padding-bottom:57px;background:#f9f9f9;font-size:12px;font-family:Helvetica;color:#696969;line-height:17px\">                            Copyright ⓒ <strong>R.LOG</strong> Corp. All Rights Reserved.                        </td></tr>                    <!-- //footer -->                </tbody></table>"
+                "<!-- footer -->                    <tr><td style=\"padding-top:26px;padding-left:21px;padding-right:21px;padding-bottom:13px;background:#f9f9f9;font-size:12px;font-family:'나눔고딕',NanumGothic,'맑은고딕',Malgun Gothic,'돋움',Dotum,Helvetica,'Apple SD Gothic Neo',Sans-serif;color:#696969;line-height:17px\">                            본 메일은 발신전용 입니다. 서비스에 대한 문의사항은 R.LOG <a href=\"http://blog.rojae.kr\" style=\"color:#696969;font-weight:bold;text-decoration:underline\" rel=\"noreferrer noopener\" target=\"_blank\">홈페이지</a>에서 확인해주세요.                        </td></tr>                    <tr><td style=\"padding-left:21px;padding-right:21px;padding-bottom:57px;background:#f9f9f9;font-size:12px;font-family:Helvetica;color:#696969;line-height:17px\">                            Copyright ⓒ <strong>R.LOG</strong> Corp. All Rights Reserved.                        </td></tr>                    <!-- //footer -->                </tbody></table>"
                 + "<br/><br/>";
         //"<img src=\"\">";
 
