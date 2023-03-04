@@ -8,6 +8,8 @@
             - https://github.com/rojae/R.LOG-Batch
     - 2021.10.01
         - AWS EC2 이전완료 (SSL)
+    - 2023.03.04
+        - 비용 문제로 도메인 이동 (https://rlog.or.kr -> https://blog.rojae.kr)
 
 
 ## 블로그 기능 정리
