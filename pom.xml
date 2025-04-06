@@ -11,7 +11,7 @@
     <groupId>kr.or</groupId>
     <artifactId>rlog</artifactId>
     <version>1.0</version>
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
     <name>rlog</name>
     <description>R.LOG BLOG APP</description>
     <properties>
@@ -105,6 +105,13 @@
             <version>2.4.2</version>
         </dependency>
 
+        <!-- Apache Commons -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.12.0</version>
+        </dependency>
+
         <dependency>
             <groupId>jakarta.persistence</groupId>
             <artifactId>jakarta.persistence-api</artifactId>
@@ -112,11 +119,19 @@
         </dependency>
 
         <!-- MYSQL -->
+<!--        <dependency>-->
+<!--            <groupId>mysql</groupId>-->
+<!--            <artifactId>mysql-connector-java</artifactId>-->
+<!--            <version>8.0.18</version>-->
+<!--        </dependency>-->
+
+        <!-- Mariadb -->
         <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>8.0.18</version>
+            <groupId>org.mariadb.jdbc</groupId>
+            <artifactId>mariadb-java-client</artifactId>
+            <version>3.3.2</version> <!-- 최신 버전 확인 가능 -->
         </dependency>
+
 
         <!-- H2 -->
         <dependency>
