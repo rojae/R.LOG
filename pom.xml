@@ -71,7 +71,6 @@
         <dependency>
             <groupId>org.apache.tomcat.embed</groupId>
             <artifactId>tomcat-embed-jasper</artifactId>
-            <scope>provided</scope>
         </dependency>
 
         <!-- JSTL -->
@@ -238,12 +237,20 @@
             </resource>
             <!-- jar에서 jsp를 로딩하기 위해서 -->
             <resource>
-                <directory>src/main/resources/META-INF/resources</directory>
+                <directory>src/main/webapp</directory>
                 <targetPath>META-INF/resources</targetPath>
                 <includes>
                     <include>**/*.jsp</include>
                 </includes>
             </resource>
+<!-- 아래 속성으로도 이론상 가능하지만, maven의 특성으로 인해서 높은 확률로 실패합니다.. (webapp에 위치를 해야함) -->
+<!--            <resource>-->
+<!--                <directory>src/main/resources/META-INF/resources</directory>-->
+<!--                <targetPath>META-INF/resources</targetPath>-->
+<!--                <includes>-->
+<!--                    <include>**/*.jsp</include>-->
+<!--                </includes>-->
+<!--            </resource>-->
         </resources>
     </build>
 

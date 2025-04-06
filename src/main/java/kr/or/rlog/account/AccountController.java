@@ -41,7 +41,7 @@ public class AccountController {
     @GetMapping("/signup")
     public String signUp(@CurrentUser Account account) {
         if(account == null)
-            return "blog/page-blog-signup";
+            return ".empty/blog/page-blog-signup";
         return "redirect:index";
     }
 
@@ -51,14 +51,14 @@ public class AccountController {
             model.addAttribute("loginResult", "이미 가입된 이메일입니다. 이메일 인증을 진행하세요.");
             if (accountService.isAuth(account))
                 model.addAttribute("loginResult", "이미 가입된 이메일입니다. 로그인을 진행해주세요.");
-            return "blog/login";
+            return ".empty/blog/login";
         }
         // 아래 두개는 합치는게 .. 좋으려나??
         Account savedUser = accountService.createNew(account, PlatformType.RLOG);
         Mail newMail = mailService.createMail(savedUser, MailType.USER_SIGNUP);
         mailService.signupSend(newMail);
         model.addAttribute("loginResult", "회원가입이 완료되었습니다. 이메일 인증을 진행하세요.");
-        return "blog/login";
+        return ".empty/blog/login";
     }
 
     /*
@@ -98,7 +98,7 @@ public class AccountController {
 
     @GetMapping("/my/info/password")
     public String updatePasswordView() {
-        return "blog/my-info-password";
+        return ".empty/blog/my-info-password";
     }
 
     @PutMapping("/my/info/password")
@@ -123,7 +123,7 @@ public class AccountController {
 
     @GetMapping("/my/info/email")
     public String updateMailView() {
-        return "blog/my-info-email";
+        return ".empty/blog/my-info-email";
     }
 
     @PostMapping("/my/info/email")

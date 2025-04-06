@@ -1,6 +1,5 @@
 package kr.or.rlog.config;
 
-import kr.or.rlog.common.TileViewPreparer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -20,7 +19,7 @@ public class TilesConfig implements WebMvcConfigurer {
         
         //타일즈 설정파일이 위치하는 디렉토리+파일명
         //configurer.setDefinitions(new String[]{"/WEB-INF/tiles/tiles.xml"});
-        configurer.setDefinitions("classpath:/WEB-INF/tiles/tiles.xml");
+        configurer.setDefinitions("classpath:/tiles/tiles.xml");
         configurer.setCheckRefresh(true);
         configurer.setPreparerFactoryClass(SimpleSpringPreparerFactory.class);
         return configurer;

@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <jsp:include page="./common/top-meta.jsp"/>
+    <jsp:include page="common/top-meta.jsp"/>
     <link href="https://fonts.googleapis.com/css?family=Karla:400,700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.materialdesignicons.com/4.8.95/css/materialdesignicons.min.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
@@ -126,7 +126,7 @@
     </div>
     <!-- Row -->
 </div>
-<jsp:include page="./common/modal.jsp"/>
-<jsp:include page="./common/buttom-meta.jsp"/>
+<jsp:include page="common/modal.jsp"/>
+<jsp:include page="common/buttom-meta.jsp"/>
 </body>
 </html>

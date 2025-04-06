@@ -31,7 +31,7 @@ public class ReportController {
 
     @GetMapping("/error")
     public String error() {
-        return "/blog/error";
+        return ".empty/blog/error";
     }
 
     @PostMapping("/error/report")
@@ -49,7 +49,7 @@ public class ReportController {
     @GetMapping("/manage/error")
     public String errorView(Model model) {
         model.addAttribute("list", reportRepository.findAll());
-        return "/manage/blog-error-list";
+        return ".empty/manage/blog-error-list";
     }
 
     @Secured("ADMIN")

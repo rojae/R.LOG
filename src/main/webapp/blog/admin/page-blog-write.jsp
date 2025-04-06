@@ -5,7 +5,7 @@
 <section class="bg-light py-10">
     <div class="row justify-content-center">
         <div class="col-lg-10 col-xl-8">
-            <jsp:include page="./write.jsp"/>
+            <jsp:include page="write.jsp"/>
         </div>
     </div>
     <div class="svg-border-rounded text-dark">

@@ -32,25 +32,25 @@ public class ManageController {
     @GetMapping("/manage")
     @Secured("ADMIN")
     public String dashBoard(@CurrentUser Account user) {
-        return "manage/dashboard";
+        return ".empty/manage/dashboard";
     }
 
     @GetMapping("/manage/my/info")
     @Secured("ADMIN")
     public String myInfo(@CurrentUser Account user) {
-        return "manage/my-info";
+        return ".empty/manage/my-info";
     }
 
     @GetMapping("/manage/posts")
     @Secured("ADMIN")
     public String myPosts(@CurrentUser Account user) {
-        return "manage/posts";
+        return ".empty/manage/posts";
     }
 
     @GetMapping("/manage/categories")
     @Secured("ADMIN")
     public String categories(@CurrentUser Account user) {
-        return "manage/categories";
+        return ".empty/manage/categories";
     }
 
     @GetMapping("/manage/statistic/today")

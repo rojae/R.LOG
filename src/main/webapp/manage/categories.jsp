@@ -18,7 +18,7 @@
             display: block;
         }
     </style>
-    <jsp:include page="./common/top-meta.jsp"/>
+    <jsp:include page="common/top-meta.jsp"/>
 
     <script>
         $(document).ready(function () {
@@ -266,14 +266,14 @@
     <!-- ============================================================== -->
     <!-- Topbar header - style you can find in pages.scss -->
     <!-- ============================================================== -->
-    <jsp:include page="./common/header.jsp"/>
+    <jsp:include page="common/header.jsp"/>
     <!-- ============================================================== -->
     <!-- End Topbar header -->
     <!-- ============================================================== -->
     <!-- ============================================================== -->
     <!-- Left Sidebar - style you can find in sidebar.scss  -->
     <!-- ============================================================== -->
-    <jsp:include page="./common/side-bar.jsp"/>
+    <jsp:include page="common/side-bar.jsp"/>
     <!-- ============================================================== -->
     <!-- End Left Sidebar - style you can find in sidebar.scss  -->
     <!-- ============================================================== -->
@@ -371,7 +371,7 @@
         <!-- ============================================================== -->
         <!-- footer -->
         <!-- ============================================================== -->
-        <jsp:include page="./common/footer.jsp"/>
+        <jsp:include page="common/footer.jsp"/>
         <!-- ============================================================== -->
         <!-- End footer -->
         <!-- ============================================================== -->
@@ -386,7 +386,7 @@
 <!-- ============================================================== -->
 <!-- All Jquery -->
 <!-- ============================================================== -->
-<jsp:include page="./common/buttom-meta.jsp"/>
+<jsp:include page="common/buttom-meta.jsp"/>
 <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
 
 </body>

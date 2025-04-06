@@ -74,7 +74,7 @@ public class GuestbookController {
         } else {
             model.addAttribute("content", guestbook.getContent());
         }
-        return "blog/guestbook-edit";
+        return ".empty/blog/guestbook-edit";
     }
 
     @PutMapping("/guestbook/{bookId}")

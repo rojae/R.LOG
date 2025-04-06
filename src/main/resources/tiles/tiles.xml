@@ -1,0 +1,71 @@
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"
+        "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+
+<tiles-definitions>
+
+    <!-- blog layout -->
+    <definition name="blogTemplate" template="/blog/layout/main.jsp" preparer="kr.or.rlog.common.TileViewPreparer">
+        <put-attribute name="footer" value="/blog/layout/footer.jsp" />
+    </definition>
+
+    <!-- admin layout -->
+    <definition name="adminTemplate" template="/admin/common/main.jsp">
+        <put-attribute name="header" value="/admin/common/fix-nav.jsp" />
+        <put-attribute name="footer" value="/admin/common/footer.jsp" />
+    </definition>
+
+    <!-- blog 1 Depth -->
+    <definition name=".blog.nav/*" extends="blogTemplate">
+        <put-attribute name="header" value="/blog/layout/header.jsp" />
+        <put-attribute name="body" value="/blog/{1}.jsp" />
+    </definition>
+
+    <definition name=".blog.nav-fixed/*" extends="blogTemplate">
+        <put-attribute name="header" value="/blog/layout/header-fixed.jsp" />
+        <put-attribute name="body" value="/blog/{1}.jsp" />
+    </definition>
+
+    <definition name=".blog.nav-transparent/*" extends="blogTemplate">
+        <put-attribute name="header" value="/blog/layout/header-transparent.jsp" />
+        <put-attribute name="body" value="/blog/{1}.jsp" />
+    </definition>
+
+    <!-- blog 2 Depth -->
+    <definition name=".blog.nav/*/*" extends="blogTemplate">
+        <put-attribute name="header" value="/blog/layout/header.jsp" />
+        <put-attribute name="body" value="/blog/{1}/{2}.jsp" />
+    </definition>
+
+    <definition name=".blog.nav-fixed/*/*" extends="blogTemplate">
+        <put-attribute name="header" value="/blog/layout/header-fixed.jsp" />
+        <put-attribute name="body" value="/blog/{1}/{2}.jsp" />
+    </definition>
+
+    <definition name=".blog.nav-transparent/*/*" extends="blogTemplate">
+        <put-attribute name="header" value="/blog/layout/header-transparent.jsp" />
+        <put-attribute name="body" value="/blog/{1}/{2}.jsp" />
+    </definition>
+
+    <!-- Admin -->
+    <definition name=".admin/*" extends="adminTemplate">
+        <put-attribute name="body" value="/admin/{1}.jsp" />
+    </definition>
+
+    <definition name=".admin/*/*" extends="adminTemplate">
+        <put-attribute name="body" value="/admin/{1}/{2}.jsp" />
+    </definition>
+
+    <!-- empty: layout 없이 단독 JSP -->
+    <definition name=".empty/*" template="/empty.jsp">
+        <put-attribute name="body" value="/{1}.jsp" />
+    </definition>
+
+    <definition name=".empty/*/*" template="/empty.jsp">
+        <put-attribute name="body" value="/{1}/{2}.jsp" />
+    </definition>
+
+    <definition name=".empty/*/*/*" template="/empty.jsp">
+        <put-attribute name="body" value="/{1}/{2}/{3}.jsp" />
+    </definition>
+
+</tiles-definitions>

@@ -63,7 +63,7 @@ public class PostController {
         if (savedPost != null)
             return "redirect:/post/" + savedPost.getId();
         else
-            return "blog/error";
+            return ".empty/blog/error";
     }
 
     /** ==================================================================
