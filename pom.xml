@@ -229,6 +229,22 @@
                 </executions>
             </plugin>
         </plugins>
+
+        <resources>
+            <!-- jar에서 Tiles.xml를 로딩하기 위해서 -->
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>false</filtering>
+            </resource>
+            <!-- jar에서 jsp를 로딩하기 위해서 -->
+            <resource>
+                <directory>src/main/resources/META-INF/resources</directory>
+                <targetPath>META-INF/resources</targetPath>
+                <includes>
+                    <include>**/*.jsp</include>
+                </includes>
+            </resource>
+        </resources>
     </build>
 
 </project>
