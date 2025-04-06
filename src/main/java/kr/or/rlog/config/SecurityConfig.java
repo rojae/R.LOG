@@ -30,6 +30,8 @@ import org.springframework.security.web.access.expression.DefaultWebSecurityExpr
 import org.springframework.security.web.access.expression.WebExpressionVoter;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter;
+import org.springframework.security.web.firewall.HttpFirewall;
+import org.springframework.security.web.firewall.StrictHttpFirewall;
 
 import java.util.Collections;
 import java.util.List;
@@ -49,6 +51,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
+
+    // Firewall Configuration
+    @Bean
+    public HttpFirewall allowUrlEncodedDoubleSlashFirewall() {
+        StrictHttpFirewall firewall = new StrictHttpFirewall();
+        firewall.setAllowUrlEncodedDoubleSlash(true);  // "//" 허용
+        firewall.setAllowSemicolon(true);              // 필요하면 ;도 허용
+        return firewall;
+    }
 
     @Bean
     public OAuth2AuthorizedClientService authorizedClientService() {
