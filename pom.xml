@@ -11,7 +11,7 @@
     <groupId>kr.or</groupId>
     <artifactId>rlog</artifactId>
     <version>1.0</version>
-    <packaging>jar</packaging>
+    <packaging>war</packaging>
     <name>rlog</name>
     <description>R.LOG BLOG APP</description>
     <properties>
@@ -71,6 +71,7 @@
         <dependency>
             <groupId>org.apache.tomcat.embed</groupId>
             <artifactId>tomcat-embed-jasper</artifactId>
+            <scope>provided</scope>
         </dependency>
 
         <!-- JSTL -->
@@ -104,13 +105,6 @@
             <version>2.4.2</version>
         </dependency>
 
-        <!-- Apache Commons -->
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-            <version>3.12.0</version>
-        </dependency>
-
         <dependency>
             <groupId>jakarta.persistence</groupId>
             <artifactId>jakarta.persistence-api</artifactId>
@@ -118,19 +112,11 @@
         </dependency>
 
         <!-- MYSQL -->
-<!--        <dependency>-->
-<!--            <groupId>mysql</groupId>-->
-<!--            <artifactId>mysql-connector-java</artifactId>-->
-<!--            <version>8.0.18</version>-->
-<!--        </dependency>-->
-
-        <!-- Mariadb -->
         <dependency>
-            <groupId>org.mariadb.jdbc</groupId>
-            <artifactId>mariadb-java-client</artifactId>
-            <version>3.3.2</version> <!-- 최신 버전 확인 가능 -->
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.18</version>
         </dependency>
-
 
         <!-- H2 -->
         <dependency>
@@ -228,30 +214,6 @@
                 </executions>
             </plugin>
         </plugins>
-
-        <resources>
-            <!-- jar에서 Tiles.xml를 로딩하기 위해서 -->
-            <resource>
-                <directory>src/main/resources</directory>
-                <filtering>false</filtering>
-            </resource>
-            <!-- jar에서 jsp를 로딩하기 위해서 -->
-            <resource>
-                <directory>src/main/webapp</directory>
-                <targetPath>META-INF/resources</targetPath>
-                <includes>
-                    <include>**/*.jsp</include>
-                </includes>
-            </resource>
-<!-- 아래 속성으로도 이론상 가능하지만, maven의 특성으로 인해서 높은 확률로 실패합니다.. (webapp에 위치를 해야함) -->
-<!--            <resource>-->
-<!--                <directory>src/main/resources/META-INF/resources</directory>-->
-<!--                <targetPath>META-INF/resources</targetPath>-->
-<!--                <includes>-->
-<!--                    <include>**/*.jsp</include>-->
-<!--                </includes>-->
-<!--            </resource>-->
-        </resources>
     </build>
 
 </project>
