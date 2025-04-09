@@ -1,4 +1,6 @@
-<div id="layoutDefault_footer">
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="footer">
     <footer class="footer pt-10 pb-5 mt-auto bg-dark footer-dark">
         <div class="container">
             <div class="row">
@@ -6,10 +8,10 @@
                     <div class="footer-brand">R.LOG</div>
                     <div class="mb-3">Blog and Rojae's Log</div>
                     <div class="icon-list-social mb-5">
-                        <a class="icon-list-social-link" href="https://www.instagram.com/rojae96"><i class="fab fa-instagram"></i></a><a
-                            class="icon-list-social-link" href="https://www.facebook.com/skdltmwotjd"><i class="fab fa-facebook"></i></a><a
-                            class="icon-list-social-link" href="https://github.com/rojae"><i class="fab fa-github"></i></a><a
-                            class="icon-list-social-link" href="#!"><i class="fab fa-twitter"></i></a>
+                        <a class="icon-list-social-link" href="https://www.instagram.com/rojae96"><i class="fab fa-instagram"></i></a>
+                        <a class="icon-list-social-link" href="https://www.facebook.com/skdltmwotjd"><i class="fab fa-facebook"></i></a>
+                        <a class="icon-list-social-link" href="https://github.com/rojae"><i class="fab fa-github"></i></a>
+                        <a class="icon-list-social-link" href="#!"><i class="fab fa-twitter"></i></a>
                     </div>
                 </div>
                 <div class="col-lg-9">
@@ -62,9 +64,11 @@
                 <div class="col-md-6 text-md-right small">
                     <a href="#!">Privacy Policy</a>
                     &middot;
-                    <a href="#!">Terms &amp; Conditions</a>
+                    <a href="#!">Terms & Conditions</a>
                 </div>
             </div>
         </div>
     </footer>
 </div>
+</body>
+</html>

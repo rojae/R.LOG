@@ -63,7 +63,7 @@ public class GuestbookController {
         model.addAttribute("endBlockPage", endBlockPage);
         model.addAttribute("guestbookPage", guestbookPage);
 
-        return ".blog.nav/guestbook";
+        return "blog/guestbook";
     }
 
     @PostMapping("/guestbook/{bookId}")
@@ -74,7 +74,7 @@ public class GuestbookController {
         } else {
             model.addAttribute("content", guestbook.getContent());
         }
-        return ".empty/blog/guestbook-edit";
+        return "blog/guestbook-edit";
     }
 
     @PutMapping("/guestbook/{bookId}")

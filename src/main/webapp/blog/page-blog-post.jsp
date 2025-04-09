@@ -610,4 +610,4 @@
 </section>
 
 <!-- 광고 추가 -->
-<jsp:include page="common/advertise.jsp"/>
+<jsp:include page="common/advertise.html"/>

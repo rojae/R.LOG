@@ -1,0 +1,66 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: rojae
+  Date: 2021/01/28
+  Time: 11:10 오후
+  To change this template use File | Settings | File Templates.
+--%>
+
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>R.LOG</title>
+</head>
+<body>
+<div th:if=${!empty message}">
+    <span th:text="${message}"></span>
+</div>
+
+<h3>글 상세조회</h3>
+<div th:if=${!empty post}">
+    <th:block th:each="category" items="${categories}" varStatus="status">
+        <div th:if=${status.first}">카테고리 :</div>
+        <span th:text="${category.categoryName}"></span>
+        <div th:if=${!status.last}"> > </div>
+        <div th:if=${status.last}">.</div>
+    </th:block>
+
+    <br/>
+    제목 : <span th:text="${post.title}"></span>
+    <br/>
+    작성자 : <span th:text="${post.writer.userName}"></span>
+    <br/>
+    내용 : <span th:text="${post.content}"></span>
+</div>
+<p><a href='/posts'>리스트로 돌아가기</a></p>
+
+<form name="comment" method="post" action="/comments/<c:out value = "${post.id}"></span>">
+    <input type="text" name="content" value=""></span>
+    <button type="submit">댓글작성</button>
+</form>
+
+<h3>댓글</h3>
+<table>
+    <tr>
+        <th>순서</th>
+        <th>작성자</th>
+        <th>내용</th>
+        <th>작성일</th>
+        <th>수정일</th>
+    </tr>
+    <th:block th:each="comment" items="${comments}" varStatus="status">
+        <tr>
+            <Td>${status.count }</Td>
+            <Td>${comment.writer.userName}</Td>
+            <Td>${comment.content}</Td>
+            <Td>${comment.createdDate}</Td>
+            <Td>${comment.modifiedDate}</Td>
+        </tr>
+    </th:block>
+</table>
+
+
+</body>
+</html>

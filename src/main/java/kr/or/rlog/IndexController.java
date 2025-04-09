@@ -89,7 +89,7 @@ public class IndexController {
         model.addAttribute("postPage", postPage);
         model.addAttribute("topPost", topPost);
         model.addAttribute("keyword", keyword);
-        return ".blog.nav-fixed/index";
+        return "blog/index";
     }
 
 

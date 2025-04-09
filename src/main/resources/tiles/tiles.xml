@@ -20,7 +20,7 @@
         <put-attribute name="body" value="/blog/{1}.jsp" />
     </definition>
 
-    <definition name=".blog.nav-fixed/*" extends="blogTemplate">
+    <definition name=".blog.nav-fixed/*" extends="blㅁogTemplate">
         <put-attribute name="header" value="/blog/layout/header-fixed.jsp" />
         <put-attribute name="body" value="/blog/{1}.jsp" />
     </definition>

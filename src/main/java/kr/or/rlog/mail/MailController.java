@@ -35,7 +35,7 @@ public class MailController {
             model.addAttribute("loginResult", "이메일 인증이 완료되었습니다. 로그인을 진행하세요");
         else
             model.addAttribute("loginResult", "잘못된 접근입니다");
-        return ".empty/blog/login";
+        return "blog/login";
     }
 
     @GetMapping("/api/v1/update/mail")
@@ -48,7 +48,7 @@ public class MailController {
         else
             model.addAttribute("loginResult", "잘못된 접근입니다");
 
-        return ".empty/blog/login";
+        return "blog/login";
     }
 
 

@@ -1,0 +1,35 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: rojae
+  Date: 2021/01/28
+  Time: 11:10 오후
+  To change this template use File | Settings | File Templates.
+--%>
+
+
+
+<!DOCTYPE html>
+<head>
+    <title>R.LOG</title>
+</head>
+<body>
+    <c:if test = "${!empty message}">
+        <c:out value = "${message}"></span>
+    </div>
+
+    <h3>로그인 페이지</h3>
+    <form name = "login"  method="post" action="/login">
+        <label>
+            <p>이메일</p>
+            <input type="text" name = "email" value =""></span>
+        </label>
+        <label>
+            <p>비밀번호</p>
+            <input type="password" name = "password" value =""></span>
+        </label>
+        <input type="submit" value="로그인"></span>
+    </form>
+    <button onclick="location.href='/signup'">회원가입</button>
+
+</body>
+</html>

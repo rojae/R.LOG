@@ -45,7 +45,7 @@ public class PostController {
     @GetMapping("/admin/write")
     @Secured("ROLE_ADMIN")
     public String write() {
-        return ".blog.nav/admin/page-blog-write";
+        return "blog/admin/page-blog-write";
     }
 
     /** ==================================================================
@@ -63,7 +63,7 @@ public class PostController {
         if (savedPost != null)
             return "redirect:/post/" + savedPost.getId();
         else
-            return ".empty/blog/error";
+            return "blog/error";
     }
 
     /** ==================================================================
@@ -86,7 +86,7 @@ public class PostController {
                 model.addAttribute("message", "권한이 없는 글입니다");
         } else
             model.addAttribute("message", "존재하지 않는 글입니다");
-        return ".blog.nav/admin/page-blog-write";
+        return "blog/admin/page-blog-write";
     }
 
     /** ==================================================================
@@ -209,7 +209,7 @@ public class PostController {
         model.addAttribute("keyword", keyword);
         model.addAttribute("categoryName", categoryService.getById(categoryId).get().getCategoryName());
 
-        return ".blog.nav/page-blog-category";
+        return "blog/page-blog-category";
     }
 
 

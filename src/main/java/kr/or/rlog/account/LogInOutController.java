@@ -11,7 +11,7 @@ public class LogInOutController {
     @GetMapping("/login")
     public String loginForm(@CurrentUser Account account) {
         if(account == null)
-            return ".empty/blog/login";
+            return "blog/login";
         return "redirect:index";
     }
 
@@ -19,12 +19,12 @@ public class LogInOutController {
     public String logoutForm(Model model) {
         model.asMap().clear();
         model.addAttribute("loginResult", "로그아웃 되었습니다");
-        return ".empty/blog/logout";
+        return "blog/logout";
     }
 
     @GetMapping("main")
     public String main() {
-        return ".empty/blog/main";
+        return "blog/main";
     }
 
 }
